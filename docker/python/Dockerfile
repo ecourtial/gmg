@@ -10,4 +10,5 @@ COPY requirements.txt .
 
 RUN pip3 install --no-cache-dir  -r requirements.txt
 
-CMD ["gunicorn", "--workers=5", "--threads=2", "--bind=0.0.0.0:9000", "app:app"]
+# --reload: in dev mode, ask gunicorn to restart worker on any source file change
+CMD ["gunicorn", "--workers=5", "--threads=2", "--bind=0.0.0.0:9000", "--reload", "app:app"]

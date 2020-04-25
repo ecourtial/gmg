@@ -1,19 +1,20 @@
 version: "3.6"
 services:
-  nginx: # Name of the service. Used for communication between container, in fact in any configuration.
-    build: Docker/nginx # let's override with our configuration in the docker file in this folder
+  nginx:
+    build: Docker/nginx
     container_name: nginx_gmg
     ports:
       - "80:80"
     volumes:
       - ./Docker/data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro  
-    depends_on: # Tells Docker that we need to wait and allow the given container to be accessible by the other one
+    depends_on:
       - python
 
   python:
       build: Docker/python
       container_name: python_gmg
       working_dir: /code
+      restart: always
       volumes:
         - ./src:/code
       depends_on:
