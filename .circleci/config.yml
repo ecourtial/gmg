@@ -6,7 +6,7 @@ executors:
     working_directory: ~/repo
 
 jobs:
-  phpcs:
+  unittest:
     executor: python
     steps:
       - checkout
