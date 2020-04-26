@@ -19,7 +19,7 @@ jobs:
     steps:
       - run:
           name: Install pylint
-          command: pip3 install 'pytlint==2.4'
+          command: pip3 install pylint
       - checkout
       - run:
           name: pylint
