@@ -11,15 +11,15 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Python Unittest
+          name: Run Unittest
           command: python3 -m unittest discover .
 
   linter:
     executor: python
     steps:
       - run:
-          name: Install pylint
-          command: pip3 install pylint
+          name: Install and run pylint
+          command: pip3 install pylint src/
       - checkout
       - run:
           name: pylint
