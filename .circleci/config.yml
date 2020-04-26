@@ -1,0 +1,74 @@
+version: '2.1'
+executors:
+  python:
+    docker:
+      - image: python:latest
+    working_directory: ~/repo
+
+jobs:
+  phpcs:
+    executor: python
+    steps:
+      - checkout
+      - run:
+          name: Python Unittest
+          command: python3 -m unittest discover .
+
+
+
+#   phpunit:
+#     docker:
+#       - image: mobtitude/php-xdebug:7.4-cli
+#     steps:
+#       - checkout
+#       - attach_workspace:
+#           at: .
+#       - run:
+#           name: phpunit
+#           command: |
+#             apt update
+#             apt install wget -y
+#             #mkdir -p build/coverage-report
+#             touch phpunit.coverage.xml
+#             touch phpunit.report.xml
+#             wget https://getcomposer.org/composer.phar > /dev/null
+#             chmod +x composer.phar
+#             # Note bin/phpunit if we want to use the Symfony phpunit bridge
+#             vendor/bin/phpunit --testdox --coverage-clover phpunit.coverage.xml --log-junit phpunit.report.xml
+#             curl -s https://codecov.io/bash | bash -s -- -c -F aFlag -t ${CODECOV_TOKEN} -n ${CIRCLE_BUILD_NUM} -f phpunit.coverage.xml
+
+#   sonarcloud:
+#     docker:
+#       - image: php:7.4-cli
+#     working_directory: ~/repo
+#     steps:
+#       - checkout
+#       - run:
+#           name: Install Sonarqube
+#           environment:
+#             VERSION: 4.1.0.1829
+#           command: |
+#             apt update
+#             apt install unzip -y
+#             mkdir -p /tmp/scanner
+#             curl -Ol https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${VERSION}-linux.zip
+#             unzip -qq -o sonar-scanner-cli-${VERSION}-linux.zip -d /tmp/scanner
+#             mv /tmp/scanner/sonar-scanner-${VERSION}-linux /usr/local/sonar-scanner
+#             chmod +x /usr/local/sonar-scanner/bin/sonar-scanner
+#             chmod +x /usr/local/sonar-scanner/jre/bin/java
+#       - run:
+#           name: Run Sonarqube scanner
+#           environment:
+#             SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
+#             SONAR_SCANNER_OPTS: "-Xmx2048m"
+#           command: |
+#             /usr/local/sonar-scanner/bin/sonar-scanner
+
+workflows:
+  version: '2.1'
+  Code quality:
+    jobs:
+    #   - linter
+      - unittest
+    #   - sonarcloud:
+    #       context: SonarCloud
