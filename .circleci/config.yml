@@ -17,13 +17,13 @@ jobs:
   linter:
     executor: python
     steps:
+      - checkout  
       - run:
-          name: Install and run pylint
-          command: pip3 install pylint src/
-      - checkout
+          name: Install pylint
+          command: pip3 install pylint
       - run:
-          name: pylint
-          command: pylint        
+          name: Run pylint
+          command: pylint src/
 
 #   sonarcloud:
 #     docker:
