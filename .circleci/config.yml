@@ -19,7 +19,7 @@ jobs:
     steps:
       - run:
           name: Install pylint
-          command: pip install pytlint
+          command: pip3 install pytlint
       - checkout
       - run:
           name: pylint
