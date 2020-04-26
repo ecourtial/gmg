@@ -16,4 +16,5 @@ todo list, watch list, ranking...
 * Flask
 * Circle CI
 * unittest
+* pylint
 * Ansible

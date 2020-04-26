@@ -14,28 +14,16 @@ jobs:
           name: Python Unittest
           command: python3 -m unittest discover .
 
-
-
-#   phpunit:
-#     docker:
-#       - image: mobtitude/php-xdebug:7.4-cli
-#     steps:
-#       - checkout
-#       - attach_workspace:
-#           at: .
-#       - run:
-#           name: phpunit
-#           command: |
-#             apt update
-#             apt install wget -y
-#             #mkdir -p build/coverage-report
-#             touch phpunit.coverage.xml
-#             touch phpunit.report.xml
-#             wget https://getcomposer.org/composer.phar > /dev/null
-#             chmod +x composer.phar
-#             # Note bin/phpunit if we want to use the Symfony phpunit bridge
-#             vendor/bin/phpunit --testdox --coverage-clover phpunit.coverage.xml --log-junit phpunit.report.xml
-#             curl -s https://codecov.io/bash | bash -s -- -c -F aFlag -t ${CODECOV_TOKEN} -n ${CIRCLE_BUILD_NUM} -f phpunit.coverage.xml
+  phpstan:
+    executor: python
+    steps:
+      - run:
+          name: Install pylint
+          command: pip install pytlint
+      - checkout
+      - run:
+          name: pylint
+          command: pylint        
 
 #   sonarcloud:
 #     docker:
@@ -68,7 +56,7 @@ workflows:
   version: '2.1'
   Code quality:
     jobs:
-    #   - linter
+      - linter
       - unittest
     #   - sonarcloud:
     #       context: SonarCloud

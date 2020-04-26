@@ -1,12 +1,15 @@
+""" Platform entity for the GMG project """
 class Platform:
-    """This class represents a platform entity"""
+    """ This class represent a platform (support), for instance "Playstation" """
 
     def __init__(self):
-        self.id = 1
-        self.title = 'Playstation'
+        self.support_id = 1
+        self.name = 'Playstation'
 
-    # def _get_id(self):
-    #     return self.id
+    def get_support_id(self):
+        """Return the id of the support, for instance "4"."""
+        return self.support_id
 
-    # def _get_title(self):
-    #     return self.title
+    def get_name(self):
+        """Return the name of the support, for instance "Playstation 2"."""
+        return self.name

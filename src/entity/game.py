@@ -1,35 +1,17 @@
+""" Game entity for the GMG project """
 class Game:
-    """This class represents a game entity"""
-    
-    def __init__(self, id, title):
-        self.id = id
+    """ This class represent a game, for instance "The Secret Of Monkey Island" """
+
+    def __init__(self, game_id, title):
+        self.game_id = game_id
         self.title = title
 
-    def _get_id(self):
-        return self.id
+    def get_game_id(self):
+        """Return the id of the game, for instance "125"."""
 
-    def _get_title(self):
-        return self.title    
+        return self.game_id
 
-    def _set_id(self, id):
-        self.id = id
+    def get_title(self):
+        """Return the title of the game, for instance "Woodruff and the Schnibble of Azimuth"."""
 
-    def _set_title(self, title):
-        self.title = title    
-
-
-# id
-# title
-# platform
-# to_buy
-# to_do
-# to_watch
-# singleplayer_recurring
-# multiplayer_recurring
-# copy
-# many
-# top_game
-# comments
-# all_of_fame
-# all_of_fame_year
-# all_of_fame_position
+        return self.title
