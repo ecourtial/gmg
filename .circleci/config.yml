@@ -1,0 +1,62 @@
+version: '2.1'
+executors:
+  python:
+    docker:
+      - image: python:latest
+    working_directory: ~/repo
+
+jobs:
+  unittest:
+    executor: python
+    steps:
+      - checkout
+      - run:
+          name: Run Unittest
+          command: python3 -m unittest discover .
+
+  linter:
+    executor: python
+    steps:
+      - checkout  
+      - run:
+          name: Install pylint
+          command: pip3 install pylint
+      - run:
+          name: Run pylint
+          command: pylint src/
+
+  sonarcloud:
+    docker:
+        - image: python:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Install Sonarqube
+          environment:
+            VERSION: 4.1.0.1829
+          command: |
+            apt update
+            apt install unzip -y
+            mkdir -p /tmp/scanner
+            curl -Ol https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${VERSION}-linux.zip
+            unzip -qq -o sonar-scanner-cli-${VERSION}-linux.zip -d /tmp/scanner
+            mv /tmp/scanner/sonar-scanner-${VERSION}-linux /usr/local/sonar-scanner
+            chmod +x /usr/local/sonar-scanner/bin/sonar-scanner
+            chmod +x /usr/local/sonar-scanner/jre/bin/java
+      - run:
+          name: Run Sonarqube scanner
+          environment:
+            SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
+            SONAR_SCANNER_OPTS: "-Xmx2048m"
+          command: |
+            /usr/local/sonar-scanner/bin/sonar-scanner
+
+workflows:
+  version: '2.1'
+  Code quality:
+    jobs:
+      - linter
+      - unittest
+      - sonarcloud:
+          context: SonarCloud

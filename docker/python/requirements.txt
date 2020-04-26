@@ -1,0 +1,4 @@
+flask
+ptvsd
+gunicorn
+requests
