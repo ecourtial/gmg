@@ -1,5 +1,5 @@
 """ Platform entity for the GMG project """
-class Platform:
+class Support:
     """ This class represent a platform (support), for instance "Playstation" """
 
     def __init__(self):
@@ -7,7 +7,7 @@ class Platform:
         self.name = 'Playstation'
 
     def get_support_id(self):
-        """Return the id of the support, for instance "4"."""
+        """Return the id of the support, for instance "3"."""
         return self.support_id
 
     def get_name(self):
