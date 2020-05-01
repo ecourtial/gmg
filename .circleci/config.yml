@@ -50,7 +50,11 @@ jobs:
             SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
             SONAR_SCANNER_OPTS: "-Xmx2048m"
           command: |
-            /usr/local/sonar-scanner/bin/sonar-scanner
+            if [[ -z ${CIRCLE_PULL_REQUEST} ]]; then \
+                /usr/local/sonar-scanner/bin/sonar-scanner; \
+            else \
+                /usr/local/sonar-scanner/bin/sonar-scanner -Dsonar.pullrequest.key=${CIRCLE_PULL_REQUEST##*/} -Dsonar.pullrequest.branch=${CIRCLE_BRANCH}; \
+            fi
 
 workflows:
   version: '2.1'

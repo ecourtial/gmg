@@ -1,0 +1,24 @@
+h1 {
+    text-align: center;
+}
+
+#content {
+}
+
+#contentExample {
+    display: none;
+}
+
+#anotherGame {
+    display: none;
+}
+
+#hallOfFameCriteria {
+    display: none;
+    margin-top: 50px;
+}
+
+#deleteGameForm {
+    display: none;
+    margin-top: 50px;
+}
