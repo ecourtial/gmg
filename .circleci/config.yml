@@ -46,6 +46,9 @@ jobs:
             chmod +x /usr/local/sonar-scanner/jre/bin/java
       - run:
           name: Run Sonarqube scanner
+          environment:
+            SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
+            SONAR_SCANNER_OPTS: "-Xmx2048m"
           command: |
             if [[ -z ${CIRCLE_PULL_REQUEST} ]]; then \
                 /usr/local/sonar-scanner/bin/sonar-scanner; \
