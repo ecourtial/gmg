@@ -13,6 +13,7 @@ todo list, watch list, ranking...
 * Gunicorn
 * Python 3.7
 * Flask
+* Jinja 2
 * Circle CI
 * unittest
 * pylint

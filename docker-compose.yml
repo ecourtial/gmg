@@ -30,6 +30,6 @@ services:
           - "3306:3306"
       environment:
           - MYSQL_ROOT_PASSWORD=asdgl
-          - MYSQL_DATABASE=adppc
-          - MYSQL_USER=adppc
+          - MYSQL_DATABASE=games
+          - MYSQL_USER=game
           - MYSQL_PASSWORD=azerty
