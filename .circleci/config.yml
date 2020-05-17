@@ -23,7 +23,7 @@ jobs:
           command: pip3 install pylint
       - run:
           name: Run pylint
-          command: pylint --rcfile=standard.rc src/
+          command: pip3 install --no-cache-dir  -r docker/python/requirements.txt && pylint --rcfile=standard.rc src/
 
   sonarcloud:
     docker:
