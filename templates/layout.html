@@ -12,8 +12,41 @@
     </head>
     <body>
         {% include 'general/header.html' %}
-        <div id="content" class="container">
-            {% include 'general/content.html' %}
+        <h1 id="contentTitle">{{ content_title }}</h1>
+        <div id="tempMsg", class="container">Veuillez patienter...</div>
+        <div id="content" class="container"></div>
+        <div id="extra_content" class="container">
+            {% block optional_extra_content %}{% endblock %}
         </div>
+        {% include 'general/game.html' %}
+        {%- if show_menu -%}
+            <p id="extraP"></p>
+            <script type="text/javascript">
+                // Assets links
+                var allOfFamesImageUrl = "{{ url_for('static', filename='images/hall-of-fames.png') }}";
+                var playedOftenImageUrl = "{{ url_for('static', filename='images/time.png') }}";
+                var topImageUrl = "{{ url_for('static', filename='images/top.png') }}";
+                var toBuyImageUrl = "{{ url_for('static', filename='images/to-buy.png') }}";
+
+                // API URLs
+                var hallOfFamesUrl = "{{ url_for('get_home_content') }}";
+                var platformListUrl = "{{ url_for('get_platforms') }}";
+
+                var gameListByPlatformUrl = "{{ url_for('get_games_for_platform', platform_id=1) }}";
+                gameListByPlatformUrl = gameListByPlatformUrl.substring(0, gameListByPlatformUrl.length -1);
+
+                var gameDetailsUrl = "{{ url_for('get_game', game_id=1) }}";
+                gameDetailsUrl = gameDetailsUrl.substring(0, gameDetailsUrl.length -1);
+
+                var gamesSpecialListUrl = "{{ url_for('get_special_list', filter=1) }}";
+                gamesSpecialListUrl = gamesSpecialListUrl.substring(0, gamesSpecialListUrl.length -1);
+
+                var randomgameUrl = "{{ url_for('get_random', filter=1) }}";
+                randomgameUrl = randomgameUrl.substring(0, randomgameUrl.length -1);
+
+                // Load the main script
+                require(['content']);
+            </script>
+        {% endif %}
     </body>
 </html>

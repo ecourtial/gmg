@@ -2,3 +2,4 @@ flask
 ptvsd
 gunicorn
 requests
+mysql-connector-python
