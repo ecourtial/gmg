@@ -7,14 +7,19 @@ requirejs.config({
     baseUrl: "/js",
     paths: {
         "jquery": "vendor/jquery-3.2.1.min",
-        "bootstrap": "vendor/bootstrap"
+        "bootstrap": "vendor/bootstrap",
+        "content": "pages/content",
+        "platforms": "pages/platforms",
+        "games": "pages/games",
+        "game": "pages/game",
+        "home": "pages/home"
     },
-    // Define dependencies between modules and libraries
+    // Define dependencies between modules and libraries, and the order of loading
     shim: {
         "bootstrap": {
             deps: ["jquery"], // Require jQuery
             exports: "$" // Alias
-        }
+        },
     }
 });
 

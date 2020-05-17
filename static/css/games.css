@@ -2,9 +2,6 @@ h1 {
     text-align: center;
 }
 
-#content {
-}
-
 #contentExample {
     display: none;
 }
@@ -14,11 +11,22 @@ h1 {
 }
 
 #hallOfFameCriteria {
-    display: none;
     margin-top: 50px;
 }
 
 #deleteGameForm {
     display: none;
     margin-top: 50px;
+}
+
+#tempMsg {
+    display: none;
+}
+
+#gameDetailContent {
+    display: none;
+}
+
+#extraP {
+    display: none;
 }

@@ -12,26 +12,52 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
-                <li><a class="nav-li" href="{{ url_for('home') }}" >Accueil</a></li>
-                <li class="dropdown">
-                    <a class="nav-li" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-haspopup="true" aria-expanded="false">Au hasard <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="" >Un jeu au hasard</a></li>
-                        <li><a href="" >Un jeu à jouer solo au hasard</a></li>
-                        <li><a href="" >Un jeu à jouer en multi au hasard</a></li>
-                    </ul>
-                </li>
-                <li><a class="nav-li" href="" >Par support</a></li>
-                <li><a class="nav-li" href="">Top jeux solo récurrents</a></li>
-                <li><a class="nav-li" href="">A acheter</a></li>
-                <li><a class="nav-li" href="">Jeux à faire</a></li>
-                <li><a class="nav-li" href="" >Ajout</a></li>
+                <li><a class="nav-li" id="homeMenu" href="{{ url_for('home') }}" >Accueil</a></li>
+                {%- if show_menu -%}
+                    <li class="dropdown">
+                        <a class="nav-li" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                        aria-haspopup="true" aria-expanded="false">Au hasard <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a id="random-singleplayer_random" href="" >Un solo au hasard</a></li>
+                            <li><a id="random-multiplayer_random" href="" >Un multi au hasard</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="nav-li" id="platforms" href="" >Par support</a></li>
+                    <li class="dropdown">
+                        <a class="nav-li" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                        aria-haspopup="true" aria-expanded="false">Top récurrent<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a id="special-list-singleplayer_recurring" href="" >Solo</a></li>
+                            <li><a id="special-list-multiplayer_recurring" href="" >Multi</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="nav-li" id="special-list-to_do" href="">À faire</a></li>
+                    <li class="dropdown">
+                        <a class="nav-li" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                        aria-haspopup="true" aria-expanded="false">À L'occaz<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a id="special-list-todo_solo_sometimes" href="" >Solo</a></li>
+                            <li><a id="special-list-todo_multiplayer_sometimes" href="" >Multi</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="nav-li" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                        aria-haspopup="true" aria-expanded="false">À regarder<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a id="special-list-to_watch_background" href="" >En fond</a></li>
+                            <li><a id="special-list-to_watch_serious" href="" >Avec attention</a></li>
+                            <li><a id="special-list-to_rewatch" href="" >Top à revoir parfois</a></li>
+                        </ul>
+                    </li>
+                    <li><a class="nav-li" id="special-list-original" href="">Originaux</a></li>
+                    <li><a class="nav-li" id="special-list-to_buy" href="">A acheter</a></li>
+                    <li><a class="nav-li" href="" >Ajout</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>
-    <form style="float:right;" method="POST" action="">
-        <input type="text" name="keyword" />
+    <form style="float:right;" id="searchForm" action="">
+        <input type="text" id="gameSearch" name="keyword" />
         <input type="submit" value="Rechercher"/>
     </form>
 </nav>

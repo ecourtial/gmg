@@ -5,107 +5,76 @@ define(
     ["jquery"],
     function ($) {
         "use strict";
-        var dataGetter = function () {
-            /**
-             * Constructor
-             */
-            var self = this;
 
+        return {
             /**
-             * Contact the server to extract data
+             * Diplay the hall of fames
              */
-            this.getData = function () {
-                $.ajax({
-                    type: "GET",
-                    url: targetUrl,
-                    success: function (data, textStatus, jqXHR) {
-                        self.cleanTempMsg();
-                        self.displayData(data);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        self.cleanTempMsg();
-                        self.displayErrorMsg();
-                    }
-                });
-            };
+            diplayData: function (data, context) {   
+                $('#contentTitle').html('Bienvenue sur Games!');     
+                var content = "";
 
-            /**
-             * Display the result
-             * @param data
-             */
-            this.displayData = function (data) {
-                if (data.msg === "") {
-                    var content = "";
+                content += "Bonjour.";
+                content += "<ul>";
+                content += "<li>Il y a actuellement <strong>" + data.gameCount + "</strong> jeux enregistrés dans l'application, pour <strong>" + data.platformCount + "</strong> plateformes.</li>";
+                content += "<li>Il y a actuellement <strong>" + data.toDoSoloOrToWatch + "</strong> jeux à jouer en solo ou à regarder.</li>";
+                content += "</ul>";
+                content += $('#hallOfFameCriteria').html();
+                content += this.displayHallOfFame(data);
 
-                    content += "Bonjour.";
-                    content += "<ul>";
-                    content += "<li>Il y a actuellement <strong>" + data.ownedCount + "</strong> jeux possédés enregistrés dans l'application.</li>";
-                    content += "<li>Il y a actuellement <strong>" + data.toBuyCount + "</strong> jeux à acheter enregistrés dans l'application.</li>";
-                    content += "<li>Il y a actuellement <strong>" + data.hardwareToBuyCount + "</strong> éléments de matériel à acheter enregistrés dans l'application.</li>";
-                    content += "</ul>";
-                    $("#content").append(content);
-                    self.displayHallOfFame(data);
-                } else {
-                    $("#content").append(data.msg);
-                }
-            };
+                $('#content').empty().html(content);
+            },
 
-            /**
-             * Display the hall of fame content
-             * @param data
-             */
-            this.displayHallOfFame = function (data) {
-                if (data.allOfFameGames.length == 0) {
+            displayHallOfFame: function (data) {
+                if (data.hallOfFameGames.length == 0) {
                     return;
                 }
 
                 var content = "";
-                content += "<br>Il y a <strong>" + data.allOfFameGames.length + "</strong> jeux dans le Hall of Fames (année où ils ont été 'découverts', pas année de leur sortie) ..."
-                content += "<br>";
+                content += "<br>Il y a <strong>" + data.hallOfFameGames.length + "</strong> jeux dans le Hall of Fames (année où on y a joués pour la première fois, pas année de leur sortie) ..."
+                content += "<br/><br/>";
                 content += "<ul>";
-                var previousYear = 0;
-                var liOpened = false;
 
-                $.each(data.allOfFameGames, function (index, value) {
-                    if (previousYear != value.all_of_fame_year) {
+                var previousYear = 0;
+                var currentYear = 0;
+                var currentYearGameCount = 0;
+                var currentYearContent = "";
+                var liOpened = false;
+                var that = this;
+
+                $.each(data.hallOfFameGames, function (index, value) {
+                    if (previousYear != value.hall_of_fame_year) {
                         if (previousYear != 0) {
-                            content = content.substr(0, content.length - 2);
-                            content += "</li>";
+                            content += that.getHallOfFameClosure(previousYear, currentYearContent, currentYearGameCount);
+                            currentYearContent = "";
+                            currentYearGameCount = 0;
                             liOpened = false;
                         }
-                        previousYear = value.all_of_fame_year;
-                        content += "<li>" + value.all_of_fame_year + ": ";
+                        currentYearGameCount = 0;
+                        previousYear = value.hall_of_fame_year;
+                        currentYearContent += ": <ul>";
                         liOpened = true;
                     }
-                    content += "<i>" + value.name + "</i> (" + value.platform + "), ";
+                    currentYear = value.hall_of_fame_year;
+                    currentYearGameCount++
+                    currentYearContent += "<li><i>" + value.title + "</i> (" + value.platform + ")</li>";
                 });
+
                 if (liOpened) {
-                    content = content.substr(0, content.length - 2);
-                    content += "</li>";
+                    content += this.getHallOfFameClosure(currentYear, currentYearContent, currentYearGameCount);
                 }
                 content += "</ul>";
-                var allOfFameCriteria = $("#hallOfFameCriteria").remove();
-                $("#content").append(content);
-                $("#content").append(allOfFameCriteria);
-                $("#hallOfFameCriteria").show();
-            };
 
-            /**
-             * Display generic error msg
-             */
-            this.displayErrorMsg = function() {
-                $("#content").append("Impossible de contacter le serveur");
-            };
+                return content;
+            },
 
-            /**
-             * Remove the temporary msg "Please wait..."
-             */
-            this.cleanTempMsg = function() {
-                $("#tempMsg").remove();
-            };
-        };
+            getHallOfFameClosure: function(year, currentYearContent, currentYearGameCount) {
+                currentYearContent += "</ul></li>";
+                var output = (currentYearGameCount > 1 ? 'entrées' : 'entrée');
+                currentYearContent = "<li><strong>" + year + "</strong> (" + currentYearGameCount + " " + output + ")" + currentYearContent;
 
-        var dataReader = new dataGetter();
-        dataReader.getData();
+                return currentYearContent;
+            }
+        }
     }
-);
+);    
