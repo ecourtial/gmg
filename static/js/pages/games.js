@@ -67,19 +67,19 @@ define(
             },
 
             getBadges: function(gameEntry, value) {
-                if (value.all_of_fames === 1) {
-                    gameEntry += ' <img title="Dans le hall of fames" src="' + allOfFamesImageUrl + '"/>'
+                if (value.meta.hall_of_fame === 1) {
+                    gameEntry += ' <img title="Dans le hall of fame" src="' + hallOfFameImageUrl + '"/>'
                 }
 
-                if (value.top_game === 1) {
+                if (value.meta.top_game === 1) {
                     gameEntry += ' <img title="Top jeu" src="' + topImageUrl + '"/>'
                 }
 
-                if (value.played_it_often === 1) {
+                if (value.meta.played_it_often === 1) {
                     gameEntry += ' <img title="Beaucoup joué" src="' + playedOftenImageUrl + '"/>'
                 }
 
-                if (value.to_buy === 1) {
+                if (value.meta.to_buy === 1) {
                     gameEntry += ' <img title="À acheter" src="' + toBuyImageUrl + '"/>'
                 }
 

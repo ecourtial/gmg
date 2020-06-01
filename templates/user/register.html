@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+    {% block optional_extra_content %}
+        <form action="{{ url_for('register') }}" method='POST'>
+            <p>
+                <label for="email">Email</label>
+                <input type='text' name='email' id='email' placeholder='email' required/>
+            </p>
+            <p>
+                <label for="user_name">Pseudo</label>
+                <input type='text' name='user_name' id='user_name' placeholder='Username' required/>
+            </p>
+            <p>
+                <label for="password">Mot de passe</label>
+                <input type='password' name='password' id='password' placeholder='password' required/>
+            </p>
+            <p>
+                <label for="confirmPassword">Confirmer le mot de passe</label>
+                <input type='password' name='confirmPassword' id='confirmPassword' placeholder='confirm password' required/>
+            </p>
+            <input type='hidden' name='_token' value='{{ token }}'/>
+            <input type='submit' name='submit'/>
+        </form>
+    {% endblock %}

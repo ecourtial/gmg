@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+    {% block optional_extra_content %}
+    <form action="{{ url_for('edit_profile') }}" method='POST'>
+        <p>
+            <label for="currentEmail">Email actuel</label>
+            <input type='text' name='currentEmail' id='currentEmail' placeholder='current email' required/>
+        </p>
+        <p>
+            <label for="newEmail">Nouvel email</label>
+            <input type='text' name='newEmail' id='newEmail' placeholder='new email' required/>
+        </p>
+        <p>
+            <label for="confirmNewEmail">Confirmer le nouvel mail</label>
+            <input type='text' name='confirmNewEmail' id='confirmNewEmail' placeholder='confirm new email' required/>
+        </p>
+        <p>
+            <label for="currentPassword">Mot de passe actuel</label>
+            <input type='password' name='currentPassword' id='currentPassword' placeholder='current password' required/>
+        </p>
+        <p>
+            <label for="newPassword">Nouveau mot de passe</label>
+            <input type='password' name='newPassword' id='newPassword' placeholder='new password' required/>
+        </p>
+        <p>
+            <label for="confirmNewPassword">Confirmer le nouveau mot de passe</label>
+            <input type='password' name='confirmNewPassword' id='confirmNewPassword' placeholder='confirm new password' required/>
+        </p>
+        <input type='hidden' name='_token' value='{{ token }}'/>
+        <input type='submit' name='submit'/>
+    </form>
+{% endblock %}

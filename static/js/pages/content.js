@@ -64,7 +64,7 @@ define(
 
         function displayHomeContent() {
             dataManager.showTempMsg(true);
-            dataManager.getData(hallOfFamesUrl, home, null);
+            dataManager.getData(hallOfFameUrl, home, null);
         }
 
         /** On startup */

@@ -22,38 +22,38 @@ define(
                 content = content.replace("@BADGES@", badges);
 
                 // Main content
-                content = content.replace("@ID@", data.game.game_id);
-                content = content.replace("@IS_SOLO_RECCURING@", this.boolToYesNoConverter(data.game.singleplayer_recurring));
-                content = content.replace("@IS_MULTI_RECCURING@", this.boolToYesNoConverter(data.game.singleplayer_recurring));
-                content = content.replace("@IS_TO_DO@", this.boolToYesNoConverter(data.game.to_do));
-                content = content.replace("@IS_TO_PLAY_SOLO_SOMETIMES@", this.boolToYesNoConverter(data.game.todo_solo_sometimes));
-                content = content.replace("@IS_TO_PLAY_MULTI_SOMETIMES@", this.boolToYesNoConverter(data.game.todo_multiplayer_sometimes));
-                content = content.replace("@ORIGINAL_VERSION@", this.boolToYesNoConverter(data.game.original));
-                content = content.replace("@IS_TO_BUY@", this.boolToYesNoConverter(data.game.to_buy));
-                content = content.replace("@IS_TO_WATCH_BACKGROUND@", this.boolToYesNoConverter(data.game.to_watch_background));
-                content = content.replace("@IS_TO_WATCH_SERIOUS@", this.boolToYesNoConverter(data.game.to_watch_serious));
-                content = content.replace("@IS_TO_WATCH_AGAIN@", this.boolToYesNoConverter(data.game.to_rewatch));
-                content = content.replace("@IS_ONE_COPY@", this.boolToYesNoConverter(data.game.copy));
-                content = content.replace("@IS_MANY@", this.boolToYesNoConverter(data.game.many));
-                content = content.replace("@IS_TOP@", this.boolToYesNoConverter(data.game.top_game));
-                content = content.replace("@IS_PLAYED_OFTEN@", this.boolToYesNoConverter(data.game.played_it_often));
+                content = content.replace("@ID@", data.game.meta.game_id);
+                content = content.replace("@IS_SOLO_RECCURING@", this.boolToYesNoConverter(data.game.meta.singleplayer_recurring));
+                content = content.replace("@IS_MULTI_RECCURING@", this.boolToYesNoConverter(data.game.meta.singleplayer_recurring));
+                content = content.replace("@IS_TO_DO@", this.boolToYesNoConverter(data.game.meta.to_do));
+                content = content.replace("@IS_TO_PLAY_SOLO_SOMETIMES@", this.boolToYesNoConverter(data.game.meta.todo_solo_sometimes));
+                content = content.replace("@IS_TO_PLAY_MULTI_SOMETIMES@", this.boolToYesNoConverter(data.game.meta.todo_multiplayer_sometimes));
+                content = content.replace("@ORIGINAL_VERSION@", this.boolToYesNoConverter(data.game.meta.original));
+                content = content.replace("@IS_TO_BUY@", this.boolToYesNoConverter(data.game.meta.to_buy));
+                content = content.replace("@IS_TO_WATCH_BACKGROUND@", this.boolToYesNoConverter(data.game.meta.to_watch_background));
+                content = content.replace("@IS_TO_WATCH_SERIOUS@", this.boolToYesNoConverter(data.game.meta.to_watch_serious));
+                content = content.replace("@IS_TO_WATCH_AGAIN@", this.boolToYesNoConverter(data.game.meta.to_rewatch));
+                content = content.replace("@IS_ONE_COPY@", this.boolToYesNoConverter(data.game.meta.copy));
+                content = content.replace("@IS_MANY@", this.boolToYesNoConverter(data.game.meta.many));
+                content = content.replace("@IS_TOP@", this.boolToYesNoConverter(data.game.meta.top_game));
+                content = content.replace("@IS_PLAYED_OFTEN@", this.boolToYesNoConverter(data.game.meta.played_it_often));
 
-                // Hall of fames
-                if (data.game.all_of_fames === 0) {
+                // Hall of fame
+                if (data.game.meta.hall_of_fame === 0) {
                     var hofYear = 'N/A';
                     var hofPosition = hofYear;
                 } else {
-                    var hofYear = data.game.all_of_fames_year;
-                    var hofPosition = data.game.all_of_fames_position;
+                    var hofYear = data.game.meta.hall_of_fame_year;
+                    var hofPosition = data.game.meta.hall_of_fame_position;
                 }
                 content = content.replace("@HALL_YEAR@", hofYear);
                 content = content.replace("@HALL_POSITION@", hofPosition);
                 
                 // Comments
-                if (data.game.comments === '' || data.game.comments === null) {
+                if (data.game.meta.comments === '' || data.game.meta.comments === null) {
                     var comments = 'Aucun';
                 } else {
-                    var comments = data.game.comments;
+                    var comments = data.game.meta.comments;
                 }
                 content = content.replace("@COMMENTS@", comments);
 
@@ -67,19 +67,19 @@ define(
             getBadges: function(value) {
                 var gameEntry = '';
 
-                if (value.all_of_fames === 1) {
-                    gameEntry += ' <img title="Dans le hall of fames" src="' + allOfFamesImageUrl + '"/>'
+                if (value.meta.hall_of_fame === 1) {
+                    gameEntry += ' <img title="Dans le hall of fame" src="' + hallOfFameImageUrl + '"/>'
                 }
 
-                if (value.top_game === 1) {
+                if (value.meta.top_game === 1) {
                     gameEntry += ' <img title="Top jeu" src="' + topImageUrl + '"/>'
                 }
 
-                if (value.played_it_often === 1) {
+                if (value.meta.played_it_often === 1) {
                     gameEntry += ' <img title="Beaucoup joué" src="' + playedOftenImageUrl + '"/>'
                 }
 
-                if (value.to_buy === 1) {
+                if (value.meta.to_buy === 1) {
                     gameEntry += ' <img title="À acheter" src="' + toBuyImageUrl + '"/>'
                 }
 

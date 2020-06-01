@@ -23,13 +23,13 @@
             <p id="extraP"></p>
             <script type="text/javascript">
                 // Assets links
-                var allOfFamesImageUrl = "{{ url_for('static', filename='images/hall-of-fames.png') }}";
+                var hallOfFameImageUrl = "{{ url_for('static', filename='images/hall-of-fame.png') }}";
                 var playedOftenImageUrl = "{{ url_for('static', filename='images/time.png') }}";
                 var topImageUrl = "{{ url_for('static', filename='images/top.png') }}";
                 var toBuyImageUrl = "{{ url_for('static', filename='images/to-buy.png') }}";
 
                 // API URLs
-                var hallOfFamesUrl = "{{ url_for('get_home_content') }}";
+                var hallOfFameUrl = "{{ url_for('get_home_content') }}";
                 var platformListUrl = "{{ url_for('get_platforms') }}";
 
                 var gameListByPlatformUrl = "{{ url_for('get_games_for_platform', platform_id=1) }}";

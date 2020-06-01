@@ -43,7 +43,7 @@ define(
                 var that = this;
 
                 $.each(data.hallOfFameGames, function (index, value) {
-                    if (previousYear != value.hall_of_fame_year) {
+                    if (previousYear != value.meta.hall_of_fame_year) {
                         if (previousYear != 0) {
                             content += that.getHallOfFameClosure(previousYear, currentYearContent, currentYearGameCount);
                             currentYearContent = "";
@@ -51,11 +51,11 @@ define(
                             liOpened = false;
                         }
                         currentYearGameCount = 0;
-                        previousYear = value.hall_of_fame_year;
+                        previousYear = value.meta.hall_of_fame_year;
                         currentYearContent += ": <ul>";
                         liOpened = true;
                     }
-                    currentYear = value.hall_of_fame_year;
+                    currentYear = value.meta.hall_of_fame_year;
                     currentYearGameCount++
                     currentYearContent += "<li><i>" + value.title + "</i> (" + value.platform + ")</li>";
                 });

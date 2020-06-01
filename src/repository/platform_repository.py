@@ -1,11 +1,9 @@
 """ Repository to handle the platforms """
+from src.repository.abstract_repository import AbstractRepository
 from src.entity.platform import Platform
 
-class PlatformRepository:
+class PlatformRepository(AbstractRepository):
     """ Another useless comment """
-
-    def __init__(self, mysql):
-        self.mysql = mysql
 
     def get_total_count(self):
         """The total count of platforms registered in the app."""
@@ -17,8 +15,6 @@ class PlatformRepository:
 
     def get_list(self):
         """The list of plaforms with their games count."""
-        platform_list = []
-        cursor = self.mysql.cursor(dictionary=True)
         request = "SELECT games.platform AS platform_id, platforms.name AS platform_name, "
         request += "count(*) AS total FROM games, platforms "
         request += "WHERE games.platform = platforms.id GROUP BY platform "
@@ -27,27 +23,15 @@ class PlatformRepository:
         request += " WHERE platforms.id NOT IN (SELECT DISTINCT games.platform FROM games) "
         request += "ORDER BY platform_name;"
 
-        cursor.execute(request)
-
-        while True:
-            row = cursor.fetchone()
-            if row is None:
-                break
-            platform_list.append(self.hydrate(row))
-
-        cursor.close()
-        return platform_list
+        return self.fetch_multiple(request, ())
 
     def get_by_id(self, platform_id):
         """Get one support."""
-        cursor = self.mysql.cursor(dictionary=True)
         request = "SELECT platforms.id as platform_id, platforms.name as platform_name,"
         request += " count(*) as total FROM games, platforms "
         request += "WHERE games.platform = platforms.id and platforms.id = %s;"
 
-        data_tuple = (platform_id,)
-        cursor.execute(request, data_tuple)
-        return self.hydrate(cursor.fetchone())
+        return self.fetch_one(request, (platform_id,))
 
     @classmethod
     def hydrate(cls, row):
