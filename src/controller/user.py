@@ -1,11 +1,13 @@
+"""Controller to handle user operations"""
 from flask import request, redirect, url_for, session, render_template
 from flask_login import login_user, logout_user
 from src.service.user_service import UserService
 
 class UserController:
-
+    """Another useless comment"""
     @classmethod
     def register(cls, mysql):
+        """Endpoint to register an user"""
         if request.method == 'GET':
             user_service = UserService(mysql)
             user_service.add_token_to_session()
@@ -38,6 +40,7 @@ class UserController:
 
     @classmethod
     def login(cls, mysql):
+        """Endpoint for login"""
         if request.method == 'GET':
             user_service = UserService(mysql)
             user_service.add_token_to_session()
@@ -57,14 +60,15 @@ class UserController:
 
         user = user_service.get_authenticated_user(request.form['email'], request.form['password'])
 
-        if user == False:
+        if user is False:
             return 'Bad login or account is inactive'
-        
+
         login_user(user)
         return redirect(url_for('home'))
 
     @classmethod
     def edit(cls, mysql):
+        """Endpoint for editing user profile"""
         if request.method == 'GET':
             return render_template(
                 'user/edit.html',
@@ -74,39 +78,49 @@ class UserController:
             )
 
         if request.form['_token'] != session['csrfToken']:
-            return "Bad request"    
+            return "Bad request"
 
-        if request.form['currentEmail'] == '' \
-            or request.form['newEmail'] == '' \
-            or request.form['confirmNewEmail'] == '' \
-            or request.form['currentPassword'] == '' \
-            or request.form['newPassword'] == '' \
-            or request.form['confirmNewPassword'] == '':
-            return "Form is incomplete"
+        fields_to_validate = (
+            'currentEmail',
+            'newEmail',
+            'confirmNewEmail',
+            'currentPassword',
+            'newPassword',
+            'confirmNewPassword'
+        )
+
+        for field in fields_to_validate:
+            if request.form[field] == '':
+                return "Form is incomplete"
 
         email = request.form['currentEmail']
-        newEmail = request.form['newEmail']
+        new_email = request.form['newEmail']
         password = request.form['currentPassword']
         new_password = request.form['newPassword']
 
         user_service = UserService(mysql)
         user = user_service.get_authenticated_user(email, password)
 
-        if user == False:
-            return 'Bad login or account is inactive'
+        error_message = ""
+        if user is False:
+            error_message += 'Bad login or account is inactive. '
 
-        if newEmail != request.form['confirmNewEmail']:
-            return "New email does not match"
+        if new_email != request.form['confirmNewEmail']:
+            error_message += "New email does not match. "
 
         if new_password != request.form['confirmNewPassword']:
-            return "New password does not match"
+            error_message += "New password does not match. "
 
-        user_service.update(user, new_password, newEmail)
-        
+        if error_message != '':
+            return error_message
+
+        user_service.update(user, new_password, new_email)
+
         return 'Done'
 
     @classmethod
     def logout(cls):
+        """Endpoint for logout"""
         logout_user()
 
         return redirect(url_for('home'))

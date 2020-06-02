@@ -1,7 +1,7 @@
-from abc import ABC, abstractmethod 
+"""An abstract repository"""
 
 class AbstractRepository:
-
+    """Another useless comment"""
     def __init__(self, mysql):
         self.mysql = mysql
 
@@ -34,9 +34,9 @@ class AbstractRepository:
     @classmethod
     def hydrate(cls, row):
         """Hydrate an object from a row. Must be overriden"""
-        pass
 
     def write(self, request, data):
+        """Performs a UPDATE or WRITE statement"""
         cursor = self.mysql.cursor()
         cursor.execute(request, data)
         self.mysql.commit()

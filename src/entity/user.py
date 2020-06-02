@@ -1,25 +1,15 @@
 """ User entity for the GMG project """
-import json
 
 class User:
     """ This class represent a user"""
-    def __init__(
-            self,
-            user_id,
-            email,
-            salt,
-            password,
-            status,
-            user_name,
-            is_authenticated
-    ):
-        self.user_id = user_id
-        self.email = email
-        self.salt = salt
-        self.password = password
-        self.status = status,
-        self.user_name = user_name
-        self.authenticated = is_authenticated
+    def __init__(self, row):
+        self.user_id = row['id']
+        self.email = row['email']
+        self.salt = row['salt']
+        self.password = row['password']
+        self.status = int(row['status'])
+        self.user_name = row['user_name']
+        self.authenticated = False
 
     def get_id(self):
         """Return the id of the user, for instance "125"."""
@@ -43,20 +33,12 @@ class User:
 
     def is_active(self):
         """Return the user's status."""
-        if self.status[0] == 1 or self.status == 1:
-            return True
-        return False
+        return self.status == 1
 
     def get_user_name(self):
+        """Returns the username"""
         return self.user_name
 
     def is_authenticated(self):
+        """Is the user authenticated"""
         return self.authenticated
-
-    def set_email(self, email):
-        """Set the user's email"""
-        self.email = email
-
-    def set_password(self, password):
-        """Set the user's password"""
-        self.password = password
