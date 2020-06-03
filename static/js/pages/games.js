@@ -2,8 +2,8 @@
  * @author Eric COURTIAL <e.courtial30@gmail.com>
  */
 define(
-    ["jquery"],
-    function ($) {
+    ["jquery", "tools"],
+    function ($, tools) {
         "use strict";
 
         return {
@@ -16,14 +16,14 @@ define(
                 var content = '<ul>';
 
                 $.each(data.games, function (index, value) {
-                    var gameEntry = value.title;
+                    var gameEntry = tools.filterContent(value.title);
 
                     if (context !== 'gamePerPlatform') {
-                        gameEntry += ' (' + value.platform + ')';
+                        gameEntry += ' (' + tools.filterContent(value.platform) + ')';
                     }
 
                     gameEntry = that.getBadges(gameEntry, value);
-                    gameEntry += ' - <a data-link-type="gameDetails" id="entry' + value.game_id + '" href="">Détails</a>';
+                    gameEntry += ' - <a data-link-type="gameDetails" id="entry' + tools.filterContent(value.game_id) + '" href="">Détails</a>';
                     content += '<li>' + gameEntry + '</li>'
                 });
 
@@ -34,7 +34,7 @@ define(
 
             getTitle: function(data, context) {
                 var output = (data.games.length > 1 ? 'entrées' : 'entrée');
-                var countTitle = ' (' + data.games.length + ' ' + output + ')';
+                var countTitle = ' (' + tools.filterContent(data.games.length) + ' ' + output + ')';
 
                 var correspondence = {
                     "singleplayer_recurring": "A jouer régulièrement en solo",
@@ -55,9 +55,9 @@ define(
 
                 if (context === 'gamePerPlatform') {
                     var platform = data.platform;
-                    var title = platform.platform_name + countTitle;
+                    var title = tools.filterContent(platform.platform_name) + countTitle;
                 } else if(context === 'gameSearch') {
-                    var title = "Recherche '" + $('#extraP').text($('#gameSearch').val()).html() + "'" + countTitle;
+                    var title = "Recherche '" + tools.filterContent($('#gameSearch').val()) + "'" + countTitle;
                 } else {
                     console.log("Unknown game context '" + context + "'");
                     var title = '???';

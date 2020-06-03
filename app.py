@@ -91,6 +91,12 @@ def get_special_list(filter):
     controller = GameController
     return controller.get_special_list(mysql, filter) 
 
+# Add a new platform
+@app.route('/platform/add', methods=['GET', 'POST'])
+def add_platform():
+    controller = PlatformController
+    return controller.add(mysql) 
+
 # Routes for session management
 
 # Register

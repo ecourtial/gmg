@@ -18,8 +18,8 @@
         <div id="extra_content" class="container">
             {% block optional_extra_content %}{% endblock %}
         </div>
-        {% include 'general/game.html' %}
         {%- if show_menu -%}
+            {% include 'general/game.html' %}
             <p id="extraP"></p>
             <script type="text/javascript">
                 // Assets links
@@ -31,6 +31,7 @@
                 // API URLs
                 var hallOfFameUrl = "{{ url_for('get_home_content') }}";
                 var platformListUrl = "{{ url_for('get_platforms') }}";
+                var addPlatformUrl = "{{ url_for('add_platform') }}";
 
                 var gameListByPlatformUrl = "{{ url_for('get_games_for_platform', platform_id=1) }}";
                 gameListByPlatformUrl = gameListByPlatformUrl.substring(0, gameListByPlatformUrl.length -1);

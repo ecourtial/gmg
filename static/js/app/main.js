@@ -12,7 +12,9 @@ requirejs.config({
         "platforms": "pages/platforms",
         "games": "pages/games",
         "game": "pages/game",
-        "home": "pages/home"
+        "home": "pages/home",
+        "tools": "app/tools",
+        "platformEditor": "forms/platform"
     },
     // Define dependencies between modules and libraries, and the order of loading
     shim: {

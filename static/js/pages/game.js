@@ -2,8 +2,8 @@
  * @author Eric COURTIAL <e.courtial30@gmail.com>
  */
 define(
-    ["jquery"],
-    function ($) {
+    ["jquery", "tools"],
+    function ($, tools) {
         "use strict";
 
         return {
@@ -11,7 +11,7 @@ define(
              * Diplay the details of a game
              */
             diplayData: function (data, context) {
-                $('#contentTitle').html(data.game.title + ' (' + data.game.platform + ')');
+                $('#contentTitle').html(tools.filterContent(data.game.title) + ' (' + tools.filterContent(data.game.platform) + ')');
                 var content = $('#gameDetailContent').html();
 
                 // Badges
@@ -22,7 +22,7 @@ define(
                 content = content.replace("@BADGES@", badges);
 
                 // Main content
-                content = content.replace("@ID@", data.game.meta.game_id);
+                content = content.replace("@ID@", tools.filterContent(data.game.meta.game_id));
                 content = content.replace("@IS_SOLO_RECCURING@", this.boolToYesNoConverter(data.game.meta.singleplayer_recurring));
                 content = content.replace("@IS_MULTI_RECCURING@", this.boolToYesNoConverter(data.game.meta.singleplayer_recurring));
                 content = content.replace("@IS_TO_DO@", this.boolToYesNoConverter(data.game.meta.to_do));
@@ -46,14 +46,16 @@ define(
                     var hofYear = data.game.meta.hall_of_fame_year;
                     var hofPosition = data.game.meta.hall_of_fame_position;
                 }
-                content = content.replace("@HALL_YEAR@", hofYear);
-                content = content.replace("@HALL_POSITION@", hofPosition);
+                content = content.replace("@HALL_YEAR@", tools.filterContent(hofYear));
+                content = content.replace("@HALL_POSITION@", tools.filterContent(hofPosition));
                 
                 // Comments
                 if (data.game.meta.comments === '' || data.game.meta.comments === null) {
                     var comments = 'Aucun';
                 } else {
                     var comments = data.game.meta.comments;
+                    comments = comments.replace(/[\n\r]/g, '<br/>');
+                    comments = tools.filterContent(comments);
                 }
                 content = content.replace("@COMMENTS@", comments);
 
