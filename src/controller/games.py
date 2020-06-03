@@ -1,5 +1,5 @@
 """ Games controller for the GMG project """
-from flask import jsonify, request
+from flask import jsonify, request, render_template, session
 from src.repository.game_repository import GameRepository
 from src.repository.platform_repository import PlatformRepository
 
@@ -55,3 +55,29 @@ class GameController:
             games_list = game_repo.get_special_list(special_filter)
 
         return jsonify(games=[game.serialize() for game in games_list])
+
+
+    @classmethod
+    def add(cls, mysql):
+        """Add a new game."""
+        if request.method == 'GET':
+            platform_repo = PlatformRepository(mysql)
+            return render_template(
+                'general/game-form.html',
+                show_menu=True,
+                content_title="Ajouter un jeu",
+                token=session['csrfToken'],
+                platforms=platform_repo.get_list()
+            )
+        
+        if request.form['_token'] != session['csrfToken']:
+            return jsonify(), 400    
+
+        name = request.form['platform_name']
+        if name == '':
+            return "Form is incomplete"
+
+        repo = PlatformRepository(mysql)
+        repo.insert(name)
+
+        return jsonify(message="Success")

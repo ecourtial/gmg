@@ -21,6 +21,9 @@ class PlatformController:
                 content_title="Ajouter une plateforme", token=session['csrfToken']
             )
 
+        if request.form['_token'] != session['csrfToken']:
+            return jsonify(), 400
+
         name = request.form['platform_name']
         if name == '':
             return "Form is incomplete"

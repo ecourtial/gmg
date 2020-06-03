@@ -32,6 +32,7 @@
                 var hallOfFameUrl = "{{ url_for('get_home_content') }}";
                 var platformListUrl = "{{ url_for('get_platforms') }}";
                 var addPlatformUrl = "{{ url_for('add_platform') }}";
+                var addGameUrl = "{{ url_for('add_game') }}";
 
                 var gameListByPlatformUrl = "{{ url_for('get_games_for_platform', platform_id=1) }}";
                 gameListByPlatformUrl = gameListByPlatformUrl.substring(0, gameListByPlatformUrl.length -1);

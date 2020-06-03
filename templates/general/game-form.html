@@ -4,5 +4,39 @@
             <label for="title">Titre</label>
             <input type='text' name='title' id='title' required/>
         </p>
+        <p>
+            <label for="platform">Plate-forme</label>
+            <select id="platform" name="platform">
+                {% for platform in platforms %}
+                    <option value="{{ platform.get_platform_id() }}">{{ platform.get_name() }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <label for="todo_solo_sometimes">A faire en solo parfois</label>
+            <select id="todo_solo_sometimes" name="todo_solo_sometimes">
+                <option value="0" selected>Non</option>
+                <option value="1">Oui</option>
+            </select>
+        </p>
+        <input type='hidden' name='_token' value='{{ token }}'/>
+        <input type='submit' name='submit' value="Enregistrer"/>
     </form>
-</div>
+    <script type="text/javascript">
+        $( "#gameForm" ).submit(function( event ) {
+            $.ajax({
+                url: "{{ url_for('add_game') }}",
+                type: "POST",
+                data: $(this).serialize(),
+                dataType: "json",
+                success: function (data) {
+                    $("#platforms").trigger("click");
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Une erreur s'est produite.");
+                }
+            });
+    
+            return false;
+        });
+    </script>

@@ -2,8 +2,8 @@
  * @author Eric COURTIAL <e.courtial30@gmail.com>
  */
 define(
-    ["jquery", "platforms", "games", "game", "home", "platformEditor"],
-    function ($, platforms, games, game, home, platformEditor) {
+    ["jquery", "platforms", "games", "game", "home", "platformEditor", "gameEditor"],
+    function ($, platforms, games, game, home, platformEditor, gameEditor) {
         "use strict";
 
         /**
@@ -120,6 +120,14 @@ define(
         $('#addPlatform').click(function() {
             dataManager.showTempMsg(true);
             dataManager.getData(addPlatformUrl, platformEditor, 'add');
+
+            return false;
+        });
+
+        // Add game form
+        $('#addGame').click(function() {
+            dataManager.showTempMsg(true);
+            dataManager.getData(addGameUrl, gameEditor, 'add');
 
             return false;
         });
