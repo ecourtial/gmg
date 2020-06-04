@@ -35,8 +35,14 @@ class AbstractRepository:
     def hydrate(cls, row):
         """Hydrate an object from a row. Must be overriden"""
 
-    def write(self, request, data):
-        """Performs a UPDATE or WRITE statement"""
+    def write(self, request, data, commit=True):
+        """Performs an UPDATE or WRITE statement"""
         cursor = self.mysql.cursor()
         cursor.execute(request, data)
-        self.mysql.commit()
+
+        if commit:
+            self.mysql.commit()
+        else:
+            self.mysql.autocommit = False
+
+        return cursor.lastrowid

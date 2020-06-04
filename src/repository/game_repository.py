@@ -126,6 +126,48 @@ class GameRepository(AbstractRepository):
         request += ' ORDER BY games_meta.hall_of_fame_year, games_meta.hall_of_fame_position'
         return self.fetch_multiple(request, ())
 
+    def insert(self, title, platform, form_content):
+        """Insert a new game"""
+        request = "INSERT INTO games (title, platform) VALUES (%s, %s)"
+        game_id = self.write(request, (title, platform), False)
+
+        meta = (
+            game_id,
+            form_content['todo_solo_sometimes'],
+            form_content['todo_multiplayer_sometimes'],
+            form_content['singleplayer_recurring'],
+            form_content['multiplayer_recurring'],
+            form_content['to_do'],
+            form_content['to_buy'],
+            form_content['to_watch_background'],
+            form_content['to_watch_serious'],
+            form_content['to_rewatch'],
+            form_content['original'],
+            form_content['copy'],
+            form_content['many'],
+            form_content['top_game'],
+            form_content['hall_of_fame'],
+            form_content['hall_of_fame_year'],
+            form_content['hall_of_fame_position'],
+            form_content['played_it_often'],
+            form_content['comments'],
+        )
+
+        request = "INSERT INTO games_meta (game_id,"
+        request += "todo_solo_sometimes, todo_multiplayer_sometimes,"
+        request += "singleplayer_recurring, multiplayer_recurring,"
+        request += "to_do, to_buy, to_watch_background,"
+        request += "to_watch_serious, to_rewatch,"
+        request += "original, copy,"
+        request += "many, top_game,"
+        request += "hall_of_fame, hall_of_fame_year,"
+        request += "hall_of_fame_position, played_it_often, comments) "
+        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+
+        self.write(request, meta)
+
+        return game_id
+
     @classmethod
     def hydrate(cls, row):
         """Hydrate an object from a row."""

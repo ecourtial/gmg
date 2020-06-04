@@ -36,7 +36,7 @@ class PlatformRepository(AbstractRepository):
     def insert(self, name):
         """Insert a new platform"""
         request = "INSERT INTO platforms (name) VALUES (%s)"
-        self.write(request, (name,))
+        return self.write(request, (name,))
 
     @classmethod
     def hydrate(cls, row):

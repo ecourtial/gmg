@@ -29,6 +29,5 @@ class PlatformController:
             return "Form is incomplete"
 
         repo = PlatformRepository(mysql)
-        repo.insert(name)
 
-        return jsonify(message="Success")
+        return jsonify(id=repo.insert(name))

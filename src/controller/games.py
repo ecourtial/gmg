@@ -16,6 +16,7 @@ class GameController:
             platform=platform.serialize(), games=[game.serialize() for game in games_list]
         )
 
+
     @classmethod
     def get_by_id(cls, mysql, game_id):
         """Return the platform list."""
@@ -69,15 +70,20 @@ class GameController:
                 token=session['csrfToken'],
                 platforms=platform_repo.get_list()
             )
-        
-        if request.form['_token'] != session['csrfToken']:
-            return jsonify(), 400    
 
-        name = request.form['platform_name']
-        if name == '':
+        if request.form['_token'] != session['csrfToken']:
+            return jsonify(), 400
+
+        title = request.form['title']
+        platform_id = request.form['platform']
+        if title == '' or platform_id == '':
             return "Form is incomplete"
 
-        repo = PlatformRepository(mysql)
-        repo.insert(name)
+        platform_repo = PlatformRepository(mysql)
+        platform = platform_repo.get_by_id(platform_id)
+        if platform is None:
+            return "Invalid platform"
 
-        return jsonify(message="Success")
+        game_repo = GameRepository(mysql)
+
+        return jsonify(id=game_repo.insert(title, platform_id, request.form))
