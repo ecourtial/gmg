@@ -11,16 +11,8 @@ define(
              * Add or edit a game
              */
             diplayData: function (data, context) {
-                $('#contentTitle').html(this.getTitle(context));
-                $('#content').empty().html(data);
-            },
-
-            getTitle: function(context) {
-                if (context === 'add') {
-                    return 'Ajouter un jeu';
-                } else {
-                    return '???';
-                }
+                $('#contentTitle').html(data.title);
+                $('#content').empty().html(data.form);
             }
         };
     }

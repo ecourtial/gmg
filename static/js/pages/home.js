@@ -57,7 +57,7 @@ define(
                     }
                     currentYear = value.meta.hall_of_fame_year;
                     currentYearGameCount++
-                    currentYearContent += "<li><i>" + tools.filterContent(value.title) + "</i> (" + tools.filterContent(value.platform) + ")</li>";
+                    currentYearContent += "<li><i>" + tools.filterContent(value.title) + "</i> (" + tools.filterContent(value.platform_name) + ")</li>";
                 });
 
                 if (liOpened) {

@@ -63,13 +63,13 @@ class GameController:
         """Add a new game."""
         if request.method == 'GET':
             platform_repo = PlatformRepository(mysql)
-            return render_template(
+            form = render_template(
                 'general/game-form.html',
-                show_menu=True,
-                content_title="Ajouter un jeu",
                 token=session['csrfToken'],
                 platforms=platform_repo.get_list()
             )
+
+            return jsonify(form=form, title="Ajouter un jeu")
 
         if request.form['_token'] != session['csrfToken']:
             return jsonify(), 400
@@ -87,3 +87,52 @@ class GameController:
         game_repo = GameRepository(mysql)
 
         return jsonify(id=game_repo.insert(title, platform_id, request.form))
+
+    @classmethod
+    def edit(cls, mysql, game_id):
+        """Edit a game."""
+        if request.method == 'GET':
+            game_repo = GameRepository(mysql)
+            game = game_repo.get_by_id(game_id)
+
+            if game is None:
+                return jsonify(), 404
+
+            platform_repo = PlatformRepository(mysql)
+
+            form = render_template(
+                'general/game-form.html',
+                token=session['csrfToken'],
+                platforms=platform_repo.get_list(),
+                game=game
+            )
+
+            return jsonify(form=form, title="Editer '" + game.get_title() + "'")
+
+        if request.form['_token'] != session['csrfToken']:
+            return jsonify(), 400
+
+        title = request.form['title']
+        platform_id = request.form['platform']
+        if title == '' or platform_id == '':
+            return "Form is incomplete"
+
+        platform_repo = PlatformRepository(mysql)
+        platform = platform_repo.get_by_id(platform_id)
+        if platform is None:
+            return "Invalid platform"
+
+        game_repo = GameRepository(mysql)
+
+        return jsonify(id=game_repo.update(game_id, title, platform_id, request.form))
+
+    @classmethod
+    def delete(cls, mysql, game_id):
+        """Delete a game."""
+        if request.form['_token'] != session['csrfToken']:
+            return jsonify(), 400
+
+        game_repo = GameRepository(mysql)
+        game_repo.delete(game_id)
+
+        return jsonify(), 204

@@ -1,6 +1,6 @@
 """ Home controller for the GMG project """
 
-from flask import render_template, jsonify
+from flask import render_template, jsonify, session
 from src.repository.platform_repository import PlatformRepository
 from src.repository.game_repository import GameRepository
 
@@ -11,6 +11,7 @@ class HomeController:
         """Return the html content (layout)."""
         return render_template(
             'layout.html',
+            token=session['csrfToken'],
             show_menu=True,
             title="Give me a game", content_title="Hall of fames"
         )

@@ -19,11 +19,17 @@ define(
                     var gameEntry = tools.filterContent(value.title);
 
                     if (context !== 'gamePerPlatform') {
-                        gameEntry += ' (' + tools.filterContent(value.platform) + ')';
+                        gameEntry += ' (' + tools.filterContent(value.platform_name) + ')';
                     }
 
                     gameEntry = that.getBadges(gameEntry, value);
-                    gameEntry += ' - <a data-link-type="gameDetails" id="entry' + tools.filterContent(value.game_id) + '" href="">Détails</a>';
+                    gameEntry += ' - <a data-link-type="gameDetails" id="entryD' + tools.filterContent(value.game_id) + '" href="">Détails</a>';
+
+                    if (logged) {
+                        gameEntry += ' - <a data-link-type="gameEdit" id="entryE' + tools.filterContent(value.game_id) + '" href="">Editer</a>';
+                        gameEntry += ' - <a data-link-type="gameDelete" id="entryR' + tools.filterContent(value.game_id) + '" href="">Supprimer</a>';
+                    }
+
                     content += '<li>' + gameEntry + '</li>'
                 });
 

@@ -47,6 +47,7 @@ class Game:
         return {
             'game_id': self.game_id,
             'title': self.title,
-            'platform': self.platform,
+            'platform': self.platform.get_platform_id(),
+            'platform_name': self.platform.get_name(),
             'meta' : self.meta
         }

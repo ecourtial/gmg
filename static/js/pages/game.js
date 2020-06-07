@@ -11,7 +11,7 @@ define(
              * Diplay the details of a game
              */
             diplayData: function (data, context) {
-                $('#contentTitle').html(tools.filterContent(data.game.title) + ' (' + tools.filterContent(data.game.platform) + ')');
+                $('#contentTitle').html(tools.filterContent(data.game.title) + ' (' + tools.filterContent(data.game.platform_name) + ')');
                 var content = $('#gameDetailContent').html();
 
                 // Badges
@@ -20,6 +20,12 @@ define(
                     badges = 'Aucun';
                 }
                 content = content.replace("@BADGES@", badges);
+
+                if (logged) {
+                    var editLink = '<p> <a data-link-type="gameEdit" id="entryE' + tools.filterContent(data.game.meta.game_id) + '" href="">Editer</a></p>';
+                    var deleteLink = '<p> <a data-link-type="gameDelete" id="entryR' + tools.filterContent(data.game.meta.game_id) + '" href="">Supprimer</a></p>';
+                    content = editLink + deleteLink + content;
+                }
 
                 // Main content
                 content = content.replace("@ID@", tools.filterContent(data.game.meta.game_id));
@@ -54,8 +60,8 @@ define(
                     var comments = 'Aucun';
                 } else {
                     var comments = data.game.meta.comments;
-                    comments = comments.replace(/[\n\r]/g, '<br/>');
                     comments = tools.filterContent(comments);
+                    comments = comments.replace(/[\n\r]/g, '<br/>');
                 }
                 content = content.replace("@COMMENTS@", comments);
 

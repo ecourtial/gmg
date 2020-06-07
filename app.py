@@ -99,11 +99,25 @@ def add_platform():
     return controller.add(mysql)
 
 # Add a new game
-@app.route('/game/add', methods=['GET', 'POST'])
+@app.route('/games/add', methods=['GET', 'POST'])
 @login_required
 def add_game():
     controller = GameController
     return controller.add(mysql) 
+
+# Edit a game
+@app.route('/games/edit/<int:game_id>', methods=['GET', 'POST'])
+@login_required
+def edit_game(game_id):
+    controller = GameController
+    return controller.edit(mysql, game_id)
+
+# Delete a game
+@app.route('/games/delete/<int:game_id>', methods=['DELETE'])
+@login_required
+def delete_game(game_id):
+    controller = GameController
+    return controller.delete(mysql, game_id) 
 
 # Routes for session management
 

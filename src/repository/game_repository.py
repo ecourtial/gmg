@@ -1,6 +1,7 @@
 """ Repository to handle the games """
 from src.repository.abstract_repository import AbstractRepository
 from src.entity.game import Game
+from src.entity.platform import Platform
 from src.exception.unknown_filter_exception import UnknownFilterException
 
 class GameRepository(AbstractRepository):
@@ -28,7 +29,7 @@ class GameRepository(AbstractRepository):
     @classmethod
     def get_main_request_start(cls, meta=False):
         """ Return the first part of the most used request """
-        start = "SELECT games.*, platforms.name as platform"
+        start = "SELECT games.*, platforms.name as platform_name"
 
         if meta:
             start += ", games_meta.*"
@@ -130,9 +131,58 @@ class GameRepository(AbstractRepository):
         """Insert a new game"""
         request = "INSERT INTO games (title, platform) VALUES (%s, %s)"
         game_id = self.write(request, (title, platform), False)
+        meta = self.get_meta_form_request(game_id, form_content, 'INSERT')
 
+        request = "INSERT INTO games_meta (game_id,"
+        request += "todo_solo_sometimes, todo_multiplayer_sometimes,"
+        request += "singleplayer_recurring, multiplayer_recurring,"
+        request += "to_do, to_buy, to_watch_background,"
+        request += "to_watch_serious, to_rewatch,"
+        request += "original, copy,"
+        request += "many, top_game,"
+        request += "hall_of_fame, hall_of_fame_year,"
+        request += "hall_of_fame_position, played_it_often, comments) "
+        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+
+        self.write(request, meta)
+
+        return game_id
+
+    def update(self, game_id, title, platform, form_content):
+        """Update an existing game"""
+        request = "UPDATE games SET title=%s, platform=%s WHERE id = %s"
+        self.write(request, (title, platform, game_id), False)
+        meta = self.get_meta_form_request(game_id, form_content, 'UPDATE')
+
+        request = "UPDATE games_meta SET "
+        request += "todo_solo_sometimes=%s, "
+        request += "todo_multiplayer_sometimes=%s, "
+        request += "singleplayer_recurring=%s, "
+        request += "multiplayer_recurring=%s, "
+        request += "to_do=%s, "
+        request += "to_buy=%s, "
+        request += "to_watch_background=%s, "
+        request += "to_watch_serious=%s, "
+        request += "to_rewatch=%s, "
+        request += "original=%s, "
+        request += "copy=%s,"
+        request += "many=%s, "
+        request += "top_game=%s, "
+        request += "hall_of_fame=%s, "
+        request += "hall_of_fame_year=%s, "
+        request += "hall_of_fame_position=%s, "
+        request += "played_it_often=%s, "
+        request += "comments=%s "
+        request += "WHERE game_id = %s"
+
+        self.write(request, meta)
+
+        return game_id
+
+    @classmethod
+    def get_meta_form_request(cls, game_id, form_content, operation):
+        """Get meta for request"""
         meta = (
-            game_id,
             form_content['todo_solo_sometimes'],
             form_content['todo_multiplayer_sometimes'],
             form_content['singleplayer_recurring'],
@@ -153,20 +203,17 @@ class GameRepository(AbstractRepository):
             form_content['comments'],
         )
 
-        request = "INSERT INTO games_meta (game_id,"
-        request += "todo_solo_sometimes, todo_multiplayer_sometimes,"
-        request += "singleplayer_recurring, multiplayer_recurring,"
-        request += "to_do, to_buy, to_watch_background,"
-        request += "to_watch_serious, to_rewatch,"
-        request += "original, copy,"
-        request += "many, top_game,"
-        request += "hall_of_fame, hall_of_fame_year,"
-        request += "hall_of_fame_position, played_it_often, comments) "
-        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        if operation == 'INSERT':
+            return (game_id,) + meta
 
-        self.write(request, meta)
+        return meta + (game_id,)
 
-        return game_id
+    def delete(self, game_id):
+        """Delete a game"""
+        request = "DELETE FROM games_meta WHERE game_id=%s"
+        self.write(request, (game_id,), False)
+        request = "DELETE FROM games WHERE id=%s"
+        self.write(request, (game_id,))
 
     @classmethod
     def hydrate(cls, row):
@@ -174,7 +221,8 @@ class GameRepository(AbstractRepository):
         game = Game(
             row['id'],
             row['title'],
-            row['platform']
+            # Set to 0 because so far we do not need it here
+            Platform(row['platform'], row['platform_name'], 0)
         )
 
         row.pop('id', None)
