@@ -1,0 +1,26 @@
+<form id="platformForm" method="POST">
+    <p>
+        <label for="platform_name">Nom</label>
+        <input type='text' name='platform_name' id='platform_name' required/>
+    </p>
+    <input type='hidden' name='_token' value='{{ token }}'/>
+    <input type='submit' name='submit' value="Enregistrer"/>
+</form>
+<script type="text/javascript">
+    $( "#platformForm" ).submit(function( event ) {
+        $.ajax({
+            url: "{{ url_for('add_platform') }}",
+            type: "POST",
+            data: $(this).serialize(),
+            dataType: "json",
+            success: function (data) {
+                $("#platforms").trigger("click");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Une erreur s'est produite.");
+            }
+        });
+
+        return false;
+    });
+</script>

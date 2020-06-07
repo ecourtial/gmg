@@ -3,3 +3,4 @@ ptvsd
 gunicorn
 requests
 mysql-connector-python
+flask-login

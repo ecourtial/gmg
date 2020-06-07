@@ -30,3 +30,7 @@ h1 {
 #extraP {
     display: none;
 }
+
+#tokenCSRF {
+    display: none;
+}

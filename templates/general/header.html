@@ -51,13 +51,29 @@
                     </li>
                     <li><a class="nav-li" id="special-list-original" href="">Originaux</a></li>
                     <li><a class="nav-li" id="special-list-to_buy" href="">A acheter</a></li>
-                    <li><a class="nav-li" href="" >Ajout</a></li>
+                    {% if current_user.is_authenticated %}
+                        <li class="dropdown">
+                            <a class="nav-li" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                            aria-haspopup="true" aria-expanded="false">{{ current_user.get_user_name() }}<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a id="addGame" href="" >Ajout jeu</a></li>
+                                <li><a id="addPlatform" href="" >Ajout plateforme</a></li>
+                                <li><a id="profile" href="{{ url_for('edit_profile') }}" >Profil</a></li>
+                                <li><a id="logout" href="{{ url_for('logout') }}" >Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a class="nav-li" id="login" href="{{ url_for('login') }}">Connexion</a></li>
+                        <li><a class="nav-li" id="register" href="{{ url_for('register') }}">S'inscrire</a></li>
+                    {% endif %}
                 {% endif %}
             </ul>
         </div>
     </div>
-    <form style="float:right;" id="searchForm" action="">
-        <input type="text" id="gameSearch" name="keyword" />
-        <input type="submit" value="Rechercher"/>
-    </form>
+    {%- if show_menu -%}
+        <form style="float:right;" id="searchForm" action="">
+            <input type="text" id="gameSearch" name="keyword" />
+            <input type="submit" value="Rechercher"/>
+        </form>
+    {% endif %}
 </nav>

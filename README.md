@@ -3,7 +3,7 @@
 
 ## Description :notebook:
 
-A personal project to manage my video games collection. Games can be sorted by support,
+A personal educational test project to manage my video games collection. Games can be sorted by support,
 todo list, watch list, ranking...
 
 ## Stack :light_rail:
@@ -15,6 +15,8 @@ todo list, watch list, ranking...
 * Flask
 * Jinja 2
 * Circle CI
+* jQuery
+* RequireJS
 * unittest
 * pylint
 * Ansible

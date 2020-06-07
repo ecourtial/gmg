@@ -18,19 +18,30 @@
         <div id="extra_content" class="container">
             {% block optional_extra_content %}{% endblock %}
         </div>
-        {% include 'general/game.html' %}
         {%- if show_menu -%}
+            {% include 'general/game.html' %}
             <p id="extraP"></p>
+            {% if current_user.is_authenticated %}
+                <p id="tokenCSRF">{{ token }}</p>
+            {% endif %}
             <script type="text/javascript">
                 // Assets links
-                var allOfFamesImageUrl = "{{ url_for('static', filename='images/hall-of-fames.png') }}";
+                var hallOfFameImageUrl = "{{ url_for('static', filename='images/hall-of-fame.png') }}";
                 var playedOftenImageUrl = "{{ url_for('static', filename='images/time.png') }}";
                 var topImageUrl = "{{ url_for('static', filename='images/top.png') }}";
                 var toBuyImageUrl = "{{ url_for('static', filename='images/to-buy.png') }}";
 
                 // API URLs
-                var hallOfFamesUrl = "{{ url_for('get_home_content') }}";
+                var hallOfFameUrl = "{{ url_for('get_home_content') }}";
                 var platformListUrl = "{{ url_for('get_platforms') }}";
+                var addPlatformUrl = "{{ url_for('add_platform') }}";
+                var addGameUrl = "{{ url_for('add_game') }}";
+
+                var editGameUrl = "{{ url_for('edit_game', game_id=1) }}";
+                editGameUrl = editGameUrl.substring(0, editGameUrl.length -1);
+
+                var deleteGameUrl = "{{ url_for('delete_game', game_id=1) }}";
+                deleteGameUrl = deleteGameUrl.substring(0, deleteGameUrl.length -1);
 
                 var gameListByPlatformUrl = "{{ url_for('get_games_for_platform', platform_id=1) }}";
                 gameListByPlatformUrl = gameListByPlatformUrl.substring(0, gameListByPlatformUrl.length -1);
@@ -43,6 +54,16 @@
 
                 var randomgameUrl = "{{ url_for('get_random', filter=1) }}";
                 randomgameUrl = randomgameUrl.substring(0, randomgameUrl.length -1);
+                
+                // Various
+                var logged = false;
+                {% if current_user.is_authenticated %}
+                    logged = true;
+                {% endif %}
+
+                var previousUrl = null;
+                var previousDisplayer = null;
+                var previousContext = null;
 
                 // Load the main script
                 require(['content']);

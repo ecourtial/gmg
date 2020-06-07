@@ -1,7 +1,10 @@
 """ Repository to handle the games """
+from src.repository.abstract_repository import AbstractRepository
 from src.entity.game import Game
+from src.entity.platform import Platform
+from src.exception.unknown_filter_exception import UnknownFilterException
 
-class GameRepository:
+class GameRepository(AbstractRepository):
     """ Another useless comment """
 
     authorized_fields = [
@@ -23,54 +26,79 @@ class GameRepository:
         'multiplayer_random'
     ]
 
-    main_request_start = "SELECT games.*, platforms.name as platform FROM games, platforms WHERE "
-    main_request_end = " AND games.platform = platforms.id ORDER BY title;"
+    @classmethod
+    def get_main_request_start(cls, meta=False):
+        """ Return the first part of the most used request """
+        start = "SELECT games.*, platforms.name as platform_name"
 
-    def __init__(self, mysql):
-        self.mysql = mysql
+        if meta:
+            start += ", games_meta.*"
+
+        start += " FROM games, platforms"
+
+        if meta:
+            start += ", games_meta"
+
+        start += " WHERE "
+
+        return start
+
+    @classmethod
+    def get_main_request_end(cls, meta=False):
+        """ Return the last part of the most used request """
+        end = " AND games.platform = platforms.id"
+        if meta:
+            end += " AND games.id = games_meta.game_id"
+
+        end += " ORDER BY title;"
+
+        return end
 
     def get_by_id(self, game_id):
         """Get one."""
-        request = self.main_request_start  + "games.id = %s" + self.main_request_end
-        data_tuple = (game_id,)
-        return self.fetch_one(request, data_tuple)
+        request = self.get_main_request_start(True)  + "games.id = %s"
+        request += self.get_main_request_end(True)
+        return self.fetch_one(request, (game_id,))
 
     def get_random(self, random_filter):
         """Get one random."""
         if random_filter not in self.random_cases:
             message = "Sorry, unauthorized random filter: " + random_filter
-            raise Exception(message)
+            raise UnknownFilterException(message)
 
         if random_filter == 'singleplayer_random':
             request_filter = "(todo_solo_sometimes = 1 OR to_do = 1 OR singleplayer_recurring = 1)"
         else:
             request_filter = "(todo_multiplayer_sometimes = 1 OR multiplayer_recurring = 1)"
 
-        request = self.main_request_start + request_filter + ' AND games.platform = platforms.id '
-        request += 'ORDER BY RAND() LIMIT 1;'
-        data_tuple = ()
-        return self.fetch_one(request, data_tuple)
+        request = self.get_main_request_start(True) + request_filter
+        request += ' AND games.platform = platforms.id '
+        request += 'AND games.id = games_meta.game_id ORDER BY RAND() LIMIT 1;'
+
+        return self.fetch_one(request, ())
 
     def get_list_by_platform(self, platform_id):
         """The list of games for a given plaform."""
-        request = "SELECT * FROM games WHERE platform = %s ORDER BY title;"
-        data_tuple = (platform_id,)
-        return self.fetch_multiple(request, data_tuple)
+        request = self.get_main_request_start(True)  + "platform = %s"
+        request += self.get_main_request_end(True)
+
+        return self.fetch_multiple(request, (platform_id,))
 
     def get_special_list(self, field):
         """The list of games to do."""
         if field not in self.authorized_fields:
             message = "Sorry, unauthorized field: " + field
-            raise Exception(message)
-        request = self.main_request_start + field + " = 1" + self.main_request_end
-        data_tuple = ()
-        return self.fetch_multiple(request, data_tuple)
+            raise UnknownFilterException(message)
+        request = self.get_main_request_start(True) + "games_meta."
+        request += field + " = 1" + self.get_main_request_end(True)
+
+        return self.fetch_multiple(request, ())
 
     def get_search(self, query):
         """The list of games for which the title is related to the request."""
-        request = self.main_request_start + "games.title LIKE %s" + self.main_request_end
-        data_tuple = ("%" + query + "%",)
-        return self.fetch_multiple(request, data_tuple)
+        request = self.get_main_request_start(True) + "games.title LIKE %s"
+        request += self.get_main_request_end(True)
+        return self.fetch_multiple(request, ("%" + query + "%",))
 
     def get_total_count(self):
         """Get the total count of games registered in the app."""
@@ -82,8 +110,10 @@ class GameRepository:
 
     def get_count_to_do_solo_or_to_watch(self):
         """Get the total count of games to do solo or to watch."""
-        request = "SELECT COUNT(*) as total FROM games WHERE todo_solo_sometimes = 1 "
-        request += "OR to_do = 1 OR to_watch_background =1 OR to_watch_serious = 1;"
+        request = "SELECT COUNT(*) as total FROM games, games_meta "
+        request += "WHERE games_meta.todo_solo_sometimes = 1 "
+        request += "OR games_meta.to_do = 1 OR games_meta.to_watch_background =1"
+        request += " OR games_meta.to_watch_serious = 1;"
         cursor = self.mysql.cursor(dictionary=True)
         cursor.execute(request)
         row = cursor.fetchone()
@@ -91,61 +121,114 @@ class GameRepository:
 
     def get_hall_of_fame_data(self):
         """Get the hall of fame data."""
-        request = self.main_request_start
-        request += ' hall_of_fame = 1 AND games.platform = platforms.id'
-        request += ' ORDER BY hall_of_fame_year, hall_of_fame_position'
-        data_tuple = ()
-        return self.fetch_multiple(request, data_tuple)
+        request = self.get_main_request_start(True)
+        request += ' games_meta.game_id = games.id AND games_meta.hall_of_fame = 1'
+        request += " AND games.platform = platforms.id"
+        request += ' ORDER BY games_meta.hall_of_fame_year, games_meta.hall_of_fame_position'
+        return self.fetch_multiple(request, ())
 
-    def fetch_one(self, request, data_tuple):
-        """Fetch one result from a given request."""
-        cursor = self.mysql.cursor(dictionary=True)
-        cursor.execute(request, data_tuple)
-        row = cursor.fetchone()
+    def insert(self, title, platform, form_content):
+        """Insert a new game"""
+        request = "INSERT INTO games (title, platform) VALUES (%s, %s)"
+        game_id = self.write(request, (title, platform), False)
+        meta = self.get_meta_form_request(game_id, form_content, 'INSERT')
 
-        if row is None:
-            return None
+        request = "INSERT INTO games_meta (game_id,"
+        request += "todo_solo_sometimes, todo_multiplayer_sometimes,"
+        request += "singleplayer_recurring, multiplayer_recurring,"
+        request += "to_do, to_buy, to_watch_background,"
+        request += "to_watch_serious, to_rewatch,"
+        request += "original, copy,"
+        request += "many, top_game,"
+        request += "hall_of_fame, hall_of_fame_year,"
+        request += "hall_of_fame_position, played_it_often, comments) "
+        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
 
-        return self.hydrate(row)
+        self.write(request, meta)
 
-    def fetch_multiple(self, request, data_tuple):
-        """Fetch mutliple games and return a list of games."""
-        games_list = []
-        cursor = self.mysql.cursor(dictionary=True, buffered=True)
-        cursor.execute(request, data_tuple)
+        return game_id
 
-        while True:
-            row = cursor.fetchone()
-            if row is None:
-                break
-            games_list.append(self.hydrate(row))
+    def update(self, game_id, title, platform, form_content):
+        """Update an existing game"""
+        request = "UPDATE games SET title=%s, platform=%s WHERE id = %s"
+        self.write(request, (title, platform, game_id), False)
+        meta = self.get_meta_form_request(game_id, form_content, 'UPDATE')
 
-        cursor.close()
-        return games_list
+        request = "UPDATE games_meta SET "
+        request += "todo_solo_sometimes=%s, "
+        request += "todo_multiplayer_sometimes=%s, "
+        request += "singleplayer_recurring=%s, "
+        request += "multiplayer_recurring=%s, "
+        request += "to_do=%s, "
+        request += "to_buy=%s, "
+        request += "to_watch_background=%s, "
+        request += "to_watch_serious=%s, "
+        request += "to_rewatch=%s, "
+        request += "original=%s, "
+        request += "copy=%s,"
+        request += "many=%s, "
+        request += "top_game=%s, "
+        request += "hall_of_fame=%s, "
+        request += "hall_of_fame_year=%s, "
+        request += "hall_of_fame_position=%s, "
+        request += "played_it_often=%s, "
+        request += "comments=%s "
+        request += "WHERE game_id = %s"
+
+        self.write(request, meta)
+
+        return game_id
+
+    @classmethod
+    def get_meta_form_request(cls, game_id, form_content, operation):
+        """Get meta for request"""
+        meta = (
+            form_content['todo_solo_sometimes'],
+            form_content['todo_multiplayer_sometimes'],
+            form_content['singleplayer_recurring'],
+            form_content['multiplayer_recurring'],
+            form_content['to_do'],
+            form_content['to_buy'],
+            form_content['to_watch_background'],
+            form_content['to_watch_serious'],
+            form_content['to_rewatch'],
+            form_content['original'],
+            form_content['copy'],
+            form_content['many'],
+            form_content['top_game'],
+            form_content['hall_of_fame'],
+            form_content['hall_of_fame_year'],
+            form_content['hall_of_fame_position'],
+            form_content['played_it_often'],
+            form_content['comments'],
+        )
+
+        if operation == 'INSERT':
+            return (game_id,) + meta
+
+        return meta + (game_id,)
+
+    def delete(self, game_id):
+        """Delete a game"""
+        request = "DELETE FROM games_meta WHERE game_id=%s"
+        self.write(request, (game_id,), False)
+        request = "DELETE FROM games WHERE id=%s"
+        self.write(request, (game_id,))
 
     @classmethod
     def hydrate(cls, row):
         """Hydrate an object from a row."""
-        return Game(
+        game = Game(
             row['id'],
             row['title'],
-            row['platform'],
-            row['todo_solo_sometimes'],
-            row['todo_multiplayer_sometimes'],
-            row['singleplayer_recurring'],
-            row['multiplayer_recurring'],
-            row['to_do'],
-            row['to_buy'],
-            row['to_watch_background'],
-            row['to_watch_serious'],
-            row['to_rewatch'],
-            row['original'],
-            row['copy'],
-            row['many'],
-            row['top_game'],
-            row['hall_of_fame'],
-            row['hall_of_fame_year'],
-            row['hall_of_fame_position'],
-            row['played_it_often'],
-            row['comments']
+            # Set to 0 because so far we do not need it here
+            Platform(row['platform'], row['platform_name'], 0)
         )
+
+        row.pop('id', None)
+        row.pop('title', None)
+        row.pop('platform', None)
+
+        game.set_meta(row)
+
+        return game

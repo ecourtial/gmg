@@ -1,5 +1,5 @@
 """ Platforms controller for the GMG project """
-from flask import jsonify
+from flask import jsonify, request, render_template, session
 from src.repository.platform_repository import PlatformRepository
 
 class PlatformController:
@@ -11,7 +11,23 @@ class PlatformController:
         platform_list = repo.get_list()
         return jsonify(platforms=[platform.serialize() for platform in platform_list])
 
-    def __str__(self):
-        """This method is here only to make Pylint stop complaining
-        because I have only one method in my class"""
-        return self.__class__.__name__
+    @classmethod
+    def add(cls, mysql):
+        """Add a new platform."""
+        if request.method == 'GET':
+            return render_template(
+                'general/platform-form.html',
+                show_menu=True,
+                content_title="Ajouter une plateforme", token=session['csrfToken']
+            )
+
+        if request.form['_token'] != session['csrfToken']:
+            return jsonify(), 400
+
+        name = request.form['platform_name']
+        if name == '':
+            return "Form is incomplete"
+
+        repo = PlatformRepository(mysql)
+
+        return jsonify(id=repo.insert(name))
