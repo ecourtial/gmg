@@ -11,7 +11,7 @@ class HomeController:
         """Return the html content (layout)."""
         return render_template(
             'layout.html',
-            token=session['csrfToken'],
+            token=session.get('csrfToken', ''),
             show_menu=True,
             title="Give me a game", content_title="Hall of fames"
         )

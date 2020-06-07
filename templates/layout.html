@@ -21,7 +21,9 @@
         {%- if show_menu -%}
             {% include 'general/game.html' %}
             <p id="extraP"></p>
-            <p id="tokenCSRF">{{ token }}</p>
+            {% if current_user.is_authenticated %}
+                <p id="tokenCSRF">{{ token }}</p>
+            {% endif %}
             <script type="text/javascript">
                 // Assets links
                 var hallOfFameImageUrl = "{{ url_for('static', filename='images/hall-of-fame.png') }}";

@@ -5,6 +5,10 @@ from src.service.user_service import UserService
 
 class UserController:
     """Another useless comment"""
+
+    BAD_REQUEST = "Bad request"
+    FORM_INCOMPLETE = "Form is incomplete"
+
     @classmethod
     def register(cls, mysql):
         """Endpoint to register an user"""
@@ -18,13 +22,13 @@ class UserController:
             )
 
         if request.form['_token'] != session['csrfToken']:
-            return "Bad request"
+            return UserController.BAD_REQUEST
 
         if request.form['email'] == '' \
             or request.form['user_name'] == '' \
             or request.form['password'] == '' \
             or request.form['confirmPassword'] == '':
-            return "Form is incomplete"
+            return UserController.FORM_INCOMPLETE
 
         email = request.form['email']
         user_name = request.form['user_name']
@@ -51,12 +55,12 @@ class UserController:
             )
 
         if request.form['_token'] != session['csrfToken']:
-            return "Bad request"
+            return UserController.BAD_REQUEST
 
         user_service = UserService(mysql)
 
         if request.form['email'] == '' or request.form['password'] == '':
-            return "Form is incomplete"
+            return UserController.FORM_INCOMPLETE
 
         user = user_service.get_authenticated_user(request.form['email'], request.form['password'])
 
@@ -78,7 +82,7 @@ class UserController:
             )
 
         if request.form['_token'] != session['csrfToken']:
-            return "Bad request"
+            return UserController.BAD_REQUEST
 
         fields_to_validate = (
             'currentEmail',
@@ -91,7 +95,7 @@ class UserController:
 
         for field in fields_to_validate:
             if request.form[field] == '':
-                return "Form is incomplete"
+                return UserController.FORM_INCOMPLETE
 
         email = request.form['currentEmail']
         new_email = request.form['newEmail']
