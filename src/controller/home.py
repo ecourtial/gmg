@@ -27,6 +27,7 @@ class HomeController:
         return jsonify(
             gameCount=game_repo.get_total_count(),
             platformCount=platform_repo.get_total_count(),
+            ownedGameCount=game_repo.get_owned_count(),
             toDoSoloOrToWatch=game_repo.get_count_to_do_solo_or_to_watch(),
             hallOfFameGames=[game.serialize() for game in hall_of_fame_games]
         )

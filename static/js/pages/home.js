@@ -17,6 +17,7 @@ define(
                 content += "Bonjour.";
                 content += "<ul>";
                 content += "<li>Il y a actuellement <strong>" + tools.filterContent(data.gameCount) + "</strong> jeux enregistrés dans l'application, pour <strong>" + tools.filterContent(data.platformCount) + "</strong> plateformes.</li>";
+                content += "<li>Parmi eux, j'en possède <strong>" + tools.filterContent(data.ownedGameCount) + "</strong></li>"
                 content += "<li>Il y a actuellement <strong>" + tools.filterContent(data.toDoSoloOrToWatch) + "</strong> jeux à jouer en solo ou à regarder.</li>";
                 content += "</ul>";
                 content += $('#hallOfFameCriteria').html();
@@ -31,7 +32,7 @@ define(
                 }
 
                 var content = "";
-                content += "<br>Il y a <strong>" + tools.filterContent(data.hallOfFameGames.length) + "</strong> jeux dans le Hall of Fames (année où on y a joués pour la première fois, pas année de leur sortie) ..."
+                content += "<br>Il y a <strong>" + tools.filterContent(data.hallOfFameGames.length) + "</strong> jeux dans le Hall of Fames (année où on y a joué pour la première fois, pas année de leur sortie) ..."
                 content += "<br/><br/>";
                 content += "<ul>";
 

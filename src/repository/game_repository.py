@@ -120,6 +120,16 @@ class GameRepository(AbstractRepository):
         row = cursor.fetchone()
         return row['total']
 
+    def get_owned_count(self):
+        """Get the total count of games that I own."""
+        request = "SELECT COUNT(*) as total FROM games, games_meta "
+        request += "WHERE (games_meta.original = 1 OR games_meta.copy = 1) "
+        request += "AND games.id = games_meta.game_id;"
+        cursor = self.mysql.cursor(dictionary=True)
+        cursor.execute(request)
+        row = cursor.fetchone()
+        return row['total']
+
     def get_hall_of_fame_data(self):
         """Get the hall of fame data."""
         request = self.get_main_request_start(True)
