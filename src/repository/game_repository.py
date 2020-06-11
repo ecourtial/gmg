@@ -111,9 +111,10 @@ class GameRepository(AbstractRepository):
     def get_count_to_do_solo_or_to_watch(self):
         """Get the total count of games to do solo or to watch."""
         request = "SELECT COUNT(*) as total FROM games, games_meta "
-        request += "WHERE games_meta.todo_solo_sometimes = 1 "
+        request += "WHERE (games_meta.todo_solo_sometimes = 1 "
         request += "OR games_meta.to_do = 1 OR games_meta.to_watch_background =1"
-        request += " OR games_meta.to_watch_serious = 1;"
+        request += " OR games_meta.to_watch_serious = 1) "
+        request += "AND games.id = games_meta.game_id;"
         cursor = self.mysql.cursor(dictionary=True)
         cursor.execute(request)
         row = cursor.fetchone()
