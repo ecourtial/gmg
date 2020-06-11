@@ -9,7 +9,7 @@ from src.controller.user import UserController
 from src.repository.user_repository import UserRepository
 from src.service.user_service import UserService
 
-# The secon parameter is optional. It allows to set the static folder accessible via the root URL instead of via /static/foo
+# The second parameter is optional. It allows to set the static folder accessible via the root URL instead of via /static/foo
 app = Flask(__name__, static_folder='static', static_url_path='')
 
 # Load config
@@ -38,6 +38,14 @@ def load_user(user_id):
         return None
 
     return user
+
+# Cache management
+@app.after_request
+def after_request(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
 
 # Routes
 @app.errorhandler(404)
