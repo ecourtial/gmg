@@ -16,112 +16,112 @@
     <p>
         <label for="todo_solo_sometimes">A faire en solo parfois</label>
         <select id="todo_solo_sometimes" name="todo_solo_sometimes">
-            <option value="0" {%- if game and game.meta.todo_solo_sometimes == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.todo_solo_sometimes == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['todo_solo_sometimes'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['todo_solo_sometimes'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="todo_multiplayer_sometimes">A faire en multi parfois</label>
         <select id="todo_multiplayer_sometimes" name="todo_multiplayer_sometimes">
-            <option value="0" {%- if game and game.meta.todo_multiplayer_sometimes == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.todo_multiplayer_sometimes == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['todo_multiplayer_sometimes'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['todo_multiplayer_sometimes'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="singleplayer_recurring">A faire en solo régulièrement</label>
         <select id="singleplayer_recurring" name="singleplayer_recurring">
-            <option value="0" {%- if game and game.meta.singleplayer_recurring == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.singleplayer_recurring == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['singleplayer_recurring'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['singleplayer_recurring'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="multiplayer_recurring">A faire en multi régulièrement</label>
         <select id="multiplayer_recurring" name="multiplayer_recurring">
-            <option value="0" {%- if game and game.meta.multiplayer_recurring == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.multiplayer_recurring == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['multiplayer_recurring'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['multiplayer_recurring'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="to_do">A faire</label>
         <select id="to_do" name="to_do">
-            <option value="0" {%- if game and game.meta.to_do == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.to_do == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['to_do'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['to_do'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="to_buy">A acheter</label>
         <select id="to_buy" name="to_buy">
-            <option value="0" {%- if game and game.meta.to_buy == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.to_buy == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['to_buy'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['to_buy'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="to_watch_background">A regarder en fond</label>
         <select id="to_watch_background" name="to_watch_background">
-            <option value="0" {%- if game and game.meta.to_watch_background == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.to_watch_background == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['to_watch_background'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['to_watch_background'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="to_watch_serious">A regarder sérieusement</label>
         <select id="to_watch_serious" name="to_watch_serious">
-            <option value="0" {%- if game and game.meta.to_watch_serious == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.to_watch_serious == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['to_watch_serious'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['to_watch_serious'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="to_rewatch">A revoir parfois</label>
         <select id="to_rewatch" name="to_rewatch">
-            <option value="0" {%- if game and game.meta.to_rewatch == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.to_rewatch == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['to_rewatch'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['to_rewatch'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="original">Au moins une version originale (Légale - non copiée)</label>
         <select id="original" name="original">
-            <option value="0" {%- if game and game.meta.original == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.original == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['original'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['original'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="copy">Au moins un exemplaire est une copie</label>
         <select id="copy" name="copy">
-            <option value="0" {%- if game and game.meta.copy == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.copy == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['copy'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['copy'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="many">Plusieurs exemplaires</label>
         <select id="many" name="many">
-            <option value="0" {%- if game and game.meta.many == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.many == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['many'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['many'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="top_game">Top jeux</label>
         <select id="top_game" name="top_game">
-            <option value="0" {%- if game and game.meta.top_game == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.top_game == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['top_game'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['top_game'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="played_it_often">Beaucoup joué</label>
         <select id="played_it_often" name="played_it_often">
-            <option value="0" {%- if game and game.meta.played_it_often == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.played_it_often == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['played_it_often'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['played_it_often'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="hall_of_fame">Dans le hall of fame</label>
         <select id="hall_of_fame" name="hall_of_fame">
-            <option value="0" {%- if game and game.meta.hall_of_fame == 0 -%} selected {% endif %}>Non</option>
-            <option value="1" {%- if game and game.meta.hall_of_fame == 1 -%} selected {% endif %}>Oui</option>
+            <option value="0" {%- if game and game.get_meta()['hall_of_fame'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['hall_of_fame'] == 1 -%} selected {% endif %}>Oui</option>
         </select>
     </p>
     <p>
         <label for="hall_of_fame_year">Année de la présence dans le hall of fame (mettre 0 si non applicable)</label>
         <input type="number" name='hall_of_fame_year' min="0" 
-            {%- if game -%} value="{{ game.meta.hall_of_fame_year }}"
+            {%- if game -%} value="{{ game.get_meta()['hall_of_fame_year'] }}"
             {% else %} value="0" {% endif %}
              required
         />
@@ -129,14 +129,14 @@
     <p>
         <label for="hall_of_fame_position">Position de la présence dans le hall of fame (mettre 0 si non applicable)</label>
         <input type="number" name='hall_of_fame_position' min="0" 
-            {%- if game -%} value="{{ game.meta.hall_of_fame_position }}"
+            {%- if game -%} value="{{ game.get_meta()['hall_of_fame_position'] }}"
             {% else %}value= "0" {% endif %}
              required
         />
     </p>
     <p>
         <label for="comments">Commentaires</label>
-        <textarea name="comments">{%- if game and game.meta.comments != None -%}{{game.meta.comments}}{% endif %}</textarea>
+        <textarea name="comments">{%- if game and game.get_meta()['comments'] != None -%}{{game.get_meta()['comments']}}{% endif %}</textarea>
     </p>
     <input type='hidden' name='_token' value='{{ token }}'/>
     <input type='submit' name='submit' value="Enregistrer"/>
