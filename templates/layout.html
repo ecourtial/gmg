@@ -26,6 +26,8 @@
             {% endif %}
             <script type="text/javascript">
                 // Assets links
+                var checkImageUrl = "{{ url_for('static', filename='images/check.png') }}";
+                var noImageUrl = "{{ url_for('static', filename='images/no.png') }}";
                 var hallOfFameImageUrl = "{{ url_for('static', filename='images/hall-of-fame.png') }}";
                 var playedOftenImageUrl = "{{ url_for('static', filename='images/time.png') }}";
                 var topImageUrl = "{{ url_for('static', filename='images/top.png') }}";

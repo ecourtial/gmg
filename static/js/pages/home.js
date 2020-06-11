@@ -27,7 +27,7 @@ define(
 
             displayHallOfFame: function (data) {
                 if (data.hallOfFameGames.length == 0) {
-                    return;
+                    return '';
                 }
 
                 var content = "";

@@ -75,6 +75,12 @@ define(
             getBadges: function(value) {
                 var gameEntry = '';
 
+                if (value.meta.original === 1 || value.meta.copy === 1) {
+                    gameEntry += '<img title="Je possède une version" src="' + checkImageUrl + '"/>'
+                } else {
+                    gameEntry += '<img title="Je ne possède aucune version" src="' + noImageUrl + '"/>'
+                }
+
                 if (value.meta.hall_of_fame === 1) {
                     gameEntry += ' <img title="Dans le hall of fame" src="' + hallOfFameImageUrl + '"/>'
                 }

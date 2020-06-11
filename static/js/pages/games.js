@@ -17,6 +17,7 @@ define(
 
                 $.each(data.games, function (index, value) {
                     var gameEntry = tools.filterContent(value.title);
+                    gameEntry = that.getStartIcon(value) + gameEntry;
 
                     if (context !== 'gamePerPlatform') {
                         gameEntry += ' (' + tools.filterContent(value.platform_name) + ')';
@@ -70,6 +71,14 @@ define(
                 }
 
                 return title;
+            },
+
+            getStartIcon: function(value) {
+                if (value.meta.original === 1 || value.meta.copy === 1) {
+                    return '<img title="Je possède une version" src="' + checkImageUrl + '"/>'
+                } else {
+                    return '<img title="Je ne possède aucune version" src="' + noImageUrl + '"/>'
+                }
             },
 
             getBadges: function(gameEntry, value) {
