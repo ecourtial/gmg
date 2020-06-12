@@ -14,18 +14,21 @@ define(
                 $('#contentTitle').html(tools.filterContent(data.game.title) + ' (' + tools.filterContent(data.game.platform_name) + ')');
                 var content = $('#gameDetailContent').html();
 
-                // Badges
+                // Badges and links
                 var badges = this.getBadges(data.game);
                 if (badges === '') {
                     badges = 'Aucun';
                 }
                 content = content.replace("@BADGES@", badges);
-
+                
                 if (logged) {
                     var editLink = '<p> <a data-link-type="gameEdit" id="entryE' + tools.filterContent(data.game.meta.game_id) + '" href="">Editer</a></p>';
                     var deleteLink = '<p> <a data-link-type="gameDelete" id="entryR' + tools.filterContent(data.game.meta.game_id) + '" href="">Supprimer</a></p>';
                     content = editLink + deleteLink + content;
                 }
+
+                content = '<p><a href="" onClick="return dispatchReturnToListEvent(' + tools.filterContent(data.game.platform) 
+                    + ')" id="returnToPrevious">Retourner à la liste des jeux <strong>' + tools.filterContent(data.game.platform_name) + '</strong></a></p>' + content;
 
                 // Main content
                 content = content.replace("@ID@", tools.filterContent(data.game.meta.game_id));

@@ -97,7 +97,11 @@ define(
             dataManager.request(deleteGameUrl+gameId, null, null, false, {'_token': $('#tokenCSRF').html()}, 'DELETE', callback)
         }
 
-        // Event listener for forms
+        /**
+         * Event listeners
+         */
+
+        // Game after edition
         $( "#extraP" ).on( "gameEditDone", function(event, gameId) {
             dataManager.showTempMsg(true);
 
@@ -106,7 +110,13 @@ define(
             } else {
                 dataManager.request(gameDetailsUrl + gameId, game, 'gameEdit', true);
             }
-        })
+        });
+
+        // Return to game list
+        $( "#extraP" ).on( "returnToGameListForThisPlaftorm", function(event, supportId) {
+            dataManager.showTempMsg(true);
+            dataManager.request(gameListByPlatformUrl + supportId, games, 'gamePerPlatform', true);
+        });
 
         /** 
          * On startup

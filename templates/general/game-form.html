@@ -1,3 +1,6 @@
+{%- if game -%}
+    <p><a id="returnActionButton" href="">Retour</a></p>
+{% endif %}
 <form id="gameForm" method="POST">
     <p>
         <label for="title">Titre</label>
@@ -151,8 +154,10 @@
             dataType: "json",
             success: function (data) {
                 {%- if game -%}
+                // If we were in edit mode: we return to the previous screen
                     $( "#extraP").trigger( "gameEditDone", [{{game.get_game_id()}}]);
                 {% else %}
+                // If we were in adding a game mode: go to the detail page
                     entry = "entryD" + data.id;
                     $('#content').append('<a data-link-type="gameDetails" id="' + entry + '" href="">Détails</a>');
                     $("#" + entry).trigger("click");
@@ -165,4 +170,12 @@
 
         return false;
     });
+
+    {%- if game -%}
+        $('#returnActionButton').click(function() {
+            $( "#extraP").trigger( "gameEditDone", [{{game.get_game_id()}}]);
+
+            return false;
+        });
+    {% endif %}
 </script>

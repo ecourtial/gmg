@@ -67,6 +67,11 @@
                 var previousDisplayer = null;
                 var previousContext = null;
 
+                function dispatchReturnToListEvent(platformId) {
+                    $( "#extraP").trigger( "returnToGameListForThisPlaftorm", [platformId]);
+                    return false;
+                }
+
                 // Load the main script
                 require(['content']);
             </script>
