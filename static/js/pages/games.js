@@ -13,7 +13,8 @@ define(
             diplayData: function (data, context) {
                 $('#contentTitle').html(this.getTitle(data, context));
                 var that = this;
-                var content = '<ul>';
+                var content = this.getSubtitle(context);
+                content += '<ul>';
 
                 $.each(data.games, function (index, value) {
                     var gameEntry = tools.filterContent(value.title);
@@ -71,6 +72,19 @@ define(
                 }
 
                 return title;
+            },
+
+            getSubtitle: function(context) {
+                var correspondence = {
+                    "singleplayer_recurring": "Top jeux, jouables par intermittence (prendre des notes)",
+                    'todo_solo_sometimes': "Top jeux, jouable de courts moments de temps en temps OU jeux d'aventures à faire d'une traite"
+                };
+
+                if (context in correspondence) {
+                    return '<p id="subtitle">' + correspondence[context] + '</p>';
+                }
+
+                return '';
             },
 
             getStartIcon: function(value) {
