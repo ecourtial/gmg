@@ -55,6 +55,7 @@ define(
                     'to_watch_background': "A regarder en fond",
                     'to_watch_serious': "A regarder sérieusement",
                     'to_rewatch': "A regarder à nouveau parfois",
+                    'ongoing': "En cours",
                 };
 
                 if (context in correspondence) {

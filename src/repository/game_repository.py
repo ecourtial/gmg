@@ -18,7 +18,8 @@ class GameRepository(AbstractRepository):
         'to_watch_serious',
         'to_rewatch',
         'to_buy',
-        'original'
+        'original',
+        'ongoing'
     ]
 
     random_cases = [
@@ -183,6 +184,7 @@ class GameRepository(AbstractRepository):
         request += "hall_of_fame_year=%s, "
         request += "hall_of_fame_position=%s, "
         request += "played_it_often=%s, "
+        request += "ongoing=%s, "
         request += "comments=%s "
         request += "WHERE game_id = %s"
 
@@ -211,6 +213,7 @@ class GameRepository(AbstractRepository):
             form_content['hall_of_fame_year'],
             form_content['hall_of_fame_position'],
             form_content['played_it_often'],
+            form_content['ongoing'],
             form_content['comments'],
         )
 

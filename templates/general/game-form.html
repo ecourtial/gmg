@@ -138,6 +138,13 @@
         />
     </p>
     <p>
+        <label for="ongoing">En cours</label>
+        <select id="ongoing" name="ongoing">
+            <option value="0" {%- if game and game.get_meta()['ongoing'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['ongoing'] == 1 -%} selected {% endif %}>Oui</option>
+        </select>
+    </p>
+    <p>
         <label for="comments">Commentaires</label>
         <textarea name="comments">{%- if game and game.get_meta()['comments'] != None -%}{{game.get_meta()['comments']}}{% endif %}</textarea>
     </p>

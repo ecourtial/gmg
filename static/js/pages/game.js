@@ -46,6 +46,7 @@ define(
                 content = content.replace("@IS_MANY@", this.boolToYesNoConverter(data.game.meta.many));
                 content = content.replace("@IS_TOP@", this.boolToYesNoConverter(data.game.meta.top_game));
                 content = content.replace("@IS_PLAYED_OFTEN@", this.boolToYesNoConverter(data.game.meta.played_it_often));
+                content = content.replace("@ONGOING@", this.boolToYesNoConverter(data.game.meta.ongoing));
 
                 // Hall of fame
                 if (data.game.meta.hall_of_fame === 0) {
