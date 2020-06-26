@@ -14,7 +14,10 @@ class AbstractRepository:
         if row is None:
             return None
 
-        return self.hydrate(row)
+        hydrated = self.hydrate(row)
+        cursor.close()
+
+        return hydrated
 
     def fetch_multiple(self, request, data_tuple):
         """Fetch mutliple items and return a list."""
