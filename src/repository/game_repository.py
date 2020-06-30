@@ -107,6 +107,8 @@ class GameRepository(AbstractRepository):
         cursor = self.mysql.cursor(dictionary=True)
         cursor.execute(request)
         row = cursor.fetchone()
+        cursor.close()
+
         return row['total']
 
     def get_count_to_do_solo_or_to_watch(self):
@@ -119,6 +121,8 @@ class GameRepository(AbstractRepository):
         cursor = self.mysql.cursor(dictionary=True)
         cursor.execute(request)
         row = cursor.fetchone()
+        cursor.close()
+
         return row['total']
 
     def get_owned_count(self):
@@ -129,6 +133,8 @@ class GameRepository(AbstractRepository):
         cursor = self.mysql.cursor(dictionary=True)
         cursor.execute(request)
         row = cursor.fetchone()
+        cursor.close()
+        
         return row['total']
 
     def get_hall_of_fame_data(self):

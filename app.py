@@ -8,6 +8,7 @@ from src.controller.games import GameController
 from src.controller.user import UserController
 from src.repository.user_repository import UserRepository
 from src.service.user_service import UserService
+from src.connection.mysql_factory import MySQLFactory
 
 # The second parameter is optional. It allows to set the static folder accessible via the root URL instead of via /static/foo
 app = Flask(__name__, static_folder='static', static_url_path='')
@@ -16,12 +17,12 @@ app = Flask(__name__, static_folder='static', static_url_path='')
 with open('configuration.json') as json_file:
     configurationData = json.load(json_file)
 
-# Init DB connection
-mysql = connector.connect(
-  host=configurationData['db_host'],
-  user=configurationData['db_user'],
-  passwd=configurationData['db_password'],
-  database=configurationData['database']
+# DB connection
+db_factory = MySQLFactory.init(
+    configurationData['db_host'],
+    configurationData['db_user'],
+    configurationData['db_password'],
+    configurationData['database']
 )
 
 # Session Manager
@@ -31,7 +32,7 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    user_repo = UserRepository(mysql)
+    user_repo = UserRepository(MySQLFactory.get())
     user = user_repo.get_by_id(user_id)
 
     if user is None or user.is_active() == False:
@@ -39,12 +40,15 @@ def load_user(user_id):
 
     return user
 
-# Cache management
+# After request: cache management, close DB connection...
 @app.after_request
 def after_request(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
+
+    MySQLFactory.close()
+
     return response
 
 # Routes
@@ -67,65 +71,65 @@ def home():
 @app.route('/home-content')
 def get_home_content():
     controller = HomeController
-    return controller.get_home_content(mysql)
+    return controller.get_home_content(MySQLFactory.get())
 
 # Return the list of all the platforms
 @app.route('/platforms')
 def get_platforms():
     controller = PlatformController
-    return controller.get_list(mysql)
+    return controller.get_list(MySQLFactory.get())
 
 # Return one given game
 @app.route('/games/<int:game_id>')
 def get_game(game_id):
     controller = GameController
-    return controller.get_by_id(mysql, game_id)
+    return controller.get_by_id(MySQLFactory.get(), game_id)
 
 # Return one random game
 @app.route('/games/random/<string:filter>')
 def get_random(filter):
     controller = GameController
-    return controller.get_random(mysql, filter)         
+    return controller.get_random(MySQLFactory.get(), filter)         
 
 # Return the list of all the games for a given platform
 @app.route('/games/platform/<int:platform_id>')
 def get_games_for_platform(platform_id):
     controller = GameController
-    return controller.get_list_by_platform(mysql, platform_id) 
+    return controller.get_list_by_platform(MySQLFactory.get(), platform_id) 
 
 # Return the list of all the games for to be played often in solo
 @app.route('/games/special/<string:filter>')
 def get_special_list(filter):
     controller = GameController
-    return controller.get_special_list(mysql, filter) 
+    return controller.get_special_list(MySQLFactory.get(), filter) 
 
 # Add a new platform
 @app.route('/platform/add', methods=['GET', 'POST'])
 @login_required
 def add_platform():
     controller = PlatformController
-    return controller.add(mysql)
+    return controller.add(MySQLFactory.get())
 
 # Add a new game
 @app.route('/games/add', methods=['GET', 'POST'])
 @login_required
 def add_game():
     controller = GameController
-    return controller.add(mysql) 
+    return controller.add(MySQLFactory.get()) 
 
 # Edit a game
 @app.route('/games/edit/<int:game_id>', methods=['GET', 'POST'])
 @login_required
 def edit_game(game_id):
     controller = GameController
-    return controller.edit(mysql, game_id)
+    return controller.edit(MySQLFactory.get(), game_id)
 
 # Delete a game
 @app.route('/games/delete/<int:game_id>', methods=['DELETE'])
 @login_required
 def delete_game(game_id):
     controller = GameController
-    return controller.delete(mysql, game_id) 
+    return controller.delete(MySQLFactory.get(), game_id) 
 
 # Routes for session management
 
@@ -133,20 +137,20 @@ def delete_game(game_id):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     controller = UserController()
-    return controller.register(mysql)
+    return controller.register(MySQLFactory.get())
 
 # Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     controller = UserController()
-    return controller.login(mysql)
+    return controller.login(MySQLFactory.get())
 
 # Edit user profile
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     controller = UserController()
-    return controller.edit(mysql)
+    return controller.edit(MySQLFactory.get())
 
 # Logout
 @app.route('/logout')

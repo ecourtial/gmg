@@ -11,6 +11,8 @@ class PlatformRepository(AbstractRepository):
         cursor = self.mysql.cursor(dictionary=True)
         cursor.execute(request)
         row = cursor.fetchone()
+        cursor.close()
+        
         return row['total']
 
     def get_list(self):
