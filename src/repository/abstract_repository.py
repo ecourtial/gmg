@@ -49,3 +49,12 @@ class AbstractRepository:
             self.mysql.autocommit = False
 
         return cursor.lastrowid
+
+    def fetch_cursor(self, request):
+        """Fetch one result"""
+        cursor = self.mysql.cursor(dictionary=True)
+        cursor.execute(request)
+        row = cursor.fetchone()
+        cursor.close()
+
+        return row

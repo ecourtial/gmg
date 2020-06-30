@@ -104,10 +104,7 @@ class GameRepository(AbstractRepository):
     def get_total_count(self):
         """Get the total count of games registered in the app."""
         request = "SELECT COUNT(*) as total FROM games;"
-        cursor = self.mysql.cursor(dictionary=True)
-        cursor.execute(request)
-        row = cursor.fetchone()
-        cursor.close()
+        row = self.fetch_cursor(request)
 
         return row['total']
 
@@ -118,10 +115,7 @@ class GameRepository(AbstractRepository):
         request += "OR games_meta.to_do = 1 OR games_meta.to_watch_background =1"
         request += " OR games_meta.to_watch_serious = 1) "
         request += "AND games.id = games_meta.game_id;"
-        cursor = self.mysql.cursor(dictionary=True)
-        cursor.execute(request)
-        row = cursor.fetchone()
-        cursor.close()
+        row = self.fetch_cursor(request)
 
         return row['total']
 
@@ -130,11 +124,8 @@ class GameRepository(AbstractRepository):
         request = "SELECT COUNT(*) as total FROM games, games_meta "
         request += "WHERE (games_meta.original = 1 OR games_meta.copy = 1) "
         request += "AND games.id = games_meta.game_id;"
-        cursor = self.mysql.cursor(dictionary=True)
-        cursor.execute(request)
-        row = cursor.fetchone()
-        cursor.close()
-        
+        row = self.fetch_cursor(request)
+
         return row['total']
 
     def get_hall_of_fame_data(self):

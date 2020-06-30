@@ -5,4 +5,4 @@ test:
 	python3 -m unittest discover .
 
 linter:
-	docker-compose exec python pylint --rcfile=standard.rc src/
+	docker-compose exec python pylint --rcfile=standard.rc src/ ./app.py

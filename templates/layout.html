@@ -52,10 +52,10 @@
                 var gameDetailsUrl = "{{ url_for('get_game', game_id=1) }}";
                 gameDetailsUrl = gameDetailsUrl.substring(0, gameDetailsUrl.length -1);
 
-                var gamesSpecialListUrl = "{{ url_for('get_special_list', filter=1) }}";
+                var gamesSpecialListUrl = "{{ url_for('get_special_list', selector=1) }}";
                 gamesSpecialListUrl = gamesSpecialListUrl.substring(0, gamesSpecialListUrl.length -1);
 
-                var randomgameUrl = "{{ url_for('get_random', filter=1) }}";
+                var randomgameUrl = "{{ url_for('get_random', selector=1) }}";
                 randomgameUrl = randomgameUrl.substring(0, randomgameUrl.length -1);
                 
                 // Various
