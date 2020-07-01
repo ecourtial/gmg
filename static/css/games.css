@@ -34,3 +34,9 @@ h1 {
 #tokenCSRF {
     display: none;
 }
+
+#subtitle {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+}

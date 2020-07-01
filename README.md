@@ -6,6 +6,16 @@
 A personal educational test project to manage my video games collection. Games can be sorted by support,
 todo list, watch list, ranking...
 
+## Utilization
+
+* In dev mode: just do a __docker compose up__. In production, make your gunicorn server to launch the application __app.py__.
+
+* An empty database is given in the repository: just import it.
+
+* Once the application is running, go to __/register__ to create an account.
+
+* Then go to your database to enable the user you just created. That's it.
+
 ## Stack :light_rail:
 
 * Docker
@@ -20,3 +30,19 @@ todo list, watch list, ranking...
 * unittest
 * pylint
 * Ansible
+
+## Todo
+Yet the project is fully working, there are some features or elements to improve:
+* Internationalization.
+
+* Add a logical check if the user already exists when creating an account.
+
+* Improve error handling on front-end... after improving it on back-end (return the proper HTTP headers according to the error).
+
+* Add the possibility to remove a platform.
+
+* Improve form validation.
+
+* Add the possibility to store the user id of the user who registered a game and the id of the last user to edit a given game.
+
+* Add unit tests (so far only the game entity is covered).

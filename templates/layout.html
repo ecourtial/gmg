@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <title>{{ title }}</title>
+        <meta name="robots" content="noindex">
         <link href="{{ url_for('static', filename='css/vendor/bootstrap-theme.css') }}" rel="stylesheet" />
         <link href="{{ url_for('static', filename='css/vendor/bootstrap.min.css') }}" rel="stylesheet" />
         <link href="{{ url_for('static', filename='css/games.css') }}" rel="stylesheet" />
@@ -26,6 +27,8 @@
             {% endif %}
             <script type="text/javascript">
                 // Assets links
+                var checkImageUrl = "{{ url_for('static', filename='images/check.png') }}";
+                var noImageUrl = "{{ url_for('static', filename='images/no.png') }}";
                 var hallOfFameImageUrl = "{{ url_for('static', filename='images/hall-of-fame.png') }}";
                 var playedOftenImageUrl = "{{ url_for('static', filename='images/time.png') }}";
                 var topImageUrl = "{{ url_for('static', filename='images/top.png') }}";
@@ -49,10 +52,10 @@
                 var gameDetailsUrl = "{{ url_for('get_game', game_id=1) }}";
                 gameDetailsUrl = gameDetailsUrl.substring(0, gameDetailsUrl.length -1);
 
-                var gamesSpecialListUrl = "{{ url_for('get_special_list', filter=1) }}";
+                var gamesSpecialListUrl = "{{ url_for('get_special_list', selector=1) }}";
                 gamesSpecialListUrl = gamesSpecialListUrl.substring(0, gamesSpecialListUrl.length -1);
 
-                var randomgameUrl = "{{ url_for('get_random', filter=1) }}";
+                var randomgameUrl = "{{ url_for('get_random', selector=1) }}";
                 randomgameUrl = randomgameUrl.substring(0, randomgameUrl.length -1);
                 
                 // Various
@@ -64,6 +67,11 @@
                 var previousUrl = null;
                 var previousDisplayer = null;
                 var previousContext = null;
+
+                function dispatchReturnToListEvent(platformId) {
+                    $( "#extraP").trigger( "returnToGameListForThisPlaftorm", [platformId]);
+                    return false;
+                }
 
                 // Load the main script
                 require(['content']);

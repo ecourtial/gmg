@@ -14,7 +14,10 @@ class AbstractRepository:
         if row is None:
             return None
 
-        return self.hydrate(row)
+        hydrated = self.hydrate(row)
+        cursor.close()
+
+        return hydrated
 
     def fetch_multiple(self, request, data_tuple):
         """Fetch mutliple items and return a list."""
@@ -46,3 +49,12 @@ class AbstractRepository:
             self.mysql.autocommit = False
 
         return cursor.lastrowid
+
+    def fetch_cursor(self, request):
+        """Fetch one result"""
+        cursor = self.mysql.cursor(dictionary=True)
+        cursor.execute(request)
+        row = cursor.fetchone()
+        cursor.close()
+
+        return row

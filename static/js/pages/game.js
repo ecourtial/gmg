@@ -14,18 +14,21 @@ define(
                 $('#contentTitle').html(tools.filterContent(data.game.title) + ' (' + tools.filterContent(data.game.platform_name) + ')');
                 var content = $('#gameDetailContent').html();
 
-                // Badges
+                // Badges and links
                 var badges = this.getBadges(data.game);
                 if (badges === '') {
                     badges = 'Aucun';
                 }
                 content = content.replace("@BADGES@", badges);
-
+                
                 if (logged) {
                     var editLink = '<p> <a data-link-type="gameEdit" id="entryE' + tools.filterContent(data.game.meta.game_id) + '" href="">Editer</a></p>';
                     var deleteLink = '<p> <a data-link-type="gameDelete" id="entryR' + tools.filterContent(data.game.meta.game_id) + '" href="">Supprimer</a></p>';
                     content = editLink + deleteLink + content;
                 }
+
+                content = '<p><a href="" onClick="return dispatchReturnToListEvent(' + tools.filterContent(data.game.platform) 
+                    + ')" id="returnToPrevious">Retourner à la liste des jeux <strong>' + tools.filterContent(data.game.platform_name) + '</strong></a></p>' + content;
 
                 // Main content
                 content = content.replace("@ID@", tools.filterContent(data.game.meta.game_id));
@@ -43,6 +46,7 @@ define(
                 content = content.replace("@IS_MANY@", this.boolToYesNoConverter(data.game.meta.many));
                 content = content.replace("@IS_TOP@", this.boolToYesNoConverter(data.game.meta.top_game));
                 content = content.replace("@IS_PLAYED_OFTEN@", this.boolToYesNoConverter(data.game.meta.played_it_often));
+                content = content.replace("@ONGOING@", this.boolToYesNoConverter(data.game.meta.ongoing));
 
                 // Hall of fame
                 if (data.game.meta.hall_of_fame === 0) {
@@ -74,6 +78,12 @@ define(
 
             getBadges: function(value) {
                 var gameEntry = '';
+
+                if (value.meta.original === 1 || value.meta.copy === 1) {
+                    gameEntry += '<img title="Je possède une version" src="' + checkImageUrl + '"/>'
+                } else {
+                    gameEntry += '<img title="Je ne possède aucune version" src="' + noImageUrl + '"/>'
+                }
 
                 if (value.meta.hall_of_fame === 1) {
                     gameEntry += ' <img title="Dans le hall of fame" src="' + hallOfFameImageUrl + '"/>'

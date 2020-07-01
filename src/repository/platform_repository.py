@@ -8,9 +8,8 @@ class PlatformRepository(AbstractRepository):
     def get_total_count(self):
         """The total count of platforms registered in the app."""
         request = "SELECT COUNT(*) as total FROM platforms;"
-        cursor = self.mysql.cursor(dictionary=True)
-        cursor.execute(request)
-        row = cursor.fetchone()
+        row = self.fetch_cursor(request)
+
         return row['total']
 
     def get_list(self):

@@ -18,7 +18,8 @@ class GameRepository(AbstractRepository):
         'to_watch_serious',
         'to_rewatch',
         'to_buy',
-        'original'
+        'original',
+        'ongoing'
     ]
 
     random_cases = [
@@ -103,20 +104,28 @@ class GameRepository(AbstractRepository):
     def get_total_count(self):
         """Get the total count of games registered in the app."""
         request = "SELECT COUNT(*) as total FROM games;"
-        cursor = self.mysql.cursor(dictionary=True)
-        cursor.execute(request)
-        row = cursor.fetchone()
+        row = self.fetch_cursor(request)
+
         return row['total']
 
     def get_count_to_do_solo_or_to_watch(self):
         """Get the total count of games to do solo or to watch."""
         request = "SELECT COUNT(*) as total FROM games, games_meta "
-        request += "WHERE games_meta.todo_solo_sometimes = 1 "
+        request += "WHERE (games_meta.todo_solo_sometimes = 1 "
         request += "OR games_meta.to_do = 1 OR games_meta.to_watch_background =1"
-        request += " OR games_meta.to_watch_serious = 1;"
-        cursor = self.mysql.cursor(dictionary=True)
-        cursor.execute(request)
-        row = cursor.fetchone()
+        request += " OR games_meta.to_watch_serious = 1) "
+        request += "AND games.id = games_meta.game_id;"
+        row = self.fetch_cursor(request)
+
+        return row['total']
+
+    def get_owned_count(self):
+        """Get the total count of games that I own."""
+        request = "SELECT COUNT(*) as total FROM games, games_meta "
+        request += "WHERE (games_meta.original = 1 OR games_meta.copy = 1) "
+        request += "AND games.id = games_meta.game_id;"
+        row = self.fetch_cursor(request)
+
         return row['total']
 
     def get_hall_of_fame_data(self):
@@ -172,6 +181,7 @@ class GameRepository(AbstractRepository):
         request += "hall_of_fame_year=%s, "
         request += "hall_of_fame_position=%s, "
         request += "played_it_often=%s, "
+        request += "ongoing=%s, "
         request += "comments=%s "
         request += "WHERE game_id = %s"
 
@@ -200,6 +210,7 @@ class GameRepository(AbstractRepository):
             form_content['hall_of_fame_year'],
             form_content['hall_of_fame_position'],
             form_content['played_it_often'],
+            form_content['ongoing'],
             form_content['comments'],
         )
 
