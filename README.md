@@ -30,3 +30,19 @@ todo list, watch list, ranking...
 * unittest
 * pylint
 * Ansible
+
+## Todo
+Yet the project is fully working, there are some features or elements to improve:
+* Internationalization.
+
+* Add a logical check if the user already exists when creating an account.
+
+* Improve error handling on front-end... after improving it on back-end (return the proper HTTP headers according to the error).
+
+* Add the possibility to remove a platform.
+
+* Improve form validation.
+
+* Add the possibility to store the user id of the user who registered a game and the id of the last user to edit a given game.
+
+* Add unit tests (so far only the game entity is covered).
