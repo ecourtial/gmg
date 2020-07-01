@@ -6,6 +6,16 @@
 A personal educational test project to manage my video games collection. Games can be sorted by support,
 todo list, watch list, ranking...
 
+## Utilization
+
+* In dev mode: just do a __docker compose up__. In production, make your gunicorn server to launch the application __app.py__.
+
+* An empty database is given in the repository: just import it.
+
+* Once the application is running, go to __/register__ to create an account.
+
+* Then go to your database to enable the user you just created. That's it.
+
 ## Stack :light_rail:
 
 * Docker

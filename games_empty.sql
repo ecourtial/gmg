@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# HÃ´te: 0.0.0.0 (MySQL 5.7.29)
-# Base de donnÃ©es: games
-# Temps de gÃ©nÃ©ration: 2020-06-10 17:35:59 +0000
+# Hôte: 0.0.0.0 (MySQL 5.7.29)
+# Base de données: games
+# Temps de génération: 2020-07-01 17:45:14 +0000
 # ************************************************************
 
 
@@ -58,9 +58,10 @@ CREATE TABLE `games_meta` (
   `many` tinyint(1) unsigned NOT NULL,
   `top_game` tinyint(1) unsigned NOT NULL,
   `hall_of_fame` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `hall_of_fame_year` int(11) unsigned DEFAULT NULL,
+  `hall_of_fame_year` smallint(11) unsigned DEFAULT NULL,
   `hall_of_fame_position` smallint(11) unsigned DEFAULT NULL,
   `played_it_often` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `ongoing` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `comments` text,
   PRIMARY KEY (`game_id`),
   CONSTRAINT `games_meta_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`)
