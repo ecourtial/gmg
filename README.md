@@ -31,6 +31,11 @@ todo list, watch list, ranking...
 * pylint
 * Ansible
 
+## Changelog
+
+### 1.0.1
+* Fixed a bug when adding a new game while edition was still working.
+
 ## Todo
 Yet the project is fully working, there are some features or elements to improve:
 * Internationalization.
