@@ -150,8 +150,8 @@ class GameRepository(AbstractRepository):
         request += "original, copy,"
         request += "many, top_game,"
         request += "hall_of_fame, hall_of_fame_year,"
-        request += "hall_of_fame_position, played_it_often, comments) "
-        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+        request += "hall_of_fame_position, played_it_often, ongoing, comments) "
+        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)"
 
         self.write(request, meta)
 
