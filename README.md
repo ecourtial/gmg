@@ -33,7 +33,7 @@ todo list, watch list, ranking...
 
 ## Changelog
 
-### 1.0.1
+### 3.0.1
 * Fixed a bug when adding a new game while edition was still working.
 
 ## Todo
