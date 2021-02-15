@@ -150,8 +150,8 @@ class GameRepository(AbstractRepository):
         request += "original, copy,"
         request += "many, top_game,"
         request += "hall_of_fame, hall_of_fame_year,"
-        request += "hall_of_fame_position, played_it_often, ongoing, comments) "
-        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)"
+        request += "hall_of_fame_position, played_it_often, ongoing, comments, todo_with_help) "
+        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s)"
 
         self.write(request, meta)
 
@@ -182,7 +182,8 @@ class GameRepository(AbstractRepository):
         request += "hall_of_fame_position=%s, "
         request += "played_it_often=%s, "
         request += "ongoing=%s, "
-        request += "comments=%s "
+        request += "comments=%s, "
+        request += "todo_with_help=%s "
         request += "WHERE game_id = %s"
 
         self.write(request, meta)
@@ -212,6 +213,7 @@ class GameRepository(AbstractRepository):
             form_content['played_it_often'],
             form_content['ongoing'],
             form_content['comments'],
+            form_content['todo_with_help'],
         )
 
         if operation == 'INSERT':
@@ -223,6 +225,10 @@ class GameRepository(AbstractRepository):
         """Delete a game"""
         request = "DELETE FROM games_meta WHERE game_id=%s"
         self.write(request, (game_id,), False)
+
+        request = "DELETE FROM history WHERE game_id=%s"
+        self.write(request, (game_id,), False)
+
         request = "DELETE FROM games WHERE id=%s"
         self.write(request, (game_id,))
 

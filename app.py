@@ -6,6 +6,7 @@ from src.controller.home import HomeController
 from src.controller.platforms import PlatformController
 from src.controller.games import GameController
 from src.controller.user import UserController
+from src.controller.history import HistoryController
 from src.repository.user_repository import UserRepository
 from src.connection.mysql_factory import MySQLFactory
 
@@ -166,3 +167,4 @@ def logout():
     """Logout"""
     controller = UserController()
     return controller.logout()
+
