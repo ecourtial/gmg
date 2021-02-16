@@ -33,6 +33,11 @@ todo list, watch list, ranking...
 
 ## Changelog
 
+### 3.1.0
+* Added a "todo with help" icon in the game list if the game is to be completed with some help.
+* The game id is now visible in the game lists.
+* Added a History menu to log the games we finish (watch or play).
+
 ### 3.0.1
 * Fixed a bug when adding a new game while edition was still working.
 

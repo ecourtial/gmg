@@ -6,6 +6,7 @@ from src.controller.home import HomeController
 from src.controller.platforms import PlatformController
 from src.controller.games import GameController
 from src.controller.user import UserController
+from src.controller.history import HistoryController
 from src.repository.user_repository import UserRepository
 from src.connection.mysql_factory import MySQLFactory
 
@@ -166,3 +167,24 @@ def logout():
     """Logout"""
     controller = UserController()
     return controller.logout()
+
+# History management
+@app.route('/history', methods=['GET'])
+def game_history():
+    """Games history"""
+    controller = HistoryController()
+    return controller.get_list(MySQLFactory.get())
+
+@app.route('/history/add', methods=['GET', 'POST'])
+@login_required
+def add_history():
+    """Adding a new history entry"""
+    controller = HistoryController
+    return controller.add(MySQLFactory.get())
+
+@app.route('/history/delete/<int:game_id>', methods=['DELETE'])
+@login_required
+def delete_history(game_id):
+    """History deletion"""
+    controller = HistoryController
+    return controller.delete(MySQLFactory.get(), game_id)

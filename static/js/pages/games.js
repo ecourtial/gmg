@@ -24,6 +24,7 @@ define(
                         gameEntry += ' (' + tools.filterContent(value.platform_name) + ')';
                     }
 
+                    gameEntry += " - " + value.game_id;
                     gameEntry = that.getBadges(gameEntry, value);
                     gameEntry += ' - <a data-link-type="gameDetails" id="entryD' + tools.filterContent(value.game_id) + '" href="">Détails</a>';
 
@@ -111,6 +112,10 @@ define(
 
                 if (value.meta.to_buy === 1) {
                     gameEntry += ' <img title="À acheter" src="' + toBuyImageUrl + '"/>'
+                }
+
+                if (value.meta.to_do == 1 && value.meta.todo_with_help === 1) {
+                    gameEntry += ' <img title="À faire avec aide ou solution" src="' + withHelpImageUrl + '"/>'
                 }
 
                 return gameEntry;

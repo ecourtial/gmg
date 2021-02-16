@@ -52,6 +52,13 @@
         </select>
     </p>
     <p>
+        <label for="todo_with_help">A faire avec la soluce ou de l'aide</label>
+        <select id="todo_with_help" name="todo_with_help">
+            <option value="0" {%- if game and game.get_meta()['todo_with_help'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['todo_with_help'] == 1 -%} selected {% endif %}>Oui</option>
+        </select>
+    </p>
+    <p>
         <label for="to_buy">A acheter</label>
         <select id="to_buy" name="to_buy">
             <option value="0" {%- if game and game.get_meta()['to_buy'] == 0 -%} selected {% endif %}>Non</option>

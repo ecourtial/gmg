@@ -33,12 +33,18 @@
                 var playedOftenImageUrl = "{{ url_for('static', filename='images/time.png') }}";
                 var topImageUrl = "{{ url_for('static', filename='images/top.png') }}";
                 var toBuyImageUrl = "{{ url_for('static', filename='images/to-buy.png') }}";
+                var withHelpImageUrl = "{{ url_for('static', filename='images/help.png') }}";
 
                 // API URLs
                 var hallOfFameUrl = "{{ url_for('get_home_content') }}";
                 var platformListUrl = "{{ url_for('get_platforms') }}";
                 var addPlatformUrl = "{{ url_for('add_platform') }}";
                 var addGameUrl = "{{ url_for('add_game') }}";
+                var addHistoryUrl = "{{ url_for('add_history') }}";
+                var getHistoryUrl = "{{ url_for('game_history') }}";
+
+                var deleteHistoryUrl = "{{ url_for('delete_history', game_id=1) }}";
+                deleteHistoryUrl = deleteHistoryUrl.substring(0, deleteHistoryUrl.length -1);
 
                 var editGameUrl = "{{ url_for('edit_game', game_id=1) }}";
                 editGameUrl = editGameUrl.substring(0, editGameUrl.length -1);
