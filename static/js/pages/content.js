@@ -2,8 +2,8 @@
  * @author Eric COURTIAL <e.courtial30@gmail.com>
  */
 define(
-    ["jquery", "platforms", "games", "game", "home", "platformEditor", "gameEditor"],
-    function ($, platforms, games, game, home, platformEditor, gameEditor) {
+    ["jquery", "platforms", "games", "game", "home", "platformEditor", "gameEditor", "historyEditor", "history"],
+    function ($, platforms, games, game, home, platformEditor, gameEditor, historyEditor, history) {
         "use strict";
 
         /**
@@ -97,6 +97,19 @@ define(
             dataManager.request(deleteGameUrl+gameId, null, null, false, {'_token': $('#tokenCSRF').html()}, 'DELETE', callback)
         }
 
+        function deleteHistory(id) {
+            if (confirm("Etes-vous sûr de vouloir supprimer cette entrée ?") === false) {
+                return false;
+            }
+
+            var callback = function() {
+                $("#history").trigger("click");
+            };
+            
+            dataManager.showTempMsg(true);
+            dataManager.request(deleteHistoryUrl + id, null, null, false, {'_token': $('#tokenCSRF').html()}, 'DELETE', callback);
+        }
+
         /**
          * Event listeners
          */
@@ -164,6 +177,14 @@ define(
             return false;
         });
 
+        // Click on the platform menu
+        $('#history').click(function() {
+            dataManager.showTempMsg(true);
+            dataManager.request(getHistoryUrl, history, null);
+
+            return false;
+        });
+
         // Search form
         $('#searchForm').submit(function() {
             var url = gamesSpecialListUrl + 'search?query=' + $('#gameSearch').val();
@@ -185,6 +206,14 @@ define(
         $('#addGame').click(function() {
             dataManager.showTempMsg(true);
             dataManager.request(addGameUrl, gameEditor, 'add');
+
+            return false;
+        });
+
+        // Add history entry form
+        $('#addHistory').click(function() {
+            dataManager.showTempMsg(true);
+            dataManager.request(addHistoryUrl, historyEditor, 'add');
 
             return false;
         });
@@ -211,6 +240,10 @@ define(
             } else if (linkType === 'gameDelete') {
                 // Specific use case since we do a DELETE instead of a GET
                 deleteGame(id);
+
+                return false;
+            } else if(linkType === 'historyDelete') {
+                deleteHistory(id);
 
                 return false;
             } else {

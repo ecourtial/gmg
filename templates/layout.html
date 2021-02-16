@@ -40,6 +40,11 @@
                 var platformListUrl = "{{ url_for('get_platforms') }}";
                 var addPlatformUrl = "{{ url_for('add_platform') }}";
                 var addGameUrl = "{{ url_for('add_game') }}";
+                var addHistoryUrl = "{{ url_for('add_history') }}";
+                var getHistoryUrl = "{{ url_for('game_history') }}";
+
+                var deleteHistoryUrl = "{{ url_for('delete_history', game_id=1) }}";
+                deleteHistoryUrl = deleteHistoryUrl.substring(0, deleteHistoryUrl.length -1);
 
                 var editGameUrl = "{{ url_for('edit_game', game_id=1) }}";
                 editGameUrl = editGameUrl.substring(0, editGameUrl.length -1);

@@ -168,3 +168,23 @@ def logout():
     controller = UserController()
     return controller.logout()
 
+# History management
+@app.route('/history', methods=['GET'])
+def game_history():
+    """Games history"""
+    controller = HistoryController()
+    return controller.get_list(MySQLFactory.get())
+
+@app.route('/history/add', methods=['GET', 'POST'])
+@login_required
+def add_history():
+    """Adding a new history entry"""
+    controller = HistoryController
+    return controller.add(MySQLFactory.get())
+
+@app.route('/history/delete/<int:game_id>', methods=['DELETE'])
+@login_required
+def delete_history(game_id):
+    """History deletion"""
+    controller = HistoryController
+    return controller.delete(MySQLFactory.get(), game_id)

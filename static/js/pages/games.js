@@ -24,6 +24,7 @@ define(
                         gameEntry += ' (' + tools.filterContent(value.platform_name) + ')';
                     }
 
+                    gameEntry += " - " + value.game_id;
                     gameEntry = that.getBadges(gameEntry, value);
                     gameEntry += ' - <a data-link-type="gameDetails" id="entryD' + tools.filterContent(value.game_id) + '" href="">Détails</a>';
 
