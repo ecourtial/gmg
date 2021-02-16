@@ -12,6 +12,8 @@ todo list, watch list, ranking...
 
 * An empty database is given in the repository: just import it.
 
+* In the root folder, copy the file _configuration.json.dist_ to _configuration.json_ and fill it with your values.
+
 * Once the application is running, go to __/register__ to create an account.
 
 * Then go to your database to enable the user you just created. That's it.
