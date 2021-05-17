@@ -106,7 +106,7 @@ define(
                 }
 
                 if (value.meta.has_box == 1) {
-                    gameEntry += ' <img title="Possède la boite originale (DVD ou carton)" src="' + hasBoxImageUrl + '"/>'
+                    gameEntry += ' <img title="Possède la boite originale (DVD ou carton, pas une réédition)" src="' + hasBoxImageUrl + '"/>'
                 }
 
                 return gameEntry;
