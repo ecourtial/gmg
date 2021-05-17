@@ -118,6 +118,10 @@ define(
                     gameEntry += ' <img title="À faire avec aide ou solution" src="' + withHelpImageUrl + '"/>'
                 }
 
+                if (value.meta.has_box == 1) {
+                    gameEntry += ' <img title="Possède la boite originale (DVD ou carton)" src="' + hasBoxImageUrl + '"/>'
+                }
+
                 return gameEntry;
             }
         };

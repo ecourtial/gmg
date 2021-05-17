@@ -7,6 +7,7 @@ from src.exception.unknown_filter_exception import UnknownFilterException
 class GameRepository(AbstractRepository):
     """ Another useless comment """
 
+    # Allowed filter for special lists
     authorized_fields = [
         'singleplayer_recurring',
         'multiplayer_recurring',
@@ -150,8 +151,9 @@ class GameRepository(AbstractRepository):
         request += "original, copy,"
         request += "many, top_game,"
         request += "hall_of_fame, hall_of_fame_year,"
-        request += "hall_of_fame_position, played_it_often, ongoing, comments, todo_with_help) "
-        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s)"
+        request += "hall_of_fame_position, played_it_often, ongoing, comments, todo_with_help"
+        request += ", has_box) "
+        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s)"
 
         self.write(request, meta)
 
@@ -183,7 +185,8 @@ class GameRepository(AbstractRepository):
         request += "played_it_often=%s, "
         request += "ongoing=%s, "
         request += "comments=%s, "
-        request += "todo_with_help=%s "
+        request += "todo_with_help=%s, "
+        request += "has_box=%s "
         request += "WHERE game_id = %s"
 
         self.write(request, meta)
@@ -214,6 +217,7 @@ class GameRepository(AbstractRepository):
             form_content['ongoing'],
             form_content['comments'],
             form_content['todo_with_help'],
+            form_content['has_box'],
         )
 
         if operation == 'INSERT':
