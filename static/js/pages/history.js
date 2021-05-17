@@ -29,7 +29,7 @@ define(
                         }
                     }
 
-                    var gameEntry = tools.filterContent(value.title);
+                    var gameEntry = value.position + "- " + tools.filterContent(value.title);
 
                     gameEntry += ' - <a data-link-type="gameDetails" id="entryD' + tools.filterContent(value.game_id) + '" href="">Détails</a>';
 
