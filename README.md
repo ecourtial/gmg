@@ -37,7 +37,7 @@ todo list, watch list, ranking...
 
 ### 3.2.0
 * Added a blacktheme (the white one is no longer applied).
-* Added a "Has the box" badge when we have the original box (no a re-edition).
+* Added a "Has the box" badge when we have the original box (not a re-edition).
 * Fixed the "To do with help" badge that was not displayed in the header of a game details page.
 
 ### 3.1.0
