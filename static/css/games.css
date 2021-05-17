@@ -86,3 +86,8 @@ h1 {
     text-align: center;
     font-weight: bold;
 }
+
+textarea {
+    width: 640px;
+    height: 280px;
+}

@@ -153,6 +153,8 @@
     </p>
     <p>
         <label for="comments">Commentaires</label>
+    </p>
+    <p>
         <textarea name="comments">{%- if game and game.get_meta()['comments'] != None -%}{{game.get_meta()['comments']}}{% endif %}</textarea>
     </p>
     <input type='hidden' name='_token' value='{{ token }}'/>
