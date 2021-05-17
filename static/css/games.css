@@ -1,3 +1,49 @@
+/* START OVERRIDE FOR DARK THEME */
+
+body {
+    background-color: black;
+    color: rgb(191, 191, 191);
+}
+
+.navbar {
+    background-color: rgb(33, 33, 33);
+    border-color: rgb(48, 48, 48);
+}
+
+.icon-bar {
+    background-color: white;
+}
+
+body::-webkit-scrollbar {
+    background-color: grey;
+}
+
+body::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: #242424 !important;
+    border: 2px solid #3e4346 !important;
+}
+
+body::-webkit-scrollbar-button {
+    background-color: black;
+}
+
+button {
+    color: #bfbfbf;
+    background-color: #1f1f1f;
+}
+
+input, select, textarea {
+    color: #1f1f1f;
+    background-color: grey;
+}
+
+.dropdown-menu>li>a {
+    color: inherit
+}
+
+/* END OVERRIDE FOR DARK THEME */
+
 h1 {
     text-align: center;
 }
@@ -39,4 +85,9 @@ h1 {
     width: 100%;
     text-align: center;
     font-weight: bold;
+}
+
+textarea {
+    width: 640px;
+    height: 280px;
 }

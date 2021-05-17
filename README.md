@@ -35,6 +35,11 @@ todo list, watch list, ranking...
 
 ## Changelog
 
+### 3.2.0
+* Added a blacktheme (the white one is no longer applied).
+* Added a "Has the box" badge when we have the original box (not a re-edition).
+* Fixed the "To do with help" badge that was not displayed in the header of a game details page.
+
 ### 3.1.0
 * Added a "todo with help" icon in the game list if the game is to be completed with some help.
 * The game id is now visible in the game lists.
@@ -58,3 +63,5 @@ Yet the project is fully working, there are some features or elements to improve
 * Add the possibility to store the user id of the user who registered a game and the id of the last user to edit a given game.
 
 * Add unit tests (so far only the game entity is covered).
+
+* Remove coupling between front and back. Use REST APIs instead of the current implementation.

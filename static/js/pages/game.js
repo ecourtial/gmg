@@ -101,6 +101,14 @@ define(
                     gameEntry += ' <img title="À acheter" src="' + toBuyImageUrl + '"/>'
                 }
 
+                if (value.meta.to_do == 1 && value.meta.todo_with_help === 1) {
+                    gameEntry += ' <img title="À faire avec aide ou solution" src="' + withHelpImageUrl + '"/>'
+                }
+
+                if (value.meta.has_box == 1) {
+                    gameEntry += ' <img title="Possède la boite originale (DVD ou carton, pas une réédition)" src="' + hasBoxImageUrl + '"/>'
+                }
+
                 return gameEntry;
             }
         };

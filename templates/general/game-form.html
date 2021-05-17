@@ -59,6 +59,13 @@
         </select>
     </p>
     <p>
+        <label for="has_box">Possède la boite originale (DVD ou carton)</label>
+        <select id="has_box" name="has_box">
+            <option value="0" {%- if game and game.get_meta()['has_box'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['has_box'] == 1 -%} selected {% endif %}>Oui</option>
+        </select>
+    </p>
+    <p>
         <label for="to_buy">A acheter</label>
         <select id="to_buy" name="to_buy">
             <option value="0" {%- if game and game.get_meta()['to_buy'] == 0 -%} selected {% endif %}>Non</option>
@@ -153,6 +160,8 @@
     </p>
     <p>
         <label for="comments">Commentaires</label>
+    </p>
+    <p>
         <textarea name="comments">{%- if game and game.get_meta()['comments'] != None -%}{{game.get_meta()['comments']}}{% endif %}</textarea>
     </p>
     <input type='hidden' name='_token' value='{{ token }}'/>

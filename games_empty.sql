@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # https://github.com/sequelpro/sequelpro
 #
-# HÃ´te: 0.0.0.0 (MySQL 5.7.29)
-# Base de donnÃ©es: games
-# Temps de gÃ©nÃ©ration: 2021-02-16 21:10:11 +0000
+# Hôte: 0.0.0.0 (MySQL 5.7.29)
+# Base de données: games
+# Temps de génération: 2021-05-17 19:05:05 +0000
 # ************************************************************
 
 
@@ -64,6 +64,7 @@ CREATE TABLE `games_meta` (
   `ongoing` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `comments` text,
   `todo_with_help` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `has_box` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`game_id`),
   CONSTRAINT `games_meta_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -78,8 +79,8 @@ DROP TABLE IF EXISTS `history`;
 CREATE TABLE `history` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `game_id` smallint(11) unsigned NOT NULL,
-  `year` smallint(6) NOT NULL,
-  `position` smallint(6) NOT NULL,
+  `year` smallint(6) unsigned NOT NULL,
+  `position` smallint(6) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `game_id` (`game_id`),
   CONSTRAINT `history_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`)
