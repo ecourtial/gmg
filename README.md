@@ -8,7 +8,7 @@ todo list, watch list, ranking...
 
 ## Utilization
 
-* In dev mode: just do a __docker compose up__. In production, make your gunicorn server to launch the application __app.py__.
+* In dev mode: just do a __make start__. In production, make your gunicorn server to launch the application __app.py__.
 
 * An empty database is given in the repository: just import it.
 
@@ -39,6 +39,7 @@ todo list, watch list, ranking...
 * Added a blacktheme (the white one is no longer applied).
 * Added a "Has the box" badge when we have the original box (not a re-edition).
 * Fixed the "To do with help" badge that was not displayed in the header of a game details page.
+* Resized the textarea for the comment section when editing a game.
 
 ### 3.1.0
 * Added a "todo with help" icon in the game list if the game is to be completed with some help.
