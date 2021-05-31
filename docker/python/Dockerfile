@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.8.9-slim
 
 # expose to nginx
 EXPOSE 9000
