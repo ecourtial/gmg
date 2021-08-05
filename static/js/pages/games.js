@@ -57,6 +57,7 @@ define(
                     'to_watch_serious': "A regarder sérieusement",
                     'to_rewatch': "A regarder à nouveau parfois",
                     'ongoing': "En cours",
+                    'bgf': "Best Games Forever",
                 };
 
                 if (context in correspondence) {
@@ -79,7 +80,8 @@ define(
             getSubtitle: function(context) {
                 var correspondence = {
                     "singleplayer_recurring": "Top jeux, jouables par intermittence (prendre des notes)",
-                    'todo_solo_sometimes': "Top jeux, jouable de courts moments de temps en temps OU jeux d'aventures à faire d'une traite"
+                    "todo_solo_sometimes": "Top jeux, jouable de courts moments de temps en temps OU jeux d'aventures à faire d'une traite",
+                    "bgf": "Pépites qui malgré le temps restent des merveilles qui nous tiennent à coeur (différent du Hall Of Fames qui est dans le contexte de l'époque)"
                 };
 
                 if (context in correspondence) {
@@ -100,6 +102,10 @@ define(
             getBadges: function(gameEntry, value) {
                 if (value.meta.hall_of_fame === 1) {
                     gameEntry += ' <img title="Dans le hall of fame" src="' + hallOfFameImageUrl + '"/>'
+                }
+
+                if (value.meta.bgf === 1) {
+                    gameEntry += ' <img title="Membre des Best Games Forever" src="' + diamondImageUrl + '"/>'
                 }
 
                 if (value.meta.top_game === 1) {

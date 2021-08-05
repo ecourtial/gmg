@@ -89,6 +89,11 @@ define(
                     gameEntry += ' <img title="Dans le hall of fame" src="' + hallOfFameImageUrl + '"/>'
                 }
 
+
+                if (value.meta.bgf === 1) {
+                    gameEntry += ' <img title="Membre des Best Games Forever" src="' + diamondImageUrl + '"/>'
+                }
+
                 if (value.meta.top_game === 1) {
                     gameEntry += ' <img title="Top jeu" src="' + topImageUrl + '"/>'
                 }
