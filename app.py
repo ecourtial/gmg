@@ -19,7 +19,7 @@ with open('configuration.json') as json_file:
     configurationData = json.load(json_file)
 
 # DB connection
-db_factory = MySQLFactory.init(
+MySQLFactory.init(
     configurationData['db_host'],
     configurationData['db_user'],
     configurationData['db_password'],

@@ -7,7 +7,7 @@
 #
 # Hôte: 0.0.0.0 (MySQL 5.7.29)
 # Base de données: games
-# Temps de génération: 2021-05-17 19:05:05 +0000
+# Temps de génération: 2021-08-05 12:36:24 +0000
 # ************************************************************
 
 
@@ -65,6 +65,7 @@ CREATE TABLE `games_meta` (
   `comments` text,
   `todo_with_help` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `has_box` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `bgf` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`game_id`),
   CONSTRAINT `games_meta_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -35,6 +35,9 @@ todo list, watch list, ranking...
 
 ## Changelog
 
+### 3.3.0
+* Added a new feature: "Best Game Forever". Different from the hall of fames. BGF games are still valuable today, while some entries in the HOF were valuable only at time.
+
 ### 3.2.0
 * Added a blacktheme (the white one is no longer applied).
 * Added a "Has the box" badge when we have the original box (not a re-edition).

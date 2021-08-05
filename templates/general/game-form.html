@@ -152,6 +152,13 @@
         />
     </p>
     <p>
+        <label for="bgf">Best Game Forever ?</label>
+        <select id="bgf" name="bgf">
+            <option value="0" {%- if game and game.get_meta()['bgf'] == 0 -%} selected {% endif %}>Non</option>
+            <option value="1" {%- if game and game.get_meta()['bgf'] == 1 -%} selected {% endif %}>Oui</option>
+        </select>
+    </p>
+    <p>
         <label for="ongoing">En cours</label>
         <select id="ongoing" name="ongoing">
             <option value="0" {%- if game and game.get_meta()['ongoing'] == 0 -%} selected {% endif %}>Non</option>

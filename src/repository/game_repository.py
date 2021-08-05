@@ -20,7 +20,8 @@ class GameRepository(AbstractRepository):
         'to_rewatch',
         'to_buy',
         'original',
-        'ongoing'
+        'ongoing',
+        'bgf'
     ]
 
     random_cases = [
@@ -152,8 +153,9 @@ class GameRepository(AbstractRepository):
         request += "many, top_game,"
         request += "hall_of_fame, hall_of_fame_year,"
         request += "hall_of_fame_position, played_it_often, ongoing, comments, todo_with_help"
-        request += ", has_box) "
-        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s)"
+        request += ", has_box, bgf) "
+        request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s"
+        request += ", %s)"
 
         self.write(request, meta)
 
@@ -186,7 +188,8 @@ class GameRepository(AbstractRepository):
         request += "ongoing=%s, "
         request += "comments=%s, "
         request += "todo_with_help=%s, "
-        request += "has_box=%s "
+        request += "has_box=%s, "
+        request += "bgf=%s "
         request += "WHERE game_id = %s"
 
         self.write(request, meta)
@@ -218,6 +221,7 @@ class GameRepository(AbstractRepository):
             form_content['comments'],
             form_content['todo_with_help'],
             form_content['has_box'],
+            form_content['bgf'],
         )
 
         if operation == 'INSERT':
