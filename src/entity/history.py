@@ -9,13 +9,17 @@ class History:
             game_id,
             title,
             year,
-            position
+            position,
+            watched,
+            played
     ):
         self.entity_id = entity_id
         self.game_id = game_id
         self.title = title
         self.year = year
         self.position = position
+        self.watched = watched
+        self.played = played
 
     def get_id(self):
         """Return the id entry."""
@@ -42,6 +46,16 @@ class History:
 
         return self.position
 
+    def get_watched(self):
+        """Did you watched a playthrough?"""
+
+        return self.watched
+
+    def get_played(self):
+        """Did you played at it?"""
+
+        return self.played
+
     def to_json(self):
         """Jsonify the object"""
         return json.dumps(self, default=lambda o: o.__dict__)
@@ -53,5 +67,7 @@ class History:
             'game_id': self.game_id,
             'title': self.title,
             'year': self.year,
-            'position': self.position
+            'position': self.position,
+            'watched': self.watched,
+            'played': self.played
         }

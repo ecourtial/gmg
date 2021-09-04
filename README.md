@@ -35,6 +35,9 @@ todo list, watch list, ranking...
 
 ## Changelog
 
+### 3.4.0
+* Added watched and played badges in the history section.
+
 ### 3.3.0
 * Added a new feature: "Best Game Forever". Different from the hall of fames. BGF games are still valuable today, while some entries in the HOF were valuable only at time.
 
@@ -47,7 +50,7 @@ todo list, watch list, ranking...
 ### 3.1.0
 * Added a "todo with help" icon in the game list if the game is to be completed with some help.
 * The game id is now visible in the game lists.
-* Added a History menu to log the games we finish (watch or play).
+* Added a History menu to log the games we finish (watched or played).
 
 ### 3.0.1
 * Fixed a bug when adding a new game while edition was still working.

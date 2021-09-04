@@ -11,7 +11,20 @@
         <label for="position">Position</label>
         <input type='int' name='position' id='position' value="{%- if history -%}{{game.get_position()}}{% endif %}" required/>
     </p>
-
+    <p>
+        <label for="watched">L'as-tu regardé ?</label>
+        <select id="watched" name="watched">
+            <option value="0">Non</option>
+            <option value="1">Oui</option>
+        </select>
+    </p>
+    <p>
+        <label for="played">Y as-tu joué ?</label>
+        <select id="played" name="played">
+            <option value="0">Non</option>
+            <option value="1">Oui</option>
+        </select>
+    </p>
     <input type='hidden' name='_token' value='{{ token }}'/>
     <input type='submit' name='submit' value="Enregistrer"/>
 </form>
