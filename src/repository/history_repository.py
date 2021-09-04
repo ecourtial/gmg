@@ -17,7 +17,7 @@ class HistoryRepository(AbstractRepository):
     def insert(self, game_id, year, position, watched, played):
         """Insert a new history entry"""
         request = "INSERT INTO history (game_id, year, position, watched, played) "
-        request += "VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        request += "VALUES (%s,%s,%s,%s,%s)"
         return self.write(request, (game_id, year, position, watched, played,))
 
     def delete(self, entity_id):
