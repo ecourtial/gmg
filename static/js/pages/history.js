@@ -14,6 +14,7 @@ define(
                 $('#contentTitle').html("Historique");
                 var content = '<p id="subtitle">Jeux vus ou joués</p>';
                 var currentYear = 0;
+                var that = this;
 
                 $.each(data.games, function (index, value) {
                     var gameYear = parseInt(value.year);
@@ -30,7 +31,7 @@ define(
                     }
 
                     var gameEntry = value.position + "- " + tools.filterContent(value.title);
-
+                    gameEntry = that.getBadges(gameEntry, value);
                     gameEntry += ' - <a data-link-type="gameDetails" id="entryD' + tools.filterContent(value.game_id) + '" href="">Détails</a>';
 
                     if (logged) {
@@ -46,6 +47,18 @@ define(
 
                 $('#content').empty().html(content);
             },
+
+            getBadges: function(gameEntry, value) {
+                if (value.watched === 1) {
+                    gameEntry += ' <img title="Je l\'ai regardé" src="' + watchedImageUrl + '"/>'
+                }
+
+                if (value.played === 1) {
+                    gameEntry += ' <img title="J\'y ai joué" src="' + playedImageUrl + '"/>'
+                }
+
+                return gameEntry;
+            }
         };
     }
 );

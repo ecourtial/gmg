@@ -8,15 +8,17 @@ class HistoryRepository(AbstractRepository):
     def get_all(self):
         """Gets all the history."""
         request = "SELECT history.id as id, history.game_id as game_id, history.year as year"
-        request += ", history.position as position, games.title as title FROM history, games"
+        request += ", history.position as position, games.title as title, history.watched"
+        request += ", history.played FROM history, games"
         request += " WHERE history.game_id = games.id ORDER BY year, position"
 
         return self.fetch_multiple(request, ())
 
-    def insert(self, game_id, year, position):
+    def insert(self, game_id, year, position, watched, played):
         """Insert a new history entry"""
-        request = "INSERT INTO history (game_id, year, position) VALUES (%s,%s,%s)"
-        return self.write(request, (game_id, year, position,))
+        request = "INSERT INTO history (game_id, year, position, watched, played) "
+        request += "VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        return self.write(request, (game_id, year, position, watched, played,))
 
     def delete(self, entity_id):
         """Delete a history entry"""
@@ -32,7 +34,9 @@ class HistoryRepository(AbstractRepository):
             row['game_id'],
             row['title'],
             row['year'],
-            row['position']
+            row['position'],
+            row['watched'],
+            row['played']
         )
 
         return history

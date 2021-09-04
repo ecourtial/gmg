@@ -30,11 +30,13 @@ class HistoryController:
         game_id = request.form['game_id']
         year = request.form['year']
         position = request.form['position']
-        if game_id == '' or year == '' or position == '':
+        watched = request.form['watched']
+        played = request.form['played']
+        if game_id == '' or year == '' or position == '' or watched == '' or played == '':
             return "Form is incomplete"
 
         history_repo = HistoryRepository(mysql)
-        history_repo.insert(game_id, year, position)
+        history_repo.insert(game_id, year, position, watched, played)
 
         return jsonify(), 200
 
