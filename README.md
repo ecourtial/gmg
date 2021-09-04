@@ -38,7 +38,7 @@ todo list, watch list, ranking...
 ## 3.5.0
 
 * Platform is now visible in the history screen.
-* Added a trading feature: you can list the games you bougth or sell.
+* Added a trading feature: you can list the games you bought or sell.
 
 ### 3.4.0
 

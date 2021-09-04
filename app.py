@@ -198,7 +198,7 @@ def trading_history():
     return controller.get_list(MySQLFactory.get())
 
 @app.route('/trade/add', methods=['GET', 'POST'])
-#@login_required
+@login_required
 def add_trade():
     """Adding a new trading entry"""
     controller = TradeController
