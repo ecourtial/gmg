@@ -30,7 +30,7 @@ define(
                         }
                     }
 
-                    var gameEntry = value.position + "- " + tools.filterContent(value.title);
+                    var gameEntry = value.position + "- " + tools.filterContent(value.title) + " (" + tools.filterContent(value.platform) + ")";
                     gameEntry = that.getBadges(gameEntry, value);
                     gameEntry += ' - <a data-link-type="gameDetails" id="entryD' + tools.filterContent(value.game_id) + '" href="">Détails</a>';
 
