@@ -1,7 +1,8 @@
 unittest2
-flask
+flask<2
 ptvsd
 gunicorn
 requests
 mysql-connector-python
 flask-login
+jaeger-client>=4.3,<5

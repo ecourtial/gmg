@@ -33,3 +33,9 @@ services:
         - MYSQL_DATABASE=games
         - MYSQL_USER=game
         - MYSQL_PASSWORD=azerty
+
+  jaeger:
+    image: jaegertracing/all-in-one
+    container_name: jaeger-gmg
+    ports:
+      - "16686:16686"

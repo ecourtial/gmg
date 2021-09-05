@@ -1,6 +1,7 @@
 """Main file of the app. Loaded once on server startup!"""
 import json
 from flask import Flask, render_template
+from jaeger_client.tracer import Tracer
 from flask_login import login_required, login_manager
 from src.controller.home import HomeController
 from src.controller.platforms import PlatformController
@@ -9,6 +10,7 @@ from src.controller.user import UserController
 from src.controller.history import HistoryController
 from src.repository.user_repository import UserRepository
 from src.connection.mysql_factory import MySQLFactory
+from src.connection.jaeger_factory import JaegerTracer
 
 # The second parameter is optional.
 # It allows to set the static folder accessible via the root URL instead of via /static/foo
@@ -25,6 +27,10 @@ MySQLFactory.init(
     configurationData['db_password'],
     configurationData['database']
 )
+
+# Opentracing
+JaegerTracer.init()
+tracer = JaegerTracer.get('GMG')
 
 # Session Manager
 app.secret_key = configurationData['secret']
@@ -51,6 +57,8 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
 
     MySQLFactory.close()
+
+    JaegerTracer.closeMainSpan()
 
     return response
 
