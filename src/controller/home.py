@@ -3,6 +3,7 @@
 from flask import render_template, jsonify, session
 from src.repository.platform_repository import PlatformRepository
 from src.repository.game_repository import GameRepository
+from src.connection.jaeger_factory import JaegerTracer
 
 class HomeController:
     """ Contains two methods: one for serving the website, one for the homepage content (async) """
@@ -19,6 +20,7 @@ class HomeController:
     @classmethod
     def get_home_content(cls, mysql):
         """Return The payload for the homepage."""
+        JaegerTracer.getChildSpan("Get home content (won't be closed manually for testing)")
         game_repo = GameRepository(mysql)
         platform_repo = PlatformRepository(mysql)
 

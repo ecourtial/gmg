@@ -28,9 +28,6 @@ MySQLFactory.init(
     configurationData['database']
 )
 
-# OpenTracing
-JaegerTracer.init('GMG')
-
 # Session Manager
 app.secret_key = configurationData['secret']
 login_manager = login_manager.LoginManager()
@@ -51,6 +48,7 @@ def load_user(user_id):
 def before_request():
     """Handle logic before each request"""
     # OpenTracing
+    JaegerTracer.init('GMG')
     JaegerTracer.createFirstSpan()
 
 # After request: cache management, close DB connection...

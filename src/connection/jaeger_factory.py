@@ -27,13 +27,16 @@ class JaegerTracer:
         )
 
         # this call also sets opentracing.tracer
-        cls.connection = config.initialize_tracer()
+        if (config.initialized()):
+            return
+        
+        cls.tracer = config.initialize_tracer()
 
     @classmethod
     def createFirstSpan(cls):
         """Create the main span"""
         if cls.mainSpan is None:
-            cls.mainSpan = cls.connection.start_span("Main span for the whole main request")
+            cls.mainSpan = cls.tracer.start_span("Main span for the whole main request")
             cls.mainSpan.log_kv({'event': 'I am starting to log the main request', 'value': 'Go value yourself!'})
             cls.spans.append(cls.mainSpan)
 
@@ -41,9 +44,9 @@ class JaegerTracer:
     def getChildSpan(cls, spanName, parent = None):
         """Get a new span"""
         if (parent is None):
-            span = cls.connection.start_span(spanName, cls.mainSpan)
+            span = cls.tracer.start_span(spanName, cls.mainSpan)
         else:
-            span = cls.connection.start_span(spanName, child_of=parent)
+            span = cls.tracer.start_span(spanName, child_of=parent)
         cls.spans.append(span)
         return span
 
