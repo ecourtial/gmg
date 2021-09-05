@@ -28,9 +28,8 @@ MySQLFactory.init(
     configurationData['database']
 )
 
-# Opentracing
-JaegerTracer.init()
-tracer = JaegerTracer.get('GMG')
+# OpenTracing
+JaegerTracer.init('GMG')
 
 # Session Manager
 app.secret_key = configurationData['secret']
@@ -48,6 +47,13 @@ def load_user(user_id):
 
     return user
 
+@app.before_request
+def before_request():
+    """Handle logic before each request"""
+    # OpenTracing
+    firstSpan = JaegerTracer.getSpan("Main request")
+    firstSpan.log_kv({'event': 'I am starting to log the main request', 'value': 'Go value yourself!'})
+
 # After request: cache management, close DB connection...
 @app.after_request
 def after_request(response):
@@ -57,8 +63,7 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
 
     MySQLFactory.close()
-
-    JaegerTracer.closeMainSpan()
+    JaegerTracer.closeAllSpans()
 
     return response
 
