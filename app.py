@@ -51,8 +51,7 @@ def load_user(user_id):
 def before_request():
     """Handle logic before each request"""
     # OpenTracing
-    firstSpan = JaegerTracer.getSpan("Main request")
-    firstSpan.log_kv({'event': 'I am starting to log the main request', 'value': 'Go value yourself!'})
+    JaegerTracer.createFirstSpan()
 
 # After request: cache management, close DB connection...
 @app.after_request
@@ -63,7 +62,7 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
 
     MySQLFactory.close()
-    JaegerTracer.closeAllSpans()
+    JaegerTracer.finishAllSpans()
 
     return response
 

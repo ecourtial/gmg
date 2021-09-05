@@ -3,6 +3,7 @@ from src.repository.abstract_repository import AbstractRepository
 from src.entity.game import Game
 from src.entity.platform import Platform
 from src.exception.unknown_filter_exception import UnknownFilterException
+from src.connection.jaeger_factory import JaegerTracer
 
 class GameRepository(AbstractRepository):
     """ Another useless comment """
@@ -105,10 +106,12 @@ class GameRepository(AbstractRepository):
 
     def get_total_count(self):
         """Get the total count of games registered in the app."""
+        span = JaegerTracer.getChildSpan("Get total count of games (will be closed manually for testing)")
         request = "SELECT COUNT(*) as total FROM games;"
-        row = self.fetch_cursor(request)
+        value = self.fetch_cursor(request)
+        span.finish()
 
-        return row['total']
+        return value['total']
 
     def get_count_to_do_solo_or_to_watch(self):
         """Get the total count of games to do solo or to watch."""
@@ -132,11 +135,15 @@ class GameRepository(AbstractRepository):
 
     def get_hall_of_fame_data(self):
         """Get the hall of fame data."""
+        span = JaegerTracer.getChildSpan("HOF data (will be closed manually for testing)")
+        span.log_kv({'event': 'I am starting to read all the HOF data!'})
         request = self.get_main_request_start(True)
         request += ' games_meta.game_id = games.id AND games_meta.hall_of_fame = 1'
         request += " AND games.platform = platforms.id"
         request += ' ORDER BY games_meta.hall_of_fame_year, games_meta.hall_of_fame_position'
-        return self.fetch_multiple(request, ())
+        value = self.fetch_multiple(request, ())
+        span.finish()
+        return value
 
     def insert(self, title, platform, form_content):
         """Insert a new game"""
