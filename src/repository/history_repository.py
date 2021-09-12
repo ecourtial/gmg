@@ -9,8 +9,9 @@ class HistoryRepository(AbstractRepository):
         """Gets all the history."""
         request = "SELECT history.id as id, history.game_id as game_id, history.year as year"
         request += ", history.position as position, games.title as title, history.watched"
-        request += ", history.played FROM history, games"
-        request += " WHERE history.game_id = games.id ORDER BY year, position"
+        request += ", platforms.name as platform, history.played FROM history, games, platforms"
+        request += " WHERE history.game_id = games.id AND games.platform = platforms.id"
+        request += " ORDER BY year, position"
 
         return self.fetch_multiple(request, ())
 
@@ -33,6 +34,7 @@ class HistoryRepository(AbstractRepository):
             row['id'],
             row['game_id'],
             row['title'],
+            row['platform'],
             row['year'],
             row['position'],
             row['watched'],

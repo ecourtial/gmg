@@ -7,6 +7,7 @@ from src.controller.platforms import PlatformController
 from src.controller.games import GameController
 from src.controller.user import UserController
 from src.controller.history import HistoryController
+from src.controller.trading import TradeController
 from src.repository.user_repository import UserRepository
 from src.connection.mysql_factory import MySQLFactory
 
@@ -182,9 +183,30 @@ def add_history():
     controller = HistoryController
     return controller.add(MySQLFactory.get())
 
-@app.route('/history/delete/<int:game_id>', methods=['DELETE'])
+@app.route('/history/delete/<int:entity_id>', methods=['DELETE'])
 @login_required
-def delete_history(game_id):
+def delete_history(entity_id):
     """History deletion"""
     controller = HistoryController
-    return controller.delete(MySQLFactory.get(), game_id)
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+# Trading management
+@app.route('/trading/history', methods=['GET'])
+def trading_history():
+    """Trading history"""
+    controller = TradeController()
+    return controller.get_list(MySQLFactory.get())
+
+@app.route('/trading/add', methods=['GET', 'POST'])
+@login_required
+def add_trade():
+    """Adding a new trading entry"""
+    controller = TradeController
+    return controller.add(MySQLFactory.get())
+
+@app.route('/trading/delete/<int:entity_id>', methods=['DELETE'])
+@login_required
+def delete_trade(entity_id):
+    """Trading deletion"""
+    controller = TradeController
+    return controller.delete(MySQLFactory.get(), entity_id)

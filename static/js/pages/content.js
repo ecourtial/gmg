@@ -2,8 +2,8 @@
  * @author Eric COURTIAL <e.courtial30@gmail.com>
  */
 define(
-    ["jquery", "platforms", "games", "game", "home", "platformEditor", "gameEditor", "historyEditor", "history"],
-    function ($, platforms, games, game, home, platformEditor, gameEditor, historyEditor, history) {
+    ["jquery", "platforms", "games", "game", "home", "platformEditor", "gameEditor", "historyEditor", "history", "tradingEditor", "trading"],
+    function ($, platforms, games, game, home, platformEditor, gameEditor, historyEditor, history, tradingEditor, trading) {
         "use strict";
 
         /**
@@ -110,6 +110,19 @@ define(
             dataManager.request(deleteHistoryUrl + id, null, null, false, {'_token': $('#tokenCSRF').html()}, 'DELETE', callback);
         }
 
+        function deleteTradingHistory(id) {
+            if (confirm("Etes-vous sûr de vouloir supprimer cette entrée ?") === false) {
+                return false;
+            }
+
+            var callback = function() {
+                $("#trading_history").trigger("click");
+            };
+            
+            dataManager.showTempMsg(true);
+            dataManager.request(deleteTradeHistoryUrl + id, null, null, false, {'_token': $('#tokenCSRF').html()}, 'DELETE', callback);
+        }
+
         /**
          * Event listeners
          */
@@ -185,6 +198,14 @@ define(
             return false;
         });
 
+        // Click on the trading menu
+        $('#trading_history').click(function() {
+            dataManager.showTempMsg(true);
+            dataManager.request(getTradingHistoryUrl, trading, null);
+
+            return false;
+        });
+
         // Search form
         $('#searchForm').submit(function() {
             var url = gamesSpecialListUrl + 'search?query=' + $('#gameSearch').val();
@@ -217,6 +238,14 @@ define(
 
             return false;
         });
+
+        // Add trading history entry form
+        $('#addTradingHistory').click(function() {
+            dataManager.showTempMsg(true);
+            dataManager.request(addTradingHistoryUrl, tradingEditor, 'add');
+
+            return false;
+        });
         
         /** Content listeners */
 
@@ -244,9 +273,11 @@ define(
                 return false;
             } else if(linkType === 'historyDelete') {
                 deleteHistory(id);
-
                 return false;
-            } else {
+            } else if(linkType === 'tradingHistoryDelete') {
+                deleteTradingHistory(id);
+                return false;
+            }else {
                 return false;
             }
 

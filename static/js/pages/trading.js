@@ -1,18 +1,18 @@
 /**
  * @author Eric COURTIAL <e.courtial30@gmail.com>
  */
-define(
+ define(
     ["jquery", "tools"],
     function ($, tools) {
         "use strict";
 
         return {
             /**
-             * Diplay the list of games history
+             * Diplay the list of games trading history
              */
             diplayData: function (data, context) {
-                $('#contentTitle').html("Historique");
-                var content = '<p id="subtitle">Jeux vus ou joués</p>';
+                $('#contentTitle').html("Historique commercial");
+                var content = '<p id="subtitle">Jeux vendus ou achetés</p>';
                 var currentYear = 0;
                 var that = this;
 
@@ -30,14 +30,14 @@ define(
                         }
                     }
 
-                    var gameEntry = value.position + "- " + tools.filterContent(value.title) + " (" + tools.filterContent(value.platform) + ")";
-                    gameEntry = that.getBadges(gameEntry, value);
+                    var gameEntry = that.getBadges(value) + tools.filterContent(value.game_id) 
+                        + "- " + tools.filterContent(value.title) + " (" + tools.filterContent(value.platform) + ")";
                     gameEntry += ' - <a data-link-type="gameDetails" id="entryD' + tools.filterContent(value.game_id) + '" href="">Détails</a>';
 
                     if (logged) {
                         gameEntry += ' - <a data-link-type="gameEdit" id="entryE' + tools.filterContent(value.game_id) + '" href="">Editer</a>';
                         gameEntry += ' - <a data-link-type="gameDelete" id="entryR' + tools.filterContent(value.game_id) + '" href="">Supprimer</a>';
-                        gameEntry += ' - <a data-link-type="historyDelete" id="entryH' + tools.filterContent(value.id) + '" href="">Supprimer entrée historique</a>';
+                        gameEntry += ' - <a data-link-type="tradingHistoryDelete" id="entryH' + tools.filterContent(value.id) + '" href="">Supprimer entrée historique</a>';
                     }
 
                     content += '<li>' + gameEntry + '</li>'
@@ -48,16 +48,16 @@ define(
                 $('#content').empty().html(content);
             },
 
-            getBadges: function(gameEntry, value) {
-                if (value.watched === 1) {
-                    gameEntry += ' <img title="Je l\'ai regardé" src="' + watchedImageUrl + '"/>'
+            getBadges: function(value) {
+                if (value.type === 0) {
+                    return  '<img title="J\'y ai vendu" src="' + outImageUrl + '"/> '
                 }
 
-                if (value.played === 1) {
-                    gameEntry += ' <img title="J\'y ai joué" src="' + playedImageUrl + '"/>'
+                if (value.type === 1) {
+                    return ' <img title="Je l\'ai acheté" src="' + inImageUrl + '"/> '
                 }
 
-                return gameEntry;
+                return "";
             }
         };
     }

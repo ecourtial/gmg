@@ -1,0 +1,45 @@
+<form id="tradingHistoryForm" method="POST">
+    <p>
+        <label for="game_id">Id du jeu</label>
+        <input type='int' name='game_id' id='game_id' value="{%- if history -%}{{game.get_game_id()}}{% endif %}" required/>
+    </p>
+    <p>
+        <label for="year">Année</label>
+        <input type='text' name='year' id='year' required/>
+    </p>
+    <p>
+        <label for="month">Mois</label>
+        <input type='text' name='month' id='month' required/>
+    </p>
+    <p>
+        <label for="day">Jour</label>
+        <input type='text' name='day' id='day' required/>
+    </p>
+    <p>
+        <label for="type">Quel type de transaction ?</label>
+        <select id="type" name="type">
+            <option value="0">Vente</option>
+            <option value="1">Achat</option>
+        </select>
+    </p>
+    <input type='hidden' name='_token' value='{{ token }}'/>
+    <input type='submit' name='submit' value="Enregistrer"/>
+</form>
+<script type="text/javascript">
+    $( "#tradingHistoryForm" ).submit(function( event ) {
+        $.ajax({
+            url: "{{ url_for('add_trade') }}",
+            type: "POST",
+            data: $(this).serialize(),
+            dataType: "json",
+            success: function (data) {
+                $("#trading_history").trigger("click");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert("Une erreur s'est produite.");
+            }
+        });
+
+        return false;
+    });
+</script>

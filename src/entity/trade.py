@@ -1,8 +1,8 @@
-""" History entity for the GMG project """
+""" Trading entity for the GMG project """
 import json
 
-class History:
-    """ This class represent a history entry, for instance I watched or played this game in 2021 """
+class Trade:
+    """ This class represent a trading entry, for instance I sell or bought a game """
     def __init__(
             self,
             entity_id,
@@ -10,18 +10,18 @@ class History:
             title,
             platform,
             year,
-            position,
-            watched,
-            played
+            month,
+            day,
+            operation
     ):
         self.entity_id = entity_id
         self.game_id = game_id
         self.title = title
         self.platform = platform
         self.year = year
-        self.position = position
-        self.watched = watched
-        self.played = played
+        self.month = month
+        self.day = day
+        self.type = operation
 
     def get_id(self):
         """Return the id entry."""
@@ -44,24 +44,24 @@ class History:
         return self.platform
 
     def get_year(self):
-        """Return the year."""
+        """Return the year"""
 
         return self.year
 
-    def get_position(self):
-        """Return the order for the given year."""
+    def get_month(self):
+        """Return the month."""
 
-        return self.position
+        return self.month
 
-    def get_watched(self):
-        """Did you watched a playthrough?"""
+    def get_day(self):
+        """Return the day."""
 
-        return self.watched
+        return self.day
 
-    def get_played(self):
-        """Did you played at it?"""
+    def get_type(self):
+        """0: sold, 1: bought"""
 
-        return self.played
+        return self.type
 
     def to_json(self):
         """Jsonify the object"""
@@ -75,7 +75,7 @@ class History:
             'title': self.title,
             'platform': self.platform,
             'year': self.year,
-            'position': self.position,
-            'watched': self.watched,
-            'played': self.played
+            'month': self.month,
+            'day': self.day,
+            'type': self.type
         }
