@@ -18,7 +18,7 @@ class TradeController:
         """Add a new trade."""
         if request.method == 'GET':
             form = render_template(
-                'general/trade-form.html',
+                'general/trading-history-form.html',
                 token=session['csrfToken']
             )
 

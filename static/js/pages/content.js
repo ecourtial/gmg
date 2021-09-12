@@ -2,8 +2,8 @@
  * @author Eric COURTIAL <e.courtial30@gmail.com>
  */
 define(
-    ["jquery", "platforms", "games", "game", "home", "platformEditor", "gameEditor", "historyEditor", "history", "trading"],
-    function ($, platforms, games, game, home, platformEditor, gameEditor, historyEditor, history, trading) {
+    ["jquery", "platforms", "games", "game", "home", "platformEditor", "gameEditor", "historyEditor", "history", "tradingEditor", "trading"],
+    function ($, platforms, games, game, home, platformEditor, gameEditor, historyEditor, history, tradingEditor, trading) {
         "use strict";
 
         /**
@@ -235,6 +235,14 @@ define(
         $('#addHistory').click(function() {
             dataManager.showTempMsg(true);
             dataManager.request(addHistoryUrl, historyEditor, 'add');
+
+            return false;
+        });
+
+        // Add trading history entry form
+        $('#addTradingHistory').click(function() {
+            dataManager.showTempMsg(true);
+            dataManager.request(addTradingHistoryUrl, tradingEditor, 'add');
 
             return false;
         });
