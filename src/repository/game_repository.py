@@ -155,9 +155,9 @@ class GameRepository(AbstractRepository):
         request += "many, top_game,"
         request += "hall_of_fame, hall_of_fame_year,"
         request += "hall_of_fame_position, played_it_often, ongoing, comments, todo_with_help"
-        request += ", has_box, bgf) "
+        request += ", has_box, bgf, to_watch_position, to_do_position) "
         request += "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s, %s, %s"
-        request += ", %s)"
+        request += ", %s, %s, %s)"
 
         self.write(request, meta)
 
@@ -191,7 +191,9 @@ class GameRepository(AbstractRepository):
         request += "comments=%s, "
         request += "todo_with_help=%s, "
         request += "has_box=%s, "
-        request += "bgf=%s "
+        request += "bgf=%s, "
+        request += "to_watch_position=%s, "
+        request += "to_do_position=%s "
         request += "WHERE game_id = %s"
 
         self.write(request, meta)
@@ -224,6 +226,8 @@ class GameRepository(AbstractRepository):
             form_content['todo_with_help'],
             form_content['has_box'],
             form_content['bgf'],
+            form_content['to_watch_position'],
+            form_content['to_do_position'],
         )
 
         if operation == 'INSERT':

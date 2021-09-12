@@ -166,6 +166,22 @@
         </select>
     </p>
     <p>
+        <label for="to_watch_position">Position dans la liste à regarder (mettre 0 si non applicable)</label>
+        <input type="number" name='to_watch_position' min="0" 
+            {%- if game -%} value="{{ game.get_meta()['to_watch_position'] }}"
+            {% else %}value= "0" {% endif %}
+             required
+        />
+    </p>
+    <p>
+        <label for="to_do_position">Position dans la liste à jouer (mettre 0 si non applicable)</label>
+        <input type="number" name='to_do_position' min="0" 
+            {%- if game -%} value="{{ game.get_meta()['to_do_position'] }}"
+            {% else %}value= "0" {% endif %}
+             required
+        />
+    </p>
+    <p>
         <label for="comments">Commentaires</label>
     </p>
     <p>
