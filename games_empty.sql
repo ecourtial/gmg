@@ -7,7 +7,7 @@
 #
 # Hôte: 0.0.0.0 (MySQL 5.7.29)
 # Base de données: games
-# Temps de génération: 2021-08-05 12:36:24 +0000
+# Temps de génération: 2021-09-12 14:43:35 +0000
 # ************************************************************
 
 
@@ -66,6 +66,8 @@ CREATE TABLE `games_meta` (
   `todo_with_help` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `has_box` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `bgf` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `to_watch_position` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `to_do_position` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`game_id`),
   CONSTRAINT `games_meta_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -82,6 +84,8 @@ CREATE TABLE `history` (
   `game_id` smallint(11) unsigned NOT NULL,
   `year` smallint(6) unsigned NOT NULL,
   `position` smallint(6) unsigned NOT NULL,
+  `watched` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `played` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `game_id` (`game_id`),
   CONSTRAINT `history_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`)
@@ -99,6 +103,25 @@ CREATE TABLE `platforms` (
   `name` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+# Affichage de la table trades
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `trades`;
+
+CREATE TABLE `trades` (
+  `id` int(4) unsigned NOT NULL AUTO_INCREMENT,
+  `game_id` smallint(5) unsigned NOT NULL,
+  `year` smallint(1) unsigned NOT NULL,
+  `month` smallint(2) unsigned NOT NULL,
+  `day` smallint(2) unsigned NOT NULL,
+  `type` tinyint(1) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `game_id` (`game_id`),
+  CONSTRAINT `trades_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `games` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
