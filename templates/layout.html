@@ -38,6 +38,8 @@
                 var diamondImageUrl = "{{ url_for('static', filename='images/diamond.png') }}";
                 var watchedImageUrl = "{{ url_for('static', filename='images/eye.png') }}";
                 var playedImageUrl = "{{ url_for('static', filename='images/controller.png') }}";
+                var inImageUrl = "{{ url_for('static', filename='images/in.png') }}";
+                var outImageUrl = "{{ url_for('static', filename='images/out.png') }}";
 
                 // API URLs
                 var hallOfFameUrl = "{{ url_for('get_home_content') }}";
@@ -46,8 +48,9 @@
                 var addGameUrl = "{{ url_for('add_game') }}";
                 var addHistoryUrl = "{{ url_for('add_history') }}";
                 var getHistoryUrl = "{{ url_for('game_history') }}";
+                var getTradingHistoryUrl = "{{ url_for('trading_history') }}";
 
-                var deleteHistoryUrl = "{{ url_for('delete_history', game_id=1) }}";
+                var deleteHistoryUrl = "{{ url_for('delete_history', entity_id=1) }}";
                 deleteHistoryUrl = deleteHistoryUrl.substring(0, deleteHistoryUrl.length -1);
 
                 var editGameUrl = "{{ url_for('edit_game', game_id=1) }}";

@@ -39,6 +39,8 @@ todo list, watch list, ranking...
 
 * Platform is now visible in the history screen.
 * Added a trading feature: you can list the games you bought or sell.
+* Added a position (rank) in the "to play" and "to watch" sections.
+* Restructuration of the menu
 
 ### 3.4.0
 

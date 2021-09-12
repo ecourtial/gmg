@@ -191,22 +191,23 @@ def delete_history(entity_id):
     return controller.delete(MySQLFactory.get(), entity_id)
 
 # Trading management
-@app.route('/trade/history', methods=['GET'])
+@app.route('/trading/history', methods=['GET'])
 def trading_history():
     """Trading history"""
     controller = TradeController()
     return controller.get_list(MySQLFactory.get())
 
-@app.route('/trade/add', methods=['GET', 'POST'])
+@app.route('/trading/add', methods=['GET', 'POST'])
 @login_required
 def add_trade():
     """Adding a new trading entry"""
     controller = TradeController
     return controller.add(MySQLFactory.get())
 
-@app.route('/trade/delete/<int:entity_id>', methods=['DELETE'])
+@app.route('/trading/delete/<int:entity_id>', methods=['DELETE'])
 @login_required
 def delete_trade(entity_id):
     """Trading deletion"""
     controller = TradeController
     return controller.delete(MySQLFactory.get(), entity_id)
+
