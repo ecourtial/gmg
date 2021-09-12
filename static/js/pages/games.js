@@ -16,6 +16,8 @@ define(
                 var content = this.getSubtitle(context);
                 content += '<ul>';
 
+                data.games = that.order(data.games, context);
+
                 $.each(data.games, function (index, value) {
                     var gameEntry = tools.filterContent(value.title);
                     gameEntry = that.getStartIcon(value) + gameEntry;
@@ -129,6 +131,42 @@ define(
                 }
 
                 return gameEntry;
+            },
+
+            order: function(entries, context) {
+                var filter = null;
+
+                if (context == "to_do") {
+                    filter = "to_do_position";
+                } else if(context == "to_watch_background" || context == "to_watch_serious") {
+                    filter = "to_watch_position";
+                }
+
+                if (filter !== null ) {
+                    entries.sort(function(x, y) {
+                        x = x.meta[filter];
+                        y = y.meta[filter];
+
+                        if (x == 0) {
+                            x = 9999;
+                        }
+
+                        if (y == 0) {
+                            y = 9999;
+                        }
+
+                        if (x < y) {
+                          return -1;
+                        }
+                        if (x > y) {
+                          return 1;
+                        }
+
+                        return 0;
+                      });
+                }
+                
+                return entries;
             }
         };
     }

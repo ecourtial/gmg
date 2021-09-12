@@ -21,7 +21,9 @@ class GameRepository(AbstractRepository):
         'to_buy',
         'original',
         'ongoing',
-        'bgf'
+        'bgf',
+        'to_watch_position',
+        'to_do_position'
     ]
 
     random_cases = [
