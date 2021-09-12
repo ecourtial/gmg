@@ -210,4 +210,3 @@ def delete_trade(entity_id):
     """Trading deletion"""
     controller = TradeController
     return controller.delete(MySQLFactory.get(), entity_id)
-

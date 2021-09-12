@@ -53,6 +53,9 @@
                 var deleteHistoryUrl = "{{ url_for('delete_history', entity_id=1) }}";
                 deleteHistoryUrl = deleteHistoryUrl.substring(0, deleteHistoryUrl.length -1);
 
+                var deleteTradeHistoryUrl = "{{ url_for('delete_trade', entity_id=1) }}";
+                deleteTradeHistoryUrl = deleteTradeHistoryUrl.substring(0, deleteTradeHistoryUrl.length -1);
+
                 var editGameUrl = "{{ url_for('edit_game', game_id=1) }}";
                 editGameUrl = editGameUrl.substring(0, editGameUrl.length -1);
 

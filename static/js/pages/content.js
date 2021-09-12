@@ -110,6 +110,19 @@ define(
             dataManager.request(deleteHistoryUrl + id, null, null, false, {'_token': $('#tokenCSRF').html()}, 'DELETE', callback);
         }
 
+        function deleteTradingHistory(id) {
+            if (confirm("Etes-vous sûr de vouloir supprimer cette entrée ?") === false) {
+                return false;
+            }
+
+            var callback = function() {
+                $("#trading_history").trigger("click");
+            };
+            
+            dataManager.showTempMsg(true);
+            dataManager.request(deleteTradeHistoryUrl + id, null, null, false, {'_token': $('#tokenCSRF').html()}, 'DELETE', callback);
+        }
+
         /**
          * Event listeners
          */
@@ -252,9 +265,11 @@ define(
                 return false;
             } else if(linkType === 'historyDelete') {
                 deleteHistory(id);
-
                 return false;
-            } else {
+            } else if(linkType === 'tradingHistoryDelete') {
+                deleteTradingHistory(id);
+                return false;
+            }else {
                 return false;
             }
 

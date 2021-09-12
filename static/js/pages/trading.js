@@ -37,7 +37,7 @@
                     if (logged) {
                         gameEntry += ' - <a data-link-type="gameEdit" id="entryE' + tools.filterContent(value.game_id) + '" href="">Editer</a>';
                         gameEntry += ' - <a data-link-type="gameDelete" id="entryR' + tools.filterContent(value.game_id) + '" href="">Supprimer</a>';
-                        gameEntry += ' - <a data-link-type="historyDelete" id="entryH' + tools.filterContent(value.id) + '" href="">Supprimer entrée historique</a>';
+                        gameEntry += ' - <a data-link-type="tradingHistoryDelete" id="entryH' + tools.filterContent(value.id) + '" href="">Supprimer entrée historique</a>';
                     }
 
                     content += '<li>' + gameEntry + '</li>'
