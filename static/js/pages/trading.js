@@ -14,19 +14,32 @@
                 $('#contentTitle').html("Historique commercial");
                 var content = '<p id="subtitle">Jeux vendus ou achetés</p>';
                 var currentYear = 0;
+                var currentMonth = 0;
                 var that = this;
 
                 $.each(data.games, function (index, value) {
                     var gameYear = parseInt(value.year);
-                    var yearString = '<strong>' + gameYear + '</strong>';
+                    var gameMonth = parseInt(value.month);
+                    var yearString = '<strong style="color: yellow;">' + gameYear + '</strong>';
 
                     if (currentYear === 0) {
-                        content += yearString + '<ul>';
+                        content += yearString + '<br/>';
                         currentYear = gameYear;
                     } else {
                         if (currentYear != gameYear) {
-                            content += '</ul>' + yearString + '<ul>';
+                            content += '</ul></ul>' + yearString + '<br/>';
                             currentYear = gameYear;
+                            currentMonth = 0;
+                        }
+                    }
+
+                    if (currentMonth === 0) {
+                        currentMonth = gameMonth;
+                        content += '<br/>' + tools.getMonthName(currentMonth) + '<ul>';  
+                    } else {
+                        if (currentMonth != gameMonth) {
+                            currentMonth = gameMonth;
+                            content += '</ul><br/>' + tools.getMonthName(currentMonth) + '<ul>';
                         }
                     }
 

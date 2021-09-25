@@ -35,6 +35,11 @@ todo list, watch list, ranking...
 
 ## Changelog
 
+## 3.6.0
+
+* In the todo and to watch screens: separate games with a position from the others.
+* In the trading history: games are also separated by month, not only per year.
+
 ## 3.5.0
 
 * Platform is now visible in the history screen.

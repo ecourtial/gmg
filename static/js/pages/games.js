@@ -14,11 +14,34 @@ define(
                 $('#contentTitle').html(this.getTitle(data, context));
                 var that = this;
                 var content = this.getSubtitle(context);
+                var count = 0;
+                var flagged = 0;
+                var flagFilter = null;
+
+                if (context == "to_do") {
+                    flagFilter = "to_do_position";
+                } else if(context == "to_watch_background" || context == "to_watch_serious") {
+                    flagFilter = "to_watch_position";
+                }
+
+
+                if (context === "to_do") {
+                    content += "<strong>Avec priorité</strong>";
+                }
+
                 content += '<ul>';
 
                 data.games = that.order(data.games, context);
 
                 $.each(data.games, function (index, value) {
+                    if (flagFilter != null && (value.meta[flagFilter] == 0 || value.meta[flagFilter] == null) && flagged == 0) {
+                        content += '</ul>';
+                        content += "<strong>Sans priorité</strong>";
+                        content += '<ul>';
+                        flagged = 1;
+                    }
+                    
+                    count++;
                     var gameEntry = tools.filterContent(value.title);
                     gameEntry = that.getStartIcon(value) + gameEntry;
 
