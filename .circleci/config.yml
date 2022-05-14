@@ -28,9 +28,13 @@ commands:
           command: |
             cd docker/python && pip3 install --no-cache-dir  -r requirements.txt && cd && cd repo
       - run:
+          name: "Create appliation configuration"
+          command: |
+            cp configuration.json.dist configuration.json
+      - run:
           name: "Starts the application"
           command: |
-            cp configuration.json.dist configuration.json && nohup gunicorn --workers=1 --bind=0.0.0.0:9000 app:app &
+            nohup gunicorn --workers=1 --bind=0.0.0.0:9000 app:app &
 
 jobs:
   unittest:
