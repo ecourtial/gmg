@@ -5,7 +5,7 @@ executors:
       - image: python:3.7
         name: python
         environment:
-          DATABASE_URL: mysql://game:azerty@mysql:3306/games?serverVersion=5.7&charset=utf8
+          DATABASE_URL: mysql://game:azerty@mysql:3306/games?serverVersion=8.0&charset=utf8
       - image: mysql:8
         name: mysql
         environment:
@@ -21,7 +21,7 @@ commands:
       - run:
           name: "Install requirements for checkout"
           command: |
-            apt update && apt install -y git openssh-client curl make nano libzip-dev
+            apt update && apt install -y mysql-client git openssh-client curl make nano libzip-dev
       - run:
           name: "Install required Python packages"
           command: |
