@@ -22,7 +22,7 @@ requirements:
 
 ## Containers internal command
 test_command_sql:
-	mysql -h mysql -u game -pazerty games < test/games_test.sql
+	mysql -u game -pazerty games < test/games_test.sql
 
 test_command_python:
 	python -m unittest discover .

@@ -8,6 +8,9 @@ executors:
         name: mysql
         environment:
           MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: games
+          MYSQL_USER: game
+          MYSQL_PASSWORD: azerty
     working_directory: ~/repo
     resource_class: medium
 
@@ -32,7 +35,7 @@ jobs:
       - extra_checkout
       - run:
           name: Unit tests
-          command: make test_command_sql && make test_command_python
+          command: mysql -h 127.0.0.1 -u game -pazerty games < test/games_test.sql && make test_command_python
 
   linter:
     executor: python
