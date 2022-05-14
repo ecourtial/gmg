@@ -25,7 +25,7 @@ commands:
       - run:
           name: "Install required Python packages"
           command: |
-            cd docker/python && pip3 install --no-cache-dir  -r requirements.txt && cd ../.. && gunicorn --workers=1 --bind=0.0.0.0:9000 app:app
+            cd docker/python && pip3 install --no-cache-dir  -r requirements.txt && cd ../.. && cp configuration.json.dist configuration.json && gunicorn --workers=1 --bind=0.0.0.0:9000 app:app
 
 jobs:
   unittest:
