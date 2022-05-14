@@ -21,11 +21,11 @@ commands:
       - run:
           name: "Install requirements for checkout"
           command: |
-            apt update && apt install -y git openssh-client curl make nano libzip-dev
+            apt update && apt install -y default-mysql-client git openssh-client curl make nano libzip-dev
       - run:
           name: "Install required Python packages"
           command: |
-            cd docker/python && pip3 install --no-cache-dir  -r requirements.txt && cd ../.. && cp configuration.json.dist configuration.json && gunicorn --workers=1 --bind=0.0.0.0:9000 app:app
+            cd docker/python && pip3 install --no-cache-dir  -r requirements.txt && cd ../.. && cp configuration.json.dist configuration.json && nohup gunicorn --workers=1 --bind=0.0.0.0:9000 app:app &
 
 jobs:
   unittest:
