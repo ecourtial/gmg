@@ -22,7 +22,7 @@ commands:
       - run:
           name: "Install requirements for checkout"
           command: |
-            apt update && apt install -y default-mysql-client git openssh-client curl make nano libzip-dev
+            apt update && apt install -y default-mysql-client nc git openssh-client curl make nano libzip-dev
       - run:
           name: "Install required Python packages"
           command: |
@@ -33,6 +33,17 @@ jobs:
     executor: python
     steps:
       - extra_checkout
+      - run:
+      # Our primary container isn't MYSQL so run a sleep command until it's ready.
+          name: Waiting for MySQL to be ready
+          command: |
+            for i in `seq 1 30`;
+            do
+              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
       - run:
           name: Unit tests
           command: mysql -h 127.0.0.1 -u game -pazerty games < test/games_test.sql && make test_command_python
