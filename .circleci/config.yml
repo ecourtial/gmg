@@ -4,8 +4,6 @@ executors:
     docker:
       - image: python:3.7
         name: python
-        environment:
-          DATABASE_URL: mysql://game:azerty@mysql:3306/games?serverVersion=8.0&charset=utf8
       - image: mysql:8
         name: mysql
         environment:
