@@ -21,7 +21,7 @@ commands:
       - run:
           name: "Install requirements for checkout"
           command: |
-            apt update && apt install -y mysql-client git openssh-client curl make nano libzip-dev
+            apt update && apt install -y git openssh-client curl make nano libzip-dev
       - run:
           name: "Install required Python packages"
           command: |
@@ -31,7 +31,7 @@ jobs:
   unittest:
     executor: python
     steps:
-      - checkout
+      - extra_checkout
       - run:
           name: Unit tests
           command: make test_command_sql && make test_command_python
