@@ -28,4 +28,4 @@ todo list, watch list, ranking...
 * Circle CI
 * unittest
 * pylint
-* MySQL
+* MySQL 8

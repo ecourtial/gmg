@@ -6,7 +6,7 @@ executors:
         name: python
         environment:
           DATABASE_URL: mysql://game:azerty@mysql:3306/games?serverVersion=5.7&charset=utf8
-      - image: mysql:5.7
+      - image: mysql:8
         name: mysql
         environment:
           MYSQL_ROOT_PASSWORD: root
