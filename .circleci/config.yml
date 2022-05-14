@@ -31,7 +31,7 @@ commands:
           name: "Starts the application"
           command: |
             cp configuration.json.dist configuration.json && nohup gunicorn --chdir=/repo --workers=1 --bind=0.0.0.0:9000 app:app &
-
+#Comment
 jobs:
   unittest:
     executor: python
