@@ -39,14 +39,14 @@ jobs:
           command: |
             for i in `seq 1 30`;
             do
-              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              nc -z mysql 3306 && echo Success && exit 0
               echo -n .
               sleep 1
             done
             echo Failed waiting for MySQL && exit 1
       - run:
           name: Unit tests
-          command: mysql -h 127.0.0.1 -u game -pazerty games < test/games_test.sql && make test_command_python
+          command: mysql -h mysql -u game -pazerty games < test/games_test.sql && make test_command_python
 
   linter:
     executor: python
