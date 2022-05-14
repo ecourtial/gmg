@@ -22,7 +22,7 @@ commands:
       - run:
           name: "Install requirements for checkout"
           command: |
-            apt update && apt install -y nc default-mysql-client git openssh-client curl make nano libzip-dev
+            apt update && apt install -y netcat default-mysql-client git openssh-client curl make nano libzip-dev
       - run:
           name: "Install required Python packages"
           command: |
