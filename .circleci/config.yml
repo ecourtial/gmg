@@ -25,42 +25,9 @@ jobs:
           name: Run pylint
           command: pip3 install --no-cache-dir  -r docker/python/requirements.txt && pylint --rcfile=standard.rc src/ ./app.py
 
-  sonarcloud:
-    docker:
-        - image: python:latest
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - run:
-          name: Install Sonarqube
-          environment:
-            VERSION: 4.1.0.1829
-          command: |
-            apt update
-            apt install unzip -y
-            mkdir -p /tmp/scanner
-            curl -Ol https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${VERSION}-linux.zip
-            unzip -qq -o sonar-scanner-cli-${VERSION}-linux.zip -d /tmp/scanner
-            mv /tmp/scanner/sonar-scanner-${VERSION}-linux /usr/local/sonar-scanner
-            chmod +x /usr/local/sonar-scanner/bin/sonar-scanner
-            chmod +x /usr/local/sonar-scanner/jre/bin/java
-      - run:
-          name: Run Sonarqube scanner
-          environment:
-            SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
-            SONAR_SCANNER_OPTS: "-Xmx2048m"
-          command: |
-            if [[ -z ${CIRCLE_PULL_REQUEST} ]]; then \
-                /usr/local/sonar-scanner/bin/sonar-scanner; \
-            else \
-                /usr/local/sonar-scanner/bin/sonar-scanner -Dsonar.pullrequest.key=${CIRCLE_PULL_REQUEST##*/} -Dsonar.pullrequest.branch=${CIRCLE_BRANCH}; \
-            fi
-
 workflows:
   version: '2.1'
   Code quality:
     jobs:
       - linter
       - unittest
-      - sonarcloud:
-          context: SonarCloud

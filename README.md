@@ -25,69 +25,7 @@ todo list, watch list, ranking...
 * Gunicorn
 * Python 3.7
 * Flask
-* Jinja 2
 * Circle CI
-* jQuery
-* RequireJS
 * unittest
 * pylint
-* Ansible
-
-## Changelog
-
-## 3.6.0
-
-* In the todo and to watch screens: separate games with a position from the others.
-* In the trading history: games are also separated by month, not only per year.
-
-## 3.5.0
-
-* Platform is now visible in the history screen.
-* Added a trading feature: you can list the games you bought or sell.
-* Added a position (rank) in the "to play" and "to watch" sections.
-* Restructuration of the menu
-
-### 3.4.0
-
-* Added watched and played badges in the history section.
-
-### 3.3.0
-
-* Added a new feature: "Best Game Forever". Different from the hall of fames. BGF games are still valuable today, while some entries in the HOF were valuable only at time.
-
-### 3.2.0
-
-* Added a blacktheme (the white one is no longer applied).
-* Added a "Has the box" badge when we have the original box (not a re-edition).
-* Fixed the "To do with help" badge that was not displayed in the header of a game details page.
-* Resized the textarea for the comment section when editing a game.
-
-### 3.1.0
-
-* Added a "todo with help" icon in the game list if the game is to be completed with some help.
-* The game id is now visible in the game lists.
-* Added a History menu to log the games we finish (watched or played).
-
-### 3.0.1
-
-* Fixed a bug when adding a new game while edition was still working.
-
-## Todo
-
-Yet the project is fully working, there are some features or elements to improve:
-
-* Internationalization.
-
-* Add a logical check if the user already exists when creating an account.
-
-* Improve error handling on front-end... after improving it on back-end (return the proper HTTP headers according to the error).
-
-* Add the possibility to remove a platform.
-
-* Improve form validation.
-
-* Add the possibility to store the user id of the user who registered a game and the id of the last user to edit a given game.
-
-* Add unit tests (so far only the game entity is covered).
-
-* Remove coupling between front and back. Use REST APIs instead of the current implementation.
+* MySQL

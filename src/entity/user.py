@@ -9,7 +9,7 @@ class User:
         self.password = row['password']
         self.status = int(row['status'])
         self.user_name = row['user_name']
-        self.authenticated = False
+        self.token = row['token']
 
     def get_id(self):
         """Return the id of the user, for instance "125"."""
@@ -39,6 +39,21 @@ class User:
         """Returns the username"""
         return self.user_name
 
-    def is_authenticated(self):
-        """Is the user authenticated"""
-        return self.authenticated
+    def get_token(self):
+        """Returns the user's API token"""
+        return self.token
+
+    def set_token(self, new_token):
+        self.token = new_token
+
+    def set_status(self, new_status):
+        self.status = int(new_status)
+
+    def set_email(self, new_email):
+        self.email = new_email
+
+    def set_user_name(self, new_user_name):
+        self.user_name = new_user_name
+
+    def set_password(self, new_password):
+        self.password = new_password

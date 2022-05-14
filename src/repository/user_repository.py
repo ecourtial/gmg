@@ -17,16 +17,30 @@ class UserRepository(AbstractRepository):
 
         return self.fetch_one(request, (user_email,))
 
-    def insert(self, email, password, salt, user_name):
-        """Inserts an user"""
-        request = "INSERT INTO users (email, password, salt, status, user_name)"
-        request += " VALUES (%s, %s, %s, 0, %s);"
-        self.write(request, (email, password, salt, user_name))
+    def get_active_by_token(self, user_token):
+        """Gets an user by its token"""
+        request = "SELECT * FROM users WHERE token = %s AND status = 1 LIMIT 1;"
 
-    def update(self, email_ref, new_email, password):
+        return self.fetch_one(request, (user_token,))
+
+    def get_by_user_name(self,  user_name):
+        """Check if a user already exists"""
+        request = "SELECT * FROM users WHERE user_name = %s LIMIT 1;"
+
+        return self.fetch_one(request, (user_name,))
+
+    def insert(self, email, password, salt, user_name, token):
+        """Inserts an user"""
+        request = "INSERT INTO users (email, password, salt, status, user_name, token)"
+        request += " VALUES (%s, %s, %s, 0, %s, %s);"
+        self.write(request, (email, password, salt, user_name, token))
+        
+        return self.get_by_email(email)
+
+    def update(self, user):
         """Updates an user"""
-        request = "UPDATE users SET email = %s, password = %s WHERE email = %s;"
-        self.write(request, (new_email, password, email_ref))
+        request = "UPDATE users SET email = %s, password = %s, status = %s, user_name = %s, token = %s WHERE id = %s;"
+        self.write(request, (user.get_email(), user.get_password(), user.is_active(), user.get_user_name(), user.get_token(), user.get_id()))
 
     @classmethod
     def hydrate(cls, row):
