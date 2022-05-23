@@ -96,4 +96,8 @@ while ($game = $query->fetch()) {
 $query = $connection->prepare('ALTER TABLE games DROP COLUMN platform;');
 $query->execute();
 
+# Add unique index on the platform name
+$query = $connection->prepare('CREATE UNIQUE INDEX platforms_name ON platforms(name);');
+$query->execute();
+
 # Setting FK

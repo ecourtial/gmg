@@ -2,7 +2,7 @@
 from functools import wraps
 import json
 from flask import Flask, jsonify, request
-from src.controller.platforms import PlatformController
+from src.controller.platform_controller import PlatformController
 from src.controller.user_controller import UserController
 from src.repository.user_repository import UserRepository
 from src.connection.mysql_factory import MySQLFactory
@@ -113,13 +113,42 @@ def renew_token(current_user):
     controller = UserController
     return controller.renew_token(MySQLFactory.get(), current_user)
 
-
-
 # Platforms
 
-@app.route('/platform', methods=['GET'])
+@app.route('/api/v1/platform/<int:entity_id>', methods=['GET'])
 @token_required
-def get_platforms():
-    """Returns the list of all the platforms"""
+def get_platform_by_id(current_user, entity_id):
+    """Returns the platform according to its id"""
+    controller = PlatformController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/platform', methods=['POST'])
+@token_required
+def create_platform(current_user):
+    """Create a platform"""
+    controller = PlatformController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/platform/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_platform(current_user, entity_id):
+    """Update the platform according to its id"""
+    controller = PlatformController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/platform/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_platform(current_user, entity_id):
+    """Delete the platform according to its id"""
+    controller = PlatformController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/platforms', methods=['GET'])
+@token_required
+def get_platforms(current_user):
+    """Get the platforms"""
     controller = PlatformController
     return controller.get_list(MySQLFactory.get())
+
+# Games
+

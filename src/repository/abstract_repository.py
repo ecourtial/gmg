@@ -50,10 +50,13 @@ class AbstractRepository:
 
         return cursor.lastrowid
 
-    def fetch_cursor(self, request):
+    def fetch_cursor(self, request, data_tuple = None):
         """Fetch one result"""
+        if (data_tuple is None):
+            data_tuple = {}
+
         cursor = self.mysql.cursor(dictionary=True)
-        cursor.execute(request)
+        cursor.execute(request, data_tuple)
         row = cursor.fetchone()
         cursor.close()
 
