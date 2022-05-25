@@ -1,7 +1,5 @@
 """ Repository to handle the platforms """
 from itertools import count
-import math
-from platform import platform
 from src.repository.abstract_repository import AbstractRepository
 from src.entity.platform import Platform
 
@@ -35,7 +33,7 @@ class PlatformRepository(AbstractRepository):
         return self.get_by_id(platform.get_id())
 
     def get_versions_count_for_platform(self, platform_id):
-        request = "SELECT COUNT(*) as count FROM versions WHERE platform = %s"
+        request = "SELECT COUNT(*) as count FROM versions WHERE platform_id = %s"
         
         return self.fetch_cursor(request, (platform_id,))
     
@@ -43,29 +41,8 @@ class PlatformRepository(AbstractRepository):
         request = "DELETE FROM platforms WHERE id = %s"
         self.write(request, (platform_id,), True)
 
-    def get_platforms_list(self, page, limit):
-        request = "SELECT COUNT(*) as count FROM platforms;"
-        totalResultCount = self.fetch_cursor(request)['count']
-
-        page = int(page)
-        limit = int(limit)
-
-        page = 1 if page < 1 else page
-        offset = (page * limit) - limit;
-
-        request = "SELECT * FROM platforms LIMIT " + str(limit) + " OFFSET " + str(offset)
-        result = self.fetch_multiple(request, ())
-
-        totalPageCount = int(math.ceil(totalResultCount/limit));
-        totalPageCount = 1 if totalResultCount == 0 else totalPageCount
-
-        return {
-            "resultCount": len(result),
-            "totalResultCount": totalResultCount,
-            "page": page,
-            "totalPageCount": totalPageCount,
-            "result": [platform.serialize() for platform in result]
-        }
+    def get_list(self, page, limit):
+        return self.get_object_list('platforms', page, limit)
 
     @classmethod
     def hydrate(cls, row):

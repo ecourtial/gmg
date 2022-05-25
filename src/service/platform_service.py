@@ -1,7 +1,3 @@
-import hashlib
-import random
-import string
-from flask import session
 from src.repository.platform_repository import PlatformRepository
 
 class PlatformService:

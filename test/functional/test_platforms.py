@@ -1,5 +1,4 @@
 from test.abstract_test import AbstractTest
-import requests
 
 class TestPlatforms(AbstractTest):
     
@@ -33,27 +32,27 @@ class TestPlatforms(AbstractTest):
         headers = {'x-access-tokens': 'foo'}
 
         # get by id
-        resp = requests.get(url=self.get_root_url()+'platform/666', headers=headers)
+        resp = self.api_call('get', 'platform/666', None, False, headers)
         self.assertEqual(403, resp.status_code)
         self.assertEqual({'message': 'Token is invalid'}, resp.json())
     
         # create
-        resp = requests.post(url=self.get_root_url()+'platform', headers=headers)
+        resp = self.api_call('post', 'platform', None, False, headers)
         self.assertEqual(403, resp.status_code)
         self.assertEqual({'message': 'Token is invalid'}, resp.json())
 
         # patch
-        resp = requests.patch(url=self.get_root_url()+'platform/666', headers=headers)
+        resp = self.api_call('patch', 'platform/666', None, False, headers)
         self.assertEqual(403, resp.status_code)
         self.assertEqual({'message': 'Token is invalid'}, resp.json())
         
         # delete
-        resp = requests.delete(url=self.get_root_url()+'platform/666', headers=headers)
+        resp = self.api_call('delete', 'platform/666', None, False, headers)
         self.assertEqual(403, resp.status_code)
         self.assertEqual({'message': 'Token is invalid'}, resp.json())
 
         # get list
-        resp = requests.get(url=self.get_root_url()+'platforms', headers=headers)
+        resp = self.api_call('get', 'platforms', None, False, headers)
         self.assertEqual(403, resp.status_code)
         self.assertEqual({'message': 'Token is invalid'}, resp.json())
 
@@ -74,7 +73,7 @@ class TestPlatforms(AbstractTest):
         resp = self.api_call('post', 'platform', {}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Incomplete payload. The request need name field to be filled.'}, resp.json())    
+        self.assertEqual({'message': 'Incomplete payload. The request need the name field to be filled.'}, resp.json())    
 
     def test_create_duplicate_name(self):
         resp = self.api_call('post', 'platform', {'name': 'PC'}, True)
@@ -108,7 +107,7 @@ class TestPlatforms(AbstractTest):
         resp = self.api_call('patch', 'platform/1', {}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Incomplete payload. The request need name field to be filled.'}, resp.json())  
+        self.assertEqual({'message': 'Incomplete payload. The request need the name field to be filled.'}, resp.json())  
 
     def test_update_duplicate_name(self):
         resp = self.api_call('patch', 'platform/4', {'name': 'PC'}, True)

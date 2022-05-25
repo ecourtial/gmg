@@ -1,11 +1,10 @@
 """ Platforms controller for the GMG project """
-from flask import jsonify, request, render_template, session
+from flask import jsonify, request
 from src.repository.platform_repository import PlatformRepository
 from src.service.platform_service import PlatformService
 from src.entity.platform import Platform
 
 class PlatformController:
-    """ Platforms controller for the GMG project """
     @classmethod
     def get_by_id(cls, mysql, id):
         repo = PlatformRepository(mysql)
@@ -21,7 +20,7 @@ class PlatformController:
         name = request.form.get('name', '')
 
         if name == '':
-            return jsonify({'message': 'Incomplete payload. The request need name field to be filled.'}), 400
+            return jsonify({'message': 'Incomplete payload. The request need the name field to be filled.'}), 400
 
         service = PlatformService(mysql)
         result = service.create(name)
@@ -42,7 +41,7 @@ class PlatformController:
         name = request.form.get('name', '')
         
         if name == '':
-            return jsonify({'message': 'Incomplete payload. The request need name field to be filled.'}), 400
+            return jsonify({'message': 'Incomplete payload. The request need the name field to be filled.'}), 400
 
         platform.set_name(name)
         service = PlatformService(mysql)
@@ -75,4 +74,4 @@ class PlatformController:
         limit = request.args.get('limit', 30)
         repo = PlatformRepository(mysql)
         
-        return jsonify(repo.get_platforms_list(page, limit))
+        return jsonify(repo.get_list(page, limit))

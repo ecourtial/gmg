@@ -5,9 +5,10 @@ class AbstractTest(unittest.TestCase):
     def get_root_url(self):
         return 'http://localhost:9000/api/v1/'
 
-    def api_call(self, method, endpoint, payload = {}, authenticated_with_default_user = False, headers = None):
+    def api_call(self, method, endpoint, payload = None, authenticated_with_default_user = False, headers = None):
         method_to_call = getattr(requests, method)
 
+        payload = {} if payload is None else payload
         headers = {} if headers is None else headers
 
         if authenticated_with_default_user is True:

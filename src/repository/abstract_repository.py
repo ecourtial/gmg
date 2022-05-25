@@ -1,4 +1,5 @@
 """An abstract repository"""
+import math
 
 class AbstractRepository:
     """Another useless comment"""
@@ -13,7 +14,7 @@ class AbstractRepository:
 
         if row is None:
             return None
-
+        
         hydrated = self.hydrate(row)
         cursor.close()
 
@@ -61,3 +62,27 @@ class AbstractRepository:
         cursor.close()
 
         return row
+
+    def get_object_list(self, table, page, limit):
+        request = "SELECT COUNT(*) as count FROM " + table + ";"
+        totalResultCount = self.fetch_cursor(request)['count']
+
+        page = int(page)
+        limit = int(limit)
+
+        page = 1 if page < 1 else page
+        offset = (page * limit) - limit;
+
+        request = "SELECT * FROM " + table + " LIMIT " + str(limit) + " OFFSET " + str(offset)
+        result = self.fetch_multiple(request, ())
+
+        totalPageCount = int(math.ceil(totalResultCount/limit));
+        totalPageCount = 1 if totalResultCount == 0 else totalPageCount
+
+        return {
+            "resultCount": len(result),
+            "totalResultCount": totalResultCount,
+            "page": page,
+            "totalPageCount": totalPageCount,
+            "result": [entry.serialize() for entry in result]
+        }
