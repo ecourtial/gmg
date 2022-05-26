@@ -1,12 +1,9 @@
-import unittest
 import requests
+from test.abstract_test import AbstractTest
 
-class HomeTest(unittest.TestCase):
+class TestHometforms(AbstractTest):
     def test_home(self):
-        resp = requests.get(url='http://localhost:9000')
+        resp = requests.get(self.get_server_url())
         data = resp.json()
 
         self.assertEqual({'message': 'Hello!'}, data)
-
-if __name__ == '__main__':
-    unittest.main()

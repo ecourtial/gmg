@@ -3,6 +3,7 @@ from flask import jsonify, request
 from src.repository.platform_repository import PlatformRepository
 from src.service.platform_service import PlatformService
 from src.entity.platform import Platform
+from src.helpers.json_helper import JsonHelper
 
 class PlatformController:
     @classmethod
@@ -17,7 +18,7 @@ class PlatformController:
 
     @classmethod
     def create(cls, mysql):
-        name = request.form.get('name', '')
+        name = JsonHelper.get_value_from_request('name', '')
 
         if name == '':
             return jsonify({'message': 'Incomplete payload. The request need the name field to be filled.'}), 400
@@ -38,7 +39,7 @@ class PlatformController:
         if platform is None:
             return jsonify({'message': 'Platform not found.'}), 404
 
-        name = request.form.get('name', '')
+        name = JsonHelper.get_value_from_request('name', '')
         
         if name == '':
             return jsonify({'message': 'Incomplete payload. The request need the name field to be filled.'}), 400

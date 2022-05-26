@@ -1,6 +1,7 @@
 """Controller to handle user operations"""
 from flask import request, jsonify
 from src.entity.user import User
+from src.helpers.json_helper import JsonHelper
 from src.service.user_service import UserService
 from src.repository.user_repository import UserRepository
 
@@ -9,8 +10,8 @@ class UserController:
 
     @classmethod
     def authenticate(cls, mysql):
-        email = request.form.get('email', '')
-        password = request.form.get('password', '')
+        email = JsonHelper.get_value_from_request('email', '')
+        password = JsonHelper.get_value_from_request('password', '')
 
         if email == '' or password == '':
             return jsonify({'message': 'Incomplete payload. The request need the email and password fields to be filled.'}), 400
@@ -43,9 +44,9 @@ class UserController:
 
     @classmethod
     def create(cls, mysql):
-        email = request.form.get('email', '')
-        password = request.form.get('password', '')
-        user_name = request.form.get('username', '')
+        email = JsonHelper.get_value_from_request('email', '')
+        password = JsonHelper.get_value_from_request('password', '')
+        user_name = JsonHelper.get_value_from_request('username', '')
 
         if email == '' or password == '' or user_name == '':
             return jsonify({'message': 'Incomplete payload. The request need the email, password and username fields to be filled.'}), 400
@@ -66,10 +67,10 @@ class UserController:
         if user is None:
             return jsonify({'message': 'User not found.'}), 404
 
-        email = request.form.get('email', '')
-        password = request.form.get('password', '')
-        status = request.form.get('status', '')
-        user_name = request.form.get('username', '')
+        email = JsonHelper.get_value_from_request('email', '')
+        password = JsonHelper.get_value_from_request('password', '')
+        status = JsonHelper.get_value_from_request('status', '')
+        user_name = JsonHelper.get_value_from_request('username', '')
 
         user_service = UserService(mysql)
         result = user_service.update(user, email, password, user_name, status)

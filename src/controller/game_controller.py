@@ -1,5 +1,6 @@
 """ Games controller for the GMG project """
 from flask import jsonify, request 
+from src.helpers.json_helper import JsonHelper
 from src.repository.game_repository import GameRepository
 from src.service.game_service import GameService
 from src.entity.game import Game
@@ -17,7 +18,7 @@ class GameController:
 
     @classmethod
     def create(cls, mysql):
-        title = request.form.get('title', '')
+        title = JsonHelper.get_value_from_request('title', '')
 
         if title == '':
             return jsonify({'message': 'Incomplete payload. The request need the title field to be filled.'}), 400
@@ -38,7 +39,7 @@ class GameController:
         if game is None:
             return jsonify({'message': 'Game not found.'}), 404
 
-        title = request.form.get('title', '')
+        title = JsonHelper.get_value_from_request('title', '')
         
         if title == '':
             return jsonify({'message': 'Incomplete payload. The request need the title field to be filled.'}), 400

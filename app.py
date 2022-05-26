@@ -204,3 +204,24 @@ def create_version(current_user):
     """Create a version"""
     controller = VersionController
     return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/version/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_version(current_user, entity_id):
+    """Update the version according to its id"""
+    controller = VersionController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/version/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_version(current_user, entity_id):
+    """Delete the version according to its id"""
+    controller = VersionController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/versions', methods=['GET'])
+@token_required
+def get_versions(current_user):
+    """Get the versions"""
+    controller = VersionController
+    return controller.get_list(MySQLFactory.get())

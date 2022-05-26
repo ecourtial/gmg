@@ -1,4 +1,3 @@
-from email.header import Header
 from test.abstract_test import AbstractTest
 
 class TestPlatforms(AbstractTest):
