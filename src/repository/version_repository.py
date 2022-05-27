@@ -7,6 +7,8 @@ from src.entity.platform import Platform
 from src.entity.copy import Copy
 
 class VersionRepository(AbstractRepository):
+    entity = Version
+
     def get_select_request_start(self):
         request = f"SELECT {Version.table_name}.*, {Game.table_name}.title AS gameTitle, {Platform.table_name}.name AS platformName "
         request += f"FROM {Version.table_name}, {Game.table_name}, {Platform.table_name} "
@@ -51,7 +53,7 @@ class VersionRepository(AbstractRepository):
         self.write(request, (version_id,), True)
 
     def get_list(self, filters, page, limit, order_by, order):
-        return super().get_list(Version, filters, page, limit, order_by, order)
+        return super().get_list(filters, page, limit, order_by, order)
 
     @classmethod
     def hydrate(cls, row):

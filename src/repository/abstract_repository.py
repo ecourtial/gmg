@@ -94,11 +94,11 @@ class AbstractRepository:
 
         return self.fetch_one(request, (entity_id,))
 
-    def get_list(self, object_class, filters, page, limit, order_by, order):
+    def get_list(self, filters, page, limit, order_by, order):
         filter_request = ''
         values = []
 
-        for api_field, data in object_class.expected_fields.items():
+        for api_field, data in self.entity.expected_fields.items():
             current_filter_values = filters.getlist(api_field + '[]')
             if 0 != len(current_filter_values):
                 orRequest = ' AND ('
@@ -118,7 +118,7 @@ class AbstractRepository:
                 filter_request += orRequest
 
     
-        count_request = f"SELECT count(*) as count FROM {object_class.table_name} WHERE version_id IS NOT NULL {filter_request}"
+        count_request = f"SELECT count(*) as count FROM {self.entity.table_name} WHERE version_id IS NOT NULL {filter_request}"
         totalResultCount = self.fetch_cursor(count_request, values)['count']
 
         page = int(page)
@@ -127,12 +127,12 @@ class AbstractRepository:
         page = 1 if page < 1 else page
         offset = (page * limit) - limit
 
-        if order_by in object_class.expected_fields:
-            order_by = object_class.expected_fields[order_by]['field']
-        elif order_by in object_class.authorized_extra_fields_for_filtering:
+        if order_by in self.entity.expected_fields:
+            order_by = self.entity.expected_fields[order_by]['field']
+        elif order_by in self.entity.authorized_extra_fields_for_filtering:
             order_by = order_by # Well, it's OK
         else:
-            order_by = object_class.primary_key
+            order_by = self.entity.primary_key
         
         if order not in ['ASC', 'DESC']:
             order = 'ASC'
@@ -141,7 +141,7 @@ class AbstractRepository:
         request += " LIMIT " + str(limit) + " OFFSET " + str(offset)
         result = self.fetch_multiple(request, values)
 
-        totalPageCount = int(math.ceil(totalResultCount/limit));
+        totalPageCount = int(math.ceil(totalResultCount/limit))
         totalPageCount = 1 if totalResultCount == 0 else totalPageCount
 
         return {

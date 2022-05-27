@@ -7,6 +7,8 @@ class Platform:
         'name': {'field': 'name', 'method': '_name', 'required': True, 'type': 'text'},
     }
 
+    authorized_extra_fields_for_filtering = {}
+
     table_name = 'platforms'
     primary_key = 'id'
 

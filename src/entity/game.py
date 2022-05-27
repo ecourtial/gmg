@@ -6,6 +6,8 @@ class Game:
         'finished': {'field': 'finished', 'method': '_finished', 'required': True, 'type': 'int'},
     }
 
+    authorized_extra_fields_for_filtering = {}
+
     table_name = 'games'
     primary_key = 'id'
 

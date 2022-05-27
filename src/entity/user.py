@@ -10,6 +10,8 @@ class User:
         'username': {'field': 'user_name', 'method': '_user_name', 'required': True, 'type': 'text'},
     }
 
+    authorized_extra_fields_for_filtering = {}
+
     table_name = 'users'
     primary_key = 'id'
 
