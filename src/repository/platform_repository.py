@@ -19,12 +19,12 @@ class PlatformRepository(AbstractRepository):
         return self.fetch_one(request, (name,))
 
     def insert(self, platform):
-        super().insert(platform, 'platforms')
+        super().insert(platform)
 
         return self.get_by_name(platform.get_name())
 
     def update(self, platform):
-        super().update(platform, 'platforms', 'id')
+        super().update(platform)
 
         return self.get_by_id(platform.get_id())
 

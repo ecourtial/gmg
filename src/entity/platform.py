@@ -7,6 +7,9 @@ class Platform:
         'name': {'field': 'name', 'method': '_name', 'required': True, 'type': 'text'},
     }
 
+    table_name = 'platforms'
+    primary_key = 'id'
+
     def __init__(self, id, name):
         self.id = id
         self.name = name

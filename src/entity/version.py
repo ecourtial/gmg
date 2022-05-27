@@ -27,6 +27,14 @@ class Version:
         'toDoPosition': {'field': 'to_do_position', 'method': '_to_do_position', 'required': False, 'type': 'int', 'default': 0},
     }
 
+    authorized_extra_fields_for_filtering = {
+        'gameTitle',
+        'platformName',
+    }
+
+    table_name = 'versions'
+    primary_key = 'version_id'
+
     # If you change the order here, you need to also change it in the array above!
     def __init__(
             self,

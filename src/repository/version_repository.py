@@ -28,13 +28,13 @@ class VersionRepository(AbstractRepository):
 
     def insert(self, version):
         """Insert a new version"""
-        super().insert(version, 'versions')
+        super().insert(version)
 
         return self.get_by_unique_index(version.get_platform_id(), version.get_game_id())
 
     def update(self, version):
         """Update a version"""
-        super().update(version, 'versions', 'version_id')
+        super().update(version)
 
         return self.get_by_id(version.get_id())
 
@@ -48,63 +48,7 @@ class VersionRepository(AbstractRepository):
         self.write(request, (version_id,), True)
 
     def get_list(self, filters, page, limit, order_by, order):
-        filter_request = ''
-        values = []
-
-        for api_field, data in Version.expected_fields.items():
-            current_filter_values = filters.getlist(api_field + '[]')
-            if 0 != len(current_filter_values):
-                orRequest = ' AND ('
-                for filter_value in current_filter_values:
-                    if data['type']== 'int':
-                        orRequest += data['field'] + f" = %s OR "
-                        value_to_bind = filter_value
-                    else:
-                        orRequest += data['field'] + f" LIKE %s OR "
-                        value_to_bind = f"%{filter_value}%"
-                    
-                    values.append(value_to_bind)
-
-                length = len(orRequest)
-                orRequest = orRequest[:length-3]
-                orRequest += ') '
-                filter_request += orRequest
-
-    
-        count_request = 'SELECT count(*) as count FROM versions WHERE version_id IS NOT NULL ' + filter_request
-        totalResultCount = self.fetch_cursor(count_request, values)['count']
-
-        page = int(page)
-        limit = int(limit)
-
-        page = 1 if page < 1 else page
-        offset = (page * limit) - limit
-
-        if order_by in Version.expected_fields:
-            order_by = Version.expected_fields[order_by]['field']
-        elif order_by in ['gameTitle', 'platformName']:
-            order_by = order_by # Well, it's OK
-        else:
-            order_by = 'version_id'
-        
-        if order not in ['ASC', 'DESC']:
-            order = 'ASC'
-
-        request = self.get_select_request_start() + filter_request + f" ORDER BY {order_by} {order}"
-        request += " LIMIT " + str(limit) + " OFFSET " + str(offset)
-        result = self.fetch_multiple(request, values)
-
-        totalPageCount = int(math.ceil(totalResultCount/limit));
-        totalPageCount = 1 if totalResultCount == 0 else totalPageCount
-
-        return {
-            "resultCount": len(result),
-            "totalResultCount": totalResultCount,
-            "page": page,
-            "totalPageCount": totalPageCount,
-            "result": [entry.serialize() for entry in result]
-        }
-
+        return super().get_list(Version, filters, page, limit, order_by, order)
 
     @classmethod
     def hydrate(cls, row):

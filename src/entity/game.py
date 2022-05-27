@@ -6,6 +6,9 @@ class Game:
         'finished': {'field': 'finished', 'method': '_finished', 'required': True, 'type': 'int'},
     }
 
+    table_name = 'games'
+    primary_key = 'id'
+
     """ This class represent a game, for instance "The Secret Of Monkey Island" """
     def __init__(
             self,

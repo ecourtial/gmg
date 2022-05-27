@@ -87,9 +87,67 @@ class AbstractRepository:
             "result": [entry.serialize() for entry in result]
         }
 
-    def insert(self, object, table_name):
+    def get_list(self, objectClass, filters, page, limit, order_by, order):
+        filter_request = ''
+        values = []
+
+        for api_field, data in objectClass.expected_fields.items():
+            current_filter_values = filters.getlist(api_field + '[]')
+            if 0 != len(current_filter_values):
+                orRequest = ' AND ('
+                for filter_value in current_filter_values:
+                    if data['type']== 'int':
+                        orRequest += data['field'] + f" = %s OR "
+                        value_to_bind = filter_value
+                    else:
+                        orRequest += data['field'] + f" LIKE %s OR "
+                        value_to_bind = f"%{filter_value}%"
+                    
+                    values.append(value_to_bind)
+
+                length = len(orRequest)
+                orRequest = orRequest[:length-3]
+                orRequest += ') '
+                filter_request += orRequest
+
+    
+        count_request = f"SELECT count(*) as count FROM {objectClass.table_name} WHERE version_id IS NOT NULL {filter_request}"
+        totalResultCount = self.fetch_cursor(count_request, values)['count']
+
+        page = int(page)
+        limit = int(limit)
+
+        page = 1 if page < 1 else page
+        offset = (page * limit) - limit
+
+        if order_by in objectClass.expected_fields:
+            order_by = objectClass.expected_fields[order_by]['field']
+        elif order_by in objectClass.authorized_extra_fields_for_filtering:
+            order_by = order_by # Well, it's OK
+        else:
+            order_by = objectClass.primary_key
+        
+        if order not in ['ASC', 'DESC']:
+            order = 'ASC'
+
+        request = self.get_select_request_start() + filter_request + f" ORDER BY {order_by} {order}"
+        request += " LIMIT " + str(limit) + " OFFSET " + str(offset)
+        result = self.fetch_multiple(request, values)
+
+        totalPageCount = int(math.ceil(totalResultCount/limit));
+        totalPageCount = 1 if totalResultCount == 0 else totalPageCount
+
+        return {
+            "resultCount": len(result),
+            "totalResultCount": totalResultCount,
+            "page": page,
+            "totalPageCount": totalPageCount,
+            "result": [entry.serialize() for entry in result]
+        }
+
+    def insert(self, object):
         """Insert a new entry"""
-        request = f"INSERT INTO {table_name} ("
+        request = f"INSERT INTO {object.table_name} ("
         
         for api_field, data in object.expected_fields.items():
             request += data['field'] + ', '
@@ -112,8 +170,8 @@ class AbstractRepository:
 
         self.write(request, values)
 
-    def update(self, object, table_name, primary_key):
-        request = f"UPDATE {table_name} SET "
+    def update(self, object):
+        request = f"UPDATE {object.table_name} SET "
 
         for api_field, data in object.expected_fields.items():
             request += data['field'] + ' = %s, '
@@ -121,7 +179,7 @@ class AbstractRepository:
         length = len(request)
         request = request[:length-2]
 
-        request += f" WHERE {primary_key} = %s"
+        request += f" WHERE {object.primary_key} = %s"
 
         values = []
         for api_field, data in object.expected_fields.items():

@@ -19,12 +19,12 @@ class GameRepository(AbstractRepository):
         return self.fetch_one(request, (title,))
 
     def insert(self, game):
-        super().insert(game, 'games')
+        super().insert(game)
 
         return self.get_by_title(game.get_title())
 
     def update(self, game):
-        super().update(game, 'games', 'id')
+        super().update(game)
 
         return self.get_by_id(game.get_id())
 
