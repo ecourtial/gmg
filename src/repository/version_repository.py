@@ -28,50 +28,13 @@ class VersionRepository(AbstractRepository):
 
     def insert(self, version):
         """Insert a new version"""
-        request = "INSERT INTO versions ("
-        
-        for api_field, data in Version.expected_fields.items():
-            request += data['field'] + ', '
-
-        length = len(request)
-        request = request[:length-2]
-        request += ') VALUES ('
-
-        for api_field, data in Version.expected_fields.items():
-            request += '%s, '
-
-        length = len(request)
-        request = request[:length-2]
-        request += ')'
-                    
-        values = []
-        for api_field, data in Version.expected_fields.items():
-            method_to_call = getattr(version, 'get' + data['method'])
-            values.append(method_to_call())  
-
-        self.write(request, values)
+        super().insert(version, 'versions')
 
         return self.get_by_unique_index(version.get_platform_id(), version.get_game_id())
 
     def update(self, version):
         """Update a version"""
-        request = "UPDATE versions SET "
-
-        for api_field, data in Version.expected_fields.items():
-            request += data['field'] + ' = %s, '
-
-        length = len(request)
-        request = request[:length-2]
-
-        request += ' WHERE version_id = %s'
-
-        values = []
-        for api_field, data in Version.expected_fields.items():
-            method_to_call = getattr(version, 'get' + data['method'])
-            values.append(method_to_call())  
-
-        values.append(version.get_id())
-        self.write(request, values)
+        super().update(version, 'versions', 'version_id')
 
         return self.get_by_id(version.get_id())
 

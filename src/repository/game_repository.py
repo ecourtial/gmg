@@ -19,16 +19,12 @@ class GameRepository(AbstractRepository):
         return self.fetch_one(request, (title,))
 
     def insert(self, game):
-        """Insert a new game"""
-        request = "INSERT INTO games (title, finished) VALUES (%s, %s)"
-        self.write(request, (game.get_title(), game.get_finished(),))
+        super().insert(game, 'games')
 
         return self.get_by_title(game.get_title())
 
     def update(self, game):
-        """Update a game"""
-        request = "UPDATE games SET title = %s, finished = %s WHERE id = %s;"
-        self.write(request, (game.get_title(), game.get_finished(), game.get_id()))
+        super().update(game, 'games', 'id')
 
         return self.get_by_id(game.get_id())
 

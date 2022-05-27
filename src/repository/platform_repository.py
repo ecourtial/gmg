@@ -19,16 +19,12 @@ class PlatformRepository(AbstractRepository):
         return self.fetch_one(request, (name,))
 
     def insert(self, platform):
-        """Insert a new platform"""
-        request = "INSERT INTO platforms (name) VALUES (%s)"
-        self.write(request, (platform.get_name(),))
+        super().insert(platform, 'platforms')
 
         return self.get_by_name(platform.get_name())
 
     def update(self, platform):
-        """Update a platform"""
-        request = "UPDATE platforms SET name = %s WHERE id = %s;"
-        self.write(request, (platform.get_name(), platform.get_id()))
+        super().update(platform, 'platforms', 'id')
 
         return self.get_by_id(platform.get_id())
 

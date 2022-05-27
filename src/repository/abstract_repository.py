@@ -86,3 +86,47 @@ class AbstractRepository:
             "totalPageCount": totalPageCount,
             "result": [entry.serialize() for entry in result]
         }
+
+    def insert(self, object, table_name):
+        """Insert a new entry"""
+        request = f"INSERT INTO {table_name} ("
+        
+        for api_field, data in object.expected_fields.items():
+            request += data['field'] + ', '
+
+        length = len(request)
+        request = request[:length-2]
+        request += ') VALUES ('
+
+        for api_field, data in object.expected_fields.items():
+            request += '%s, '
+
+        length = len(request)
+        request = request[:length-2]
+        request += ')'
+                    
+        values = []
+        for api_field, data in object.expected_fields.items():
+            method_to_call = getattr(object, 'get' + data['method'])
+            values.append(method_to_call())  
+
+        self.write(request, values)
+
+    def update(self, object, table_name, primary_key):
+        request = f"UPDATE {table_name} SET "
+
+        for api_field, data in object.expected_fields.items():
+            request += data['field'] + ' = %s, '
+
+        length = len(request)
+        request = request[:length-2]
+
+        request += f" WHERE {primary_key} = %s"
+
+        values = []
+        for api_field, data in object.expected_fields.items():
+            method_to_call = getattr(object, 'get' + data['method'])
+            values.append(method_to_call())  
+
+        values.append(object.get_id())
+        self.write(request, values)
