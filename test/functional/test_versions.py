@@ -224,7 +224,7 @@ class TestVersions(AbstractTest):
 
     def test_create_update_delete_success(self):
         # Create the game
-        resp = self.api_call('post', 'game', {'title': 'Something'}, True)
+        resp = self.api_call('post', 'game', {'finished': True, 'title': 'Something'}, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual('Something', resp.json()["title"])
