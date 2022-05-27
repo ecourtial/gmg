@@ -63,30 +63,6 @@ class AbstractRepository:
 
         return row
 
-    def get_object_list(self, table, page, limit):
-        request = "SELECT COUNT(*) as count FROM " + table + ";"
-        totalResultCount = self.fetch_cursor(request)['count']
-
-        page = int(page)
-        limit = int(limit)
-
-        page = 1 if page < 1 else page
-        offset = (page * limit) - limit;
-
-        request = "SELECT * FROM " + table + " LIMIT " + str(limit) + " OFFSET " + str(offset)
-        result = self.fetch_multiple(request, ())
-
-        totalPageCount = int(math.ceil(totalResultCount/limit));
-        totalPageCount = 1 if totalResultCount == 0 else totalPageCount
-
-        return {
-            "resultCount": len(result),
-            "totalResultCount": totalResultCount,
-            "page": page,
-            "totalPageCount": totalPageCount,
-            "result": [entry.serialize() for entry in result]
-        }
-
     def get_by_id(self, entity_id):
         """Get one support by its primary key."""
         request = f"SELECT * FROM {self.entity.table_name} "
@@ -125,7 +101,7 @@ class AbstractRepository:
                 filter_request += orRequest
 
     
-        count_request = f"SELECT count(*) as count FROM {self.entity.table_name} WHERE version_id IS NOT NULL {filter_request}"
+        count_request = f"SELECT count(*) as count FROM {self.entity.table_name} WHERE {self.entity.primary_key} IS NOT NULL {filter_request}"
         totalResultCount = self.fetch_cursor(count_request, values)['count']
 
         page = int(page)

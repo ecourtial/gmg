@@ -28,9 +28,6 @@ class PlatformRepository(AbstractRepository):
         
         return self.fetch_cursor(request, (platform_id,))
 
-    def get_list(self, page, limit):
-        return self.get_object_list('platforms', page, limit)
-
     @classmethod
     def hydrate(cls, row):
         """Hydrate an object from a row."""

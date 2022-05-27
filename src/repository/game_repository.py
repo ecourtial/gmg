@@ -28,9 +28,6 @@ class GameRepository(AbstractRepository):
         
         return self.fetch_cursor(request, (game_id,))
 
-    def get_list(self, page, limit):
-        return self.get_object_list('games', page, limit)
-
     @classmethod
     def hydrate(cls, row):
         """Hydrate an object from a row."""

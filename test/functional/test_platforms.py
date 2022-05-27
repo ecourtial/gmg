@@ -138,8 +138,8 @@ class TestPlatforms(AbstractTest):
         self.assertEqual(2, resp.json()['page'])
         self.assertEqual(6, resp.json()['totalPageCount'])
 
-        self.assertEqual(5, resp.json()['result'][0]['id'])
-        self.assertEqual('GameCube', resp.json()['result'][0]['name'])
+        self.assertEqual(3, resp.json()['result'][0]['id'])
+        self.assertEqual('Playstation 2', resp.json()['result'][0]['name'])
 
-        self.assertEqual(7, resp.json()['result'][1]['id'])
-        self.assertEqual('Megadrive II', resp.json()['result'][1]['name'])
+        self.assertEqual(4, resp.json()['result'][1]['id'])
+        self.assertEqual('Nintendo 64', resp.json()['result'][1]['name'])

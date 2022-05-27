@@ -66,8 +66,11 @@ class GameController:
 
     @classmethod
     def get_list(cls, mysql):
-        page = request.args.get('page', 1)
-        limit = request.args.get('limit', 30)
         repo = GameRepository(mysql)
         
-        return jsonify(repo.get_list(page, limit))
+        page = request.args.get('page', 1)
+        limit = request.args.get('limit', 30)
+        order_by = request.args.get('order_by')
+        order = request.args.get('order')
+
+        return jsonify(repo.get_list(request.args, page, limit, order_by, order))
