@@ -56,7 +56,7 @@ class TestUsers(AbstractTest):
         resp = self.api_call('post', 'user/authenticate', payload, True)
 
         self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'user' with email 'foo' has not been found."}, resp.json())
+        self.assertEqual({'message': 'The user with email = foo is inactive.'}, resp.json())
 
         # Activate the user and update all the available data
         payload = {'email': 'fooz', 'password': 'barz', 'username': 'mephistophelesz', 'status': 1}

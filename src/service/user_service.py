@@ -26,15 +26,7 @@ class UserService:
         if password == '':
             raise MissingFieldException('password')
 
-        user = self.get_authenticated_user(email, password)
-
-        if user is False:
-            raise ResourceNotFoundException('user', email, 'email')
-
-        if user.get_is_active() == 0:
-            raise InactiveUserException('email', email)
-
-        return user
+        return self.get_authenticated_user(email, password)
 
     def get_by_filter(self, filter, filter_value):
         if filter == 'id':
@@ -144,10 +136,10 @@ class UserService:
         """Load a user and check if the credentials are correct"""
         user = self.user_repository.get_by_email(email)
         if user is None:
-            return False
+            raise ResourceNotFoundException('user', email, 'email')
 
         hashed_password = self.get_hashed_password(raw_password, user.get_salt())
         if (hashed_password == user.get_password() and user.get_is_active()):
             return user
 
-        return False
+        raise InactiveUserException('email', email)
