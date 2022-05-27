@@ -1,71 +1,68 @@
-""" Platforms controller for the GMG project """
-from flask import jsonify, request
+""" Games controller for the GMG project """
+from flask import jsonify, request 
+from src.helpers.json_helper import JsonHelper
 from src.repository.platform_repository import PlatformRepository
 from src.service.platform_service import PlatformService
 from src.entity.platform import Platform
-from src.helpers.json_helper import JsonHelper
+from src.exception.missing_field_exception import MissingFieldException
+from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
+from src.exception.unknown_resource_exception import ResourceNotFoundException
+from src.exception.resource_has_children_exception import RessourceHasChildrenException
 
 class PlatformController:
     @classmethod
-    def get_by_id(cls, mysql, id):
-        repo = PlatformRepository(mysql)
-        platform = repo.get_by_id(id)
+    def get_by_id(cls, mysql, platform_id):
+        service = PlatformService(mysql)
 
-        if platform is None:
-            return jsonify({'message': 'Platform not found.'}), 404
+        try:
+            platform = service.get_by_id(platform_id)
+        except ResourceNotFoundException as e:
+            return jsonify({'message': str(e)}), 404
 
         return jsonify(platform.serialize()), 200
 
     @classmethod
     def create(cls, mysql):
-        name = JsonHelper.get_value_from_request('name', '')
-
-        if name == '':
-            return jsonify({'message': 'Incomplete payload. The request need the name field to be filled.'}), 400
-
         service = PlatformService(mysql)
-        result = service.create(name)
 
-        if isinstance(result, Platform) is False:
-            return jsonify({'message': 'The following field must be unique: ' + result}), 400
-        
-        return cls.get_by_id(mysql, result.get_id())
+        try:
+            platform = service.validate_payload_for_creation_and_hydrate()
+        except MissingFieldException as e:
+            return jsonify({'message': str(e)}), 400
+        except ResourceAlreadyExistsException as e:
+            return jsonify({'message': str(e)}), 400
+
+        repo = PlatformRepository(mysql)
+        platform = repo.insert(platform)
+
+        return cls.get_by_id(mysql, platform.get_id())
 
     @classmethod
     def update(cls, mysql, platform_id):
-        repo = PlatformRepository(mysql)
-        platform = repo.get_by_id(platform_id)
-
-        if platform is None:
-            return jsonify({'message': 'Platform not found.'}), 404
-
-        name = JsonHelper.get_value_from_request('name', '')
-        
-        if name == '':
-            return jsonify({'message': 'Incomplete payload. The request need the name field to be filled.'}), 400
-
-        platform.set_name(name)
         service = PlatformService(mysql)
-        result = service.update(platform)
 
-        if isinstance(result, Platform) is False:
-            return jsonify({'message': 'The following field must be unique: ' + result}), 400
-        
-        return cls.get_by_id(mysql, result.get_id())
+        try:
+            platform = service.validate_payload_for_update_and_hydrate(platform_id)
+        except ResourceNotFoundException as e:
+            return jsonify({'message': str(e)}), 404
+        except ResourceAlreadyExistsException as e:
+            return jsonify({'message': str(e)}), 400
+
+        repo = PlatformRepository(mysql)
+        platform = repo.update(platform)
+
+        return cls.get_by_id(mysql, platform.get_id())
 
     @classmethod
     def delete(cls, mysql, platform_id):
-        repo = PlatformRepository(mysql)
-        platform = repo.get_by_id(platform_id)
-
-        if platform is None:
-            return jsonify({'message': 'Platform not found.'}), 404
-
         service = PlatformService(mysql)
-        result = service.delete(platform)
 
-        if result is False:
-            return jsonify({'message': 'Platform has games. Cannot delete it.'}), 400
+        try:
+            service.delete(platform_id)
+        except ResourceNotFoundException as e:
+            return jsonify({'message': str(e)}), 404
+        except RessourceHasChildrenException as e:
+            return jsonify({'message': str(e)}), 400
 
         return jsonify({'message': 'Platform successfully deleted.'}), 200
 

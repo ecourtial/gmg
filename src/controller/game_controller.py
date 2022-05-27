@@ -11,12 +11,13 @@ from src.exception.resource_has_children_exception import RessourceHasChildrenEx
 
 class GameController:
     @classmethod
-    def get_by_id(cls, mysql, id):
-        repo = GameRepository(mysql)
-        game = repo.get_by_id(id)
+    def get_by_id(cls, mysql, game_id):
+        service = GameService(mysql)
 
-        if game is None:
-            return jsonify({'message': 'Game not found.'}), 404
+        try:
+            game = service.get_by_id(game_id)
+        except ResourceNotFoundException as e:
+            return jsonify({'message': str(e)}), 404
 
         return jsonify(game.serialize()), 200
 

@@ -10,6 +10,14 @@ class GameService:
     def __init__(self, mysql):
         self.game_repository = GameRepository(mysql)
 
+    def get_by_id(self, game_id):
+        game = self.game_repository.get_by_id(game_id)
+        
+        if game is None:
+            raise ResourceNotFoundException('game', game_id)
+
+        return game
+
     def validate_payload_for_creation_and_hydrate(self):
         values = []
         values.append(None)

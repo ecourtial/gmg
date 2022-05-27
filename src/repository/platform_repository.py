@@ -18,12 +18,12 @@ class PlatformRepository(AbstractRepository):
 
         return self.fetch_one(request, (name,))
 
-    def insert(self, name):
+    def insert(self, platform):
         """Insert a new platform"""
         request = "INSERT INTO platforms (name) VALUES (%s)"
-        self.write(request, (name,))
+        self.write(request, (platform.get_name(),))
 
-        return self.get_by_name(name)
+        return self.get_by_name(platform.get_name())
 
     def update(self, platform):
         """Update a platform"""

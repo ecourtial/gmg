@@ -1,5 +1,4 @@
 """ Game entity for the GMG project """
-import json
 
 class Game:
     expected_fields = {

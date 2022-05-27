@@ -61,7 +61,7 @@ class TestPlatforms(AbstractTest):
         resp = self.api_call('get', 'platform/666', {}, True)
 
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': 'Platform not found.'}, resp.json())
+        self.assertEqual({'message': "The resource of type 'platform' with id  #666 has not been found."}, resp.json())
 
         # Exist
         resp = self.api_call('get', 'platform/1', {}, True)
@@ -73,13 +73,13 @@ class TestPlatforms(AbstractTest):
         resp = self.api_call('post', 'platform', {}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Incomplete payload. The request need the name field to be filled.'}, resp.json())    
+        self.assertEqual({'message': 'The following field is missing: name.'}, resp.json())    
 
     def test_create_duplicate_name(self):
         resp = self.api_call('post', 'platform', {'name': 'PC'}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'The following field must be unique: name'}, resp.json())  
+        self.assertEqual({'message': "The resource of type 'platform' with name 'PC' already exists."}, resp.json())  
 
     def test_create_update_delete_success(self):
         # Create
@@ -101,25 +101,19 @@ class TestPlatforms(AbstractTest):
 
         resp = self.api_call('delete', 'platform/' + platform_id, {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': 'Platform not found.'}, resp.json())
-
-    def test_update_fails_incomplete_payload(self):
-        resp = self.api_call('patch', 'platform/1', {}, True)
-
-        self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Incomplete payload. The request need the name field to be filled.'}, resp.json())  
+        self.assertEqual({'message': "The resource of type 'platform' with id  #12 has not been found."}, resp.json())
 
     def test_update_duplicate_name(self):
         resp = self.api_call('patch', 'platform/4', {'name': 'PC'}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'The following field must be unique: name'}, resp.json())  
+        self.assertEqual({'message': "The resource of type 'platform' with name 'Nintendo 64' already exists."}, resp.json())  
 
     def test_delete_fails_because_platform_has_versions(self):
         resp = self.api_call('delete', 'platform/1', {}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Platform has games. Cannot delete it.'}, resp.json())  
+        self.assertEqual({'message':  "The following resource type 'platform' has children of type 'version', so it cannot be deleted."}, resp.json())  
 
         resp = self.api_call('get', 'platform/1', {}, True)
 

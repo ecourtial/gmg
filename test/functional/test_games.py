@@ -61,7 +61,7 @@ class TestPlatforms(AbstractTest):
         resp = self.api_call('get', 'game/666', {}, True)
 
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': 'Game not found.'}, resp.json())
+        self.assertEqual({'message': "The resource of type 'game' with id  #666 has not been found."}, resp.json())
 
         # Exist
         resp = self.api_call('get', 'game/1', {}, True)

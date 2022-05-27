@@ -1,5 +1,3 @@
-import json
-
 class Version:
     """ This class represent a version of a game, for instance, the PC version of Monkey Island IV """
     # If you change the order here, you need to also change it in the constructor!

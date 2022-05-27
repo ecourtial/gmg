@@ -1,8 +1,11 @@
 """ Platform entity for the GMG project """
-import json
 
 class Platform:
     """ This class represent a platform (support), for instance "Playstation" """
+
+    expected_fields = {
+        'name': {'field': 'name', 'method': '_name', 'required': True, 'type': 'text'},
+    }
 
     def __init__(self, id, name):
         self.id = id
