@@ -420,3 +420,15 @@ class TestVersions(AbstractTest):
             self.assertEqual(81, resp.json()['totalResultCount'])
             self.assertEqual(3, resp.json()['page'])
             self.assertEqual(3, resp.json()['totalPageCount'])
+    
+    def test_filter_comments(self):
+            resp = self.api_call('get', 'versions?comments[]=coop', None, True)
+
+            self.assertEqual(200, resp.status_code)
+            self.assertEqual(1, resp.json()['resultCount'])
+            self.assertEqual(1, resp.json()['totalResultCount'])
+            self.assertEqual(1, resp.json()['page'])
+            self.assertEqual(1, resp.json()['totalPageCount'])
+
+            self.assertEqual(376, resp.json()['result'][0]['gameId'])
+            self.assertEqual('Fifa 99', resp.json()['result'][0]['gameTitle'])
