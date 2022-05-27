@@ -47,13 +47,6 @@ class VersionRepository(AbstractRepository):
         request = f"SELECT COUNT(*) as count FROM {Copy.table_name} WHERE version_id = %s"
         
         return self.fetch_cursor(request, (version_id,))
-    
-    def delete(self, version_id):
-        request = f"DELETE FROM {Version.table_name} WHERE {Version.primary_key} = %s"
-        self.write(request, (version_id,), True)
-
-    def get_list(self, filters, page, limit, order_by, order):
-        return super().get_list(filters, page, limit, order_by, order)
 
     @classmethod
     def hydrate(cls, row):

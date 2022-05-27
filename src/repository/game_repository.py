@@ -28,10 +28,6 @@ class GameRepository(AbstractRepository):
         request = f"SELECT COUNT(*) as count FROM {Version.table_name} WHERE game_id = %s"
         
         return self.fetch_cursor(request, (game_id,))
-    
-    def delete(self, game_id):
-        request = f"DELETE FROM {Game.table_name} WHERE id = %s"
-        self.write(request, (game_id,), True)
 
     def get_list(self, page, limit):
         return self.get_object_list('games', page, limit)

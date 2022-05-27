@@ -94,6 +94,10 @@ class AbstractRepository:
 
         return self.fetch_one(request, (entity_id,))
 
+    def delete(self, entity_id):
+        request = f"DELETE FROM {self.entity.table_name} WHERE {self.entity.primary_key} = %s"
+        self.write(request, (entity_id,), True)
+
     def get_list(self, filters, page, limit, order_by, order):
         filter_request = ''
         values = []

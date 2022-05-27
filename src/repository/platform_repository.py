@@ -28,10 +28,6 @@ class PlatformRepository(AbstractRepository):
         request = f"SELECT COUNT(*) as count FROM {Version.table_name} WHERE platform_id = %s"
         
         return self.fetch_cursor(request, (platform_id,))
-    
-    def delete(self, platform_id):
-        request = f"DELETE FROM {Platform.table_name} WHERE id = %s"
-        self.write(request, (platform_id,), True)
 
     def get_list(self, page, limit):
         return self.get_object_list('platforms', page, limit)
