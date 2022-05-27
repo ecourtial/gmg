@@ -2,27 +2,30 @@
 from itertools import count
 from src.repository.abstract_repository import AbstractRepository
 from src.entity.version import Version
-import math
+from src.entity.game import Game
+from src.entity.platform import Platform
+from src.entity.copy import Copy
 
 class VersionRepository(AbstractRepository):
     def get_select_request_start(self):
-        request = "SELECT versions.*, games.title AS gameTitle, platforms.name AS platformName FROM versions, games, platforms "
-        request += "WHERE versions.game_id = games.id "
-        request += "AND versions.platform_id = platforms.id "
+        request = f"SELECT {Version.table_name}.*, {Game.table_name}.title AS gameTitle, {Platform.table_name}.name AS platformName "
+        request += f"FROM {Version.table_name}, {Game.table_name}, {Platform.table_name} "
+        request += f"WHERE {Version.table_name}.game_id = {Game.table_name}.{Game.primary_key} "
+        request += f"AND {Version.table_name}.platform_id = {Platform.table_name}.{Platform.primary_key} "
 
         return request
     
     def get_by_id(self, version_id):
         """Get one version by its id."""
-        request = self.get_select_request_start() + "AND versions.version_id = %s LIMIT 1;"
+        request = self.get_select_request_start() + f"AND {Version.table_name}.{Version.primary_key} = %s LIMIT 1;"
 
         return self.fetch_one(request, (version_id,))
 
     def get_by_unique_index(self, platform_id, game_id):
         """Get one version by the unique combination of the platform and the game."""
         request = self.get_select_request_start()
-        request += "AND versions.platform_id = %s "
-        request += "AND versions.game_id = %s LIMIT 1;"
+        request += f"AND {Version.table_name}.platform_id = %s "
+        request += f"AND {Version.table_name}.game_id = %s LIMIT 1;"
 
         return self.fetch_one(request, (platform_id, game_id,))
 
@@ -39,12 +42,12 @@ class VersionRepository(AbstractRepository):
         return self.get_by_id(version.get_id())
 
     def get_copies_count_for_version(self, version_id):
-        request = "SELECT COUNT(*) as count FROM copies WHERE version_id = %s"
+        request = f"SELECT COUNT(*) as count FROM {Copy.table_name} WHERE version_id = %s"
         
         return self.fetch_cursor(request, (version_id,))
     
     def delete(self, version_id):
-        request = "DELETE FROM versions WHERE version_id = %s"
+        request = f"DELETE FROM {Version.table_name} WHERE {Version.primary_key} = %s"
         self.write(request, (version_id,), True)
 
     def get_list(self, filters, page, limit, order_by, order):
