@@ -9,8 +9,7 @@ class GameRepository(AbstractRepository):
 
     def get_by_title(self, title):
         """Get one support by its title."""
-        request = f"SELECT * FROM {Game.table_name} "
-        request += "WHERE title = %s LIMIT 1;"
+        request = self.get_select_request_start() + "AND title = %s LIMIT 1;"
 
         return self.fetch_one(request, (title,))
 

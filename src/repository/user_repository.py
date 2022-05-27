@@ -8,19 +8,19 @@ class UserRepository(AbstractRepository):
 
     def get_by_email(self, user_email):
         """Gets an user by email"""
-        request = "SELECT * FROM users WHERE email = %s;"
+        request = self.get_select_request_start() + "AND email = %s;"
 
         return self.fetch_one(request, (user_email,))
 
     def get_active_by_token(self, user_token):
         """Gets an user by its token"""
-        request = "SELECT * FROM users WHERE token = %s AND status = 1 LIMIT 1;"
+        request = self.get_select_request_start() + "AND token = %s AND status = 1 LIMIT 1;"
 
         return self.fetch_one(request, (user_token,))
 
     def get_by_user_name(self,  user_name):
         """Check if a user already exists"""
-        request = "SELECT * FROM users WHERE user_name = %s LIMIT 1;"
+        request = self.get_select_request_start() + "AND user_name = %s LIMIT 1;"
 
         return self.fetch_one(request, (user_name,))
 

@@ -9,8 +9,7 @@ class PlatformRepository(AbstractRepository):
 
     def get_by_name(self, name):
         """Get one support by its name."""
-        request = f"SELECT * FROM {Platform.table_name} "
-        request += f"WHERE name = %s LIMIT 1;"
+        request = self.get_select_request_start() + "AND name = %s LIMIT 1;"
 
         return self.fetch_one(request, (name,))
 

@@ -98,6 +98,9 @@ class AbstractRepository:
         request = f"DELETE FROM {self.entity.table_name} WHERE {self.entity.primary_key} = %s"
         self.write(request, (entity_id,), True)
 
+    def get_select_request_start(self):
+        return f"SELECT * FROM {self.entity.table_name} WHERE {self.entity.primary_key} IS NOT NULL "
+
     def get_list(self, filters, page, limit, order_by, order):
         filter_request = ''
         values = []
