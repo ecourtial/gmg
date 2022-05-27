@@ -102,7 +102,7 @@ class TestPlatforms(AbstractTest):
 
         resp = self.api_call('delete', 'game/' + game_id, {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'game' with id #381 has not been found."}, resp.json()) 
+        self.assertEqual({'message': f"The resource of type 'game' with id #{game_id} has not been found."}, resp.json()) 
 
     def test_update_duplicate_title(self):
         resp = self.api_call('patch', 'game/4', {'title': 'Fifa 97'}, True)
@@ -139,8 +139,8 @@ class TestPlatforms(AbstractTest):
         self.assertEqual(2, resp.json()['page'])
         self.assertEqual(171, resp.json()['totalPageCount'])
 
-        self.assertEqual(146, resp.json()['result'][0]['id'])
-        self.assertEqual('688 Sumarine', resp.json()['result'][0]['title'])
+        self.assertEqual(3, resp.json()['result'][0]['id'])
+        self.assertEqual('Super Monaco GP', resp.json()['result'][0]['title'])
 
-        self.assertEqual(135, resp.json()['result'][1]['id'])
-        self.assertEqual('A-10 Tank Killer', resp.json()['result'][1]['title'])
+        self.assertEqual(4, resp.json()['result'][1]['id'])
+        self.assertEqual('Revenge Of Shinobi', resp.json()['result'][1]['title'])

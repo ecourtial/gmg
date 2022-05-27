@@ -138,6 +138,9 @@ $connection->exec('DROP TABLE games_meta;');
 $query = $connection->prepare('ALTER TABLE games DROP COLUMN platform;');
 $query->execute();
 
+# Add a "finished" field in the games table
+$connection->exec('ALTER TABLE games ADD `finished` tinyint unsigned NOT NULL DEFAULT 0');
+
 # Add unique index on the platform name
 $query = $connection->prepare('CREATE UNIQUE INDEX platforms_name ON platforms(name);');
 $query->execute();
@@ -151,12 +154,12 @@ $createStatement = "
 CREATE TABLE IF NOT EXISTS copies(
   `copy_id` SMALLINT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
   `version_id` SMALLINT(11) UNSIGNED NOT NULL,
-  `type` tinyint unsigned NOT NULL, 
-  `box_type` tinyint unsigned NOT NULL, 
-  `casing` tinyint unsigned NOT NULL, 
-  `on_compilation` tinyint unsigned NOT NULL DEFAULT '0',
-  `reedition` tinyint unsigned NOT NULL DEFAULT '0',
-  `has_manual` tinyint unsigned NOT NULL DEFAULT '0',
+  `is_original` tinyint unsigned NOT NULL, 
+  `box_type` VARCHAR(255) NOT NULL, 
+  `casing` VARCHAR(255) NOT NULL, 
+  `on_compilation` tinyint unsigned NOT NULL,
+  `reedition` tinyint unsigned NOT NULL,
+  `has_manual` tinyint unsigned NOT NULL,
   `comments` text,
   KEY `version_id` (`version_id`),
   CONSTRAINT `copies_ibfk_1` FOREIGN KEY (`version_id`) REFERENCES `versions` (`version_id`)
@@ -164,6 +167,26 @@ CREATE TABLE IF NOT EXISTS copies(
 ";
 
 $connection->exec($createStatement);
+
+# Add values to copies
+$entries = [
+    [348, 1, 'big-box', 'cd', 0, 0, 1, 'Bought it in 2004'],
+    [349, 1, 'none', 'cardboard-cd-sleeve', 1, 1, 0, 'Got it with my cereals'],
+];
+
+$stmtBase = "INSERT into copies (version_id, is_original, box_type, casing, on_compilation, reedition, has_manual, comments) VALUES(";
+
+foreach ($entries as $entry) {
+    $stmt = $stmtBase;
+    foreach ($entry as $value) {
+        $stmt .= "'$value',";
+    }
+
+    $stmt = substr($stmt, 0, strlen($stmt) - 1);
+    $stmt .= ");";
+
+    $connection->exec($stmt);
+}
 
 # Dump trade table and creates a new one
 $connection->exec('DROP TABLE trades;');
@@ -186,3 +209,6 @@ $connection->exec($createStatement);
 $connection->exec("ALTER TABLE stories ADD FOREIGN KEY (version_id) REFERENCES versions(version_id);");
 $connection->exec("ALTER TABLE versions ADD FOREIGN KEY (platform_id) REFERENCES platforms(id);");
 $connection->exec("ALTER TABLE versions ADD FOREIGN KEY (game_id) REFERENCES games(id);");
+
+# To remove: change user credentials
+$connection->exec("UPDATE users SET email = 'foo@bar.com', salt = 'someSalt', password = 'somePassword', token = 'tokentest123' WHERE id = 1;");

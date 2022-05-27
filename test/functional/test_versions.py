@@ -289,7 +289,7 @@ class TestVersions(AbstractTest):
 
         resp = self.api_call('delete', 'version/' + str_id, {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'version' with id #350 has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'version' with id #351 has not been found."}, resp.json())
 
         # Remove the game too (otherwise it will pollute the DB)
         resp = self.api_call('delete', 'game/' + str_game_id, {}, True)
