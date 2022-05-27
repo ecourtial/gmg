@@ -220,7 +220,7 @@ class TestVersions(AbstractTest):
         resp = self.api_call('post', 'version', payload, True)
         
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'platform-game couple' with id  #7:1 already exists."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'platform-game couple' with id #7:1 already exists."}, resp.json())
 
     def test_create_update_delete_success(self):
         # Create the game
@@ -317,7 +317,7 @@ class TestVersions(AbstractTest):
         resp = self.api_call('patch', 'version/347', {'platformId': 8, 'gameId': 377}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'platform-game couple' with id  #377-8 already exists."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'platform-game couple' with id #377-8 already exists."}, resp.json())
 
     def test_delete_fails_because_not_found(self):
         resp = self.api_call('delete', 'version/9999', None, True)

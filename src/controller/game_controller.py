@@ -4,6 +4,10 @@ from src.helpers.json_helper import JsonHelper
 from src.repository.game_repository import GameRepository
 from src.service.game_service import GameService
 from src.entity.game import Game
+from src.exception.missing_field_exception import MissingFieldException
+from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
+from src.exception.unknown_resource_exception import ResourceNotFoundException
+from src.exception.resource_has_children_exception import RessourceHasChildrenException
 
 class GameController:
     @classmethod
@@ -18,54 +22,46 @@ class GameController:
 
     @classmethod
     def create(cls, mysql):
-        title = JsonHelper.get_value_from_request('title', '')
-
-        if title == '':
-            return jsonify({'message': 'Incomplete payload. The request need the title field to be filled.'}), 400
-
         service = GameService(mysql)
-        result = service.create(title)
 
-        if isinstance(result, Game) is False:
-            return jsonify({'message': 'The following field must be unique: ' + result}), 400
-        
-        return cls.get_by_id(mysql, result.get_id())
+        try:
+            game = service.validate_payload_for_creation_and_hydrate()
+        except MissingFieldException as e:
+            return jsonify({'message': str(e)}), 400
+        except ResourceAlreadyExistsException as e:
+            return jsonify({'message': str(e)}), 400
+
+        repo = GameRepository(mysql)
+        game = repo.insert(game)
+
+        return cls.get_by_id(mysql, game.get_id())
 
     @classmethod
     def update(cls, mysql, game_id):
-        repo = GameRepository(mysql)
-        game = repo.get_by_id(game_id)
-
-        if game is None:
-            return jsonify({'message': 'Game not found.'}), 404
-
-        title = JsonHelper.get_value_from_request('title', '')
-        
-        if title == '':
-            return jsonify({'message': 'Incomplete payload. The request need the title field to be filled.'}), 400
-
-        game.set_title(title)
         service = GameService(mysql)
-        result = service.update(game)
 
-        if isinstance(result, Game) is False:
-            return jsonify({'message': 'The following field must be unique: ' + result}), 400
-        
-        return cls.get_by_id(mysql, result.get_id())
+        try:
+            game = service.validate_payload_for_update_and_hydrate(game_id)
+        except ResourceNotFoundException as e:
+            return jsonify({'message': str(e)}), 404
+        except ResourceAlreadyExistsException as e:
+            return jsonify({'message': str(e)}), 400
+
+        repo = GameRepository(mysql)
+        game = repo.update(game)
+
+        return cls.get_by_id(mysql, game.get_id())
 
     @classmethod
     def delete(cls, mysql, game_id):
-        repo = GameRepository(mysql)
-        game = repo.get_by_id(game_id)
-
-        if game is None:
-            return jsonify({'message': 'Game not found.'}), 404
-
         service = GameService(mysql)
-        result = service.delete(game)
 
-        if result is False:
-            return jsonify({'message': 'Game has versions. Cannot delete it.'}), 400
+        try:
+            service.delete(game_id)
+        except ResourceNotFoundException as e:
+            return jsonify({'message': str(e)}), 404
+        except RessourceHasChildrenException as e:
+            return jsonify({'message': str(e)}), 400
 
         return jsonify({'message': 'Game successfully deleted.'}), 200
 

@@ -2,6 +2,10 @@
 import json
 
 class Game:
+    expected_fields = {
+        'title': {'field': 'title', 'method': '_title', 'required': True, 'type': 'text'},
+    }
+
     """ This class represent a game, for instance "The Secret Of Monkey Island" """
     def __init__(
             self,

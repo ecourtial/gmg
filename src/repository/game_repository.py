@@ -18,12 +18,12 @@ class GameRepository(AbstractRepository):
 
         return self.fetch_one(request, (title,))
 
-    def insert(self, title):
+    def insert(self, game):
         """Insert a new game"""
         request = "INSERT INTO games (title) VALUES (%s)"
-        self.write(request, (title,))
+        self.write(request, (game.get_title(),))
 
-        return self.get_by_title(title)
+        return self.get_by_title(game.get_title())
 
     def update(self, game):
         """Update a game"""

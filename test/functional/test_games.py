@@ -73,13 +73,13 @@ class TestPlatforms(AbstractTest):
         resp = self.api_call('post', 'game', {}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Incomplete payload. The request need the title field to be filled.'}, resp.json())    
+        self.assertEqual({'message': 'The following field is missing: title.'}, resp.json())    
 
     def test_create_duplicate_title(self):
         resp = self.api_call('post', 'game', {'title': 'Fifa 97'}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'The following field must be unique: title'}, resp.json())  
+        self.assertEqual({'message': "The resource of type 'game' with title 'Fifa 97' already exists."}, resp.json())  
 
     def test_create_update_delete_success(self):
         # Create
@@ -102,25 +102,19 @@ class TestPlatforms(AbstractTest):
 
         resp = self.api_call('delete', 'game/' + game_id, {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': 'Game not found.'}, resp.json())
-
-    def test_update_fails_incomplete_payload(self):
-        resp = self.api_call('patch', 'game/1', {}, True)
-
-        self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Incomplete payload. The request need the title field to be filled.'}, resp.json())  
+        self.assertEqual({'message': "The resource of type 'game' with id  #381 has not been found."}, resp.json()) 
 
     def test_update_duplicate_title(self):
         resp = self.api_call('patch', 'game/4', {'title': 'Fifa 97'}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'The following field must be unique: title'}, resp.json())  
+        self.assertEqual({'message': "The resource of type 'game' with title 'Revenge Of Shinobi' already exists."}, resp.json())  
 
     def test_delete_fails_because_game_has_versions(self):
         resp = self.api_call('delete', 'game/1', {}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Game has versions. Cannot delete it.'}, resp.json())  
+        self.assertEqual({'message': "The following resource type 'game' has children of type 'version', so it cannot be deleted."}, resp.json())  
 
         resp = self.api_call('get', 'game/1', {}, True)
 
