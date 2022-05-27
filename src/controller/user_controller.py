@@ -1,83 +1,73 @@
 """Controller to handle user operations"""
-from flask import request, jsonify
-from src.entity.user import User
-from src.helpers.json_helper import JsonHelper
-from src.service.user_service import UserService
+from flask import jsonify
+from src.exception.inactive_user_exception import InactiveUserException
+from src.exception.missing_field_exception import MissingFieldException
+from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
+from src.exception.unknown_resource_exception import ResourceNotFoundException
+from src.exception.unsupported_filter_exception import UnsupportedFilterException
 from src.repository.user_repository import UserRepository
+from src.service.user_service import UserService
 
 class UserController:
-    """Another useless comment"""
-
     @classmethod
     def authenticate(cls, mysql):
-        email = JsonHelper.get_value_from_request('email', '')
-        password = JsonHelper.get_value_from_request('password', '')
-
-        if email == '' or password == '':
-            return jsonify({'message': 'Incomplete payload. The request need the email and password fields to be filled.'}), 400
-
-        user_service = UserService(mysql)
-        user = user_service.get_authenticated_user(email, password)
-
-        if user is False or user.is_active == 0:
-            return jsonify({'message': 'User not found.'}), 403
+        userService = UserService(mysql)
+        
+        try:
+            user = userService.authenticate()
+        except MissingFieldException as e:
+            return jsonify({'message': str(e)}), 400
+        except ResourceNotFoundException as e:
+            return jsonify({'message': str(e)}), 403
+        except InactiveUserException as e:
+            return jsonify({'message': str(e)}), 403     
 
         return jsonify({'id': user.get_id(), 'username': user.get_user_name(), 'token': user.get_token()}), 200
 
     @classmethod
     def get_by_filter(cls, mysql, filter, filter_value):
-        repo = UserRepository(mysql)
+        userService = UserService(mysql)
+        
+        try:
+            user = userService.get_by_filter(filter, filter_value)
+        except UnsupportedFilterException as e:
+            return jsonify({'message': str(e)}), 400
+        except ResourceNotFoundException as e:
+            return jsonify({'message': str(e)}), 404  
 
-        if filter == 'id':
-            user = repo.get_by_id(filter_value)
-        elif filter == 'email':
-            user = repo.get_by_email(filter_value)
-        elif filter == 'username':
-            user = repo.get_by_user_name(filter_value)
-        else:
-            return jsonify({'message': 'Unknown filter. Allowed filters are: id, email, username.'}), 400
-
-        if user is None:
-            return jsonify({'message': 'No user found.'}), 404
-
-        return jsonify({'id': user.get_id(), 'email': user.get_email(), 'userName': user.get_user_name(), 'active': user.is_active()}), 200
+        return jsonify({'id': user.get_id(), 'email': user.get_email(), 'userName': user.get_user_name(), 'active': user.get_is_active()}), 200
 
     @classmethod
     def create(cls, mysql):
-        email = JsonHelper.get_value_from_request('email', '')
-        password = JsonHelper.get_value_from_request('password', '')
-        user_name = JsonHelper.get_value_from_request('username', '')
+        service = UserService(mysql)
 
-        if email == '' or password == '' or user_name == '':
-            return jsonify({'message': 'Incomplete payload. The request need the email, password and username fields to be filled.'}), 400
-
-        user_service = UserService(mysql)
-        result = user_service.create(email, password, user_name)
-
-        if isinstance(result, User) is False:
-            return jsonify({'message': 'The following field must be unique: ' + result}), 400
+        try:
+            user = service.validate_payload_for_creation_and_hydrate()
+        except MissingFieldException as e:
+            return jsonify({'message': str(e)}), 400
+        except ResourceAlreadyExistsException as e:
+            return jsonify({'message': str(e)}), 400
         
-        return cls.get_by_filter(mysql, 'id', result.get_id())
+        user = service.create(user)
+
+        return cls.get_by_filter(mysql, 'id', user.get_id())
 
     @classmethod
     def update(cls, mysql, user_id):
+        service = UserService(mysql)
+
+        try:
+            user = service.update(user_id)
+        except ResourceNotFoundException as e:
+            return jsonify({'message': str(e)}), 404
+        except MissingFieldException as e:
+            return jsonify({'message': str(e)}), 400
+        except ResourceAlreadyExistsException as e:
+            return jsonify({'message': str(e)}), 400
+
         repo = UserRepository(mysql)
-        user = repo.get_by_id(user_id)
+        user = repo.update(user)
 
-        if user is None:
-            return jsonify({'message': 'User not found.'}), 404
-
-        email = JsonHelper.get_value_from_request('email', '')
-        password = JsonHelper.get_value_from_request('password', '')
-        status = JsonHelper.get_value_from_request('status', '')
-        user_name = JsonHelper.get_value_from_request('username', '')
-
-        user_service = UserService(mysql)
-        result = user_service.update(user, email, password, user_name, status)
-
-        if result is not True:
-            return jsonify({'message': 'The following field must be unique: ' + result}), 400
-        
         return cls.get_by_filter(mysql, 'id', user.get_id())
 
     @classmethod

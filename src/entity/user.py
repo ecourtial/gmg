@@ -2,14 +2,21 @@
 
 class User:
     """ This class represent a user"""
-    def __init__(self, row):
-        self.user_id = row['id']
-        self.email = row['email']
-        self.salt = row['salt']
-        self.password = row['password']
-        self.status = int(row['status'])
-        self.user_name = row['user_name']
-        self.token = row['token']
+    expected_fields = {
+        'email': {'field': 'email', 'method': '_email', 'required': True, 'type': 'text'},
+        'password': {'field': 'password', 'method': '_password', 'required': True, 'type': 'text'},
+        'status': {'field': 'status', 'method': '_is_active', 'required': False, 'type': 'int', 'default': 0},
+        'username': {'field': 'user_name', 'method': '_user_name', 'required': True, 'type': 'text'},
+    }
+
+    def __init__(self, id, email, password, status, user_name, salt, token):
+        self.user_id = id
+        self.email = email
+        self.password = password
+        self.status = int(status)
+        self.user_name = user_name
+        self.salt = salt
+        self.token = token
 
     def get_id(self):
         """Return the id of the user, for instance "125"."""
@@ -31,7 +38,7 @@ class User:
 
         return self.password
 
-    def is_active(self):
+    def get_is_active(self):
         """Return the user's status."""
         return self.status == 1
 
@@ -46,7 +53,10 @@ class User:
     def set_token(self, new_token):
         self.token = new_token
 
-    def set_status(self, new_status):
+    def set_salt(self, salt):
+        self.salt = salt
+
+    def set_is_active(self, new_status):
         self.status = int(new_status)
 
     def set_email(self, new_email):

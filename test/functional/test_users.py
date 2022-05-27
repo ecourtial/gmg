@@ -6,14 +6,14 @@ class TestUsers(AbstractTest):
         resp = self.api_call('post', 'user/authenticate', payload)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Incomplete payload. The request need the email and password fields to be filled.'}, resp.json())
+        self.assertEqual({'message': 'The following field is missing: password.'}, resp.json())
 
     def test_authentication_user_not_found(self):
         payload = {'email': 'foo', 'password': 'bar'}
         resp = self.api_call('post', 'user/authenticate', payload)
 
         self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'User not found.'}, resp.json())
+        self.assertEqual({'message': "The resource of type 'user' with email 'foo' has not been found."}, resp.json())
 
     def test_creation_missing_auth_header(self):
         payload = {'email': 'foo', 'password': 'bar', 'username': 'someusername'}
@@ -27,18 +27,18 @@ class TestUsers(AbstractTest):
         resp = self.api_call('post', 'user', payload, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Incomplete payload. The request need the email, password and username fields to be filled.'}, resp.json())
+        self.assertEqual({'message': 'The following field is missing: username.'}, resp.json())
 
     def test_update_fails_user_not_found(self):
         resp = self.api_call('patch', 'user/666', {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': 'User not found.'}, resp.json())
+        self.assertEqual({'message': "The resource of type 'user' with id #666 has not been found."}, resp.json())
 
     def test_update_fails_duplicate_value(self):
         payload = {'email': 'foo@bar.com', 'password': 'barz', 'username': 'mephistophelesz', 'status': 1}
         resp = self.api_call('patch', 'user/1', payload, True)
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'The following field must be unique: email'}, resp.json())
+        self.assertEqual({'message': "The resource of type 'user' with email 'foo@bar.com' already exists."}, resp.json())
 
     def test_creation_update_activate_renew_token(self):
         # Create the user
@@ -56,7 +56,7 @@ class TestUsers(AbstractTest):
         resp = self.api_call('post', 'user/authenticate', payload, True)
 
         self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'User not found.'}, resp.json())
+        self.assertEqual({'message': "The resource of type 'user' with email 'foo' has not been found."}, resp.json())
 
         # Activate the user and update all the available data
         payload = {'email': 'fooz', 'password': 'barz', 'username': 'mephistophelesz', 'status': 1}
@@ -93,17 +93,17 @@ class TestUsers(AbstractTest):
         payload = {'email': 'fooz', 'password': 'barbar', 'username': 'mephistophelesZ'}
         resp = self.api_call('post', 'user', payload, True)
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'The following field must be unique: email'}, resp.json())
+        self.assertEqual({'message': "The resource of type 'user' with email 'fooz' already exists."}, resp.json())
 
     def test_get_by_filter_fails_unknown_filter(self):
         resp = self.api_call('get', 'user?filter=toto', {}, True)
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'Unknown filter. Allowed filters are: id, email, username.'}, resp.json())
+        self.assertEqual({'message': 'The following filter is not allowed: toto. Allowed filters are: id, email, userName.'}, resp.json())
 
     def test_get_by_filter_no_result(self):
         resp = self.api_call('get', 'user?filter=username&value=toto', {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': 'No user found.'}, resp.json())
+        self.assertEqual({'message': "The resource of type 'user' with username 'toto' has not been found."}, resp.json())
 
     def test_get_by_filters(self):
         resp = self.api_call('get', 'user?filter=username&value=Eric', {}, True)

@@ -3,7 +3,6 @@ from flask import jsonify, request
 from src.exception.resource_has_children_exception import RessourceHasChildrenException
 from src.repository.version_repository import VersionRepository
 from src.service.version_service import VersionService
-from src.entity.version import Version
 from src.exception.missing_field_exception import MissingFieldException
 from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
 from src.exception.unknown_resource_exception import ResourceNotFoundException

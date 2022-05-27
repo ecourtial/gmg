@@ -2,52 +2,121 @@
 import hashlib
 import random
 import string
-from flask import session
+from src.exception.inactive_user_exception import InactiveUserException
+from src.exception.missing_field_exception import MissingFieldException
+from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
+from src.exception.unknown_resource_exception import ResourceNotFoundException
+from src.exception.unsupported_filter_exception import UnsupportedFilterException
 from src.repository.user_repository import UserRepository
+from src.helpers.json_helper import JsonHelper
+from src.entity.user import User
 
 class UserService:
     """Useless comment"""
     def __init__(self, mysql):
         self.user_repository = UserRepository(mysql)
 
-    def create(self, email, raw_password, user_name):
-        """Create an user"""
-        checkUser = self.user_repository.get_by_email(email)
-        if checkUser is not None:
-            return 'email'
+    def authenticate(self):
+        email = JsonHelper.get_value_from_request('email', '')
+        password = JsonHelper.get_value_from_request('password', '')
 
-        checkUser = self.user_repository.get_by_user_name(user_name)
-        if checkUser is not None:
-            return 'user_name'
+        if email == '':
+            raise MissingFieldException('email')
 
-        salt = self.get_new_salt()
-        token = self.get_new_token()
-        password = self.get_hashed_password(raw_password, salt)
+        if password == '':
+            raise MissingFieldException('password')
+
+        user = self.get_authenticated_user(email, password)
+
+        if user is False:
+            raise ResourceNotFoundException('user', email, 'email')
+
+        if user.get_is_active() == 0:
+            raise InactiveUserException('email', email)
+
+        return user
+
+    def get_by_filter(self, filter, filter_value):
+        if filter == 'id':
+            user = self.user_repository.get_by_id(filter_value)
+        elif filter == 'email':
+            user = self.user_repository.get_by_email(filter_value)
+        elif filter == 'username':
+            user = self.user_repository.get_by_user_name(filter_value)
+        else:
+            raise UnsupportedFilterException(filter, ['id', 'email', 'userName'])
+
+        if user is None:
+            raise ResourceNotFoundException('user', filter_value, filter)
+
+        return user
+
+    def validate_payload_for_creation_and_hydrate(self):
+        values = []
+        values.append(None)
+
+        for api_field, data in User.expected_fields.items():
+            value = JsonHelper.get_value_from_request(api_field, None)
         
-        return self.user_repository.insert(email, password, salt, user_name, token)
+            if value is None:
+                if data['required'] is True:
+                    raise MissingFieldException(api_field)
+                else:
+                    values.append(data['default'])
+            else:
+                values.append(value)
+
+        values.append(None)
+        values.append(None)
+
+        user = User(*values)
+
+        checkUser = self.user_repository.get_by_email(user.get_email())
+        if checkUser is not None:
+            raise ResourceAlreadyExistsException('user', user.get_email(), 'email')
+
+        checkUser = self.user_repository.get_by_user_name(user.get_user_name())
+        if checkUser is not None:
+            raise ResourceAlreadyExistsException('user', user.get_user_name(), 'username')
+
+        return user
+
+    def create(self, user):
+        salt = self.get_new_salt()
+        user.set_salt(salt)
+        user.set_password(self.get_hashed_password(user.get_password(), salt))
+        user.set_token(self.get_new_token())
+        
+        return self.user_repository.insert(user)
     
-    def update(self, user, email, password, user_name, status):
-        if (email != ''):
-            checkUser = self.user_repository.get_by_email(email)
-            if checkUser is not None:
-                return 'email'
-            user.set_email(email)
+    def update(self, user_id):
+        # Verification
+        user = self.user_repository.get_by_id(user_id)
 
-        if (status != ''):
-            user.set_status(status)
+        if user is None:
+            raise ResourceNotFoundException('user', user_id)
 
-        if (user_name != ''):
-            checkUser = self.user_repository.get_by_user_name(user_name)
-            if checkUser is not None:
-                return 'user_name'
-            user.set_user_name(user_name)
-
-        if (password != ''):
+        # Hydratation
+        for api_field, data in User.expected_fields.items():
+            value = JsonHelper.get_value_from_request(api_field, None)
+        
+            if value is not None:
+                method_to_call = getattr(user, 'set' + data['method'])
+                method_to_call(value)
+        
+        password = JsonHelper.get_value_from_request('password', None)
+        if (password != None):
             user.set_password(self.get_hashed_password(password, user.get_salt()))
 
-        self.user_repository.update(user)
+        checkUser = self.user_repository.get_by_email(user.get_email())
+        if checkUser is not None:
+            raise ResourceAlreadyExistsException('user', user.get_email(), 'email')
 
-        return True
+        checkUser = self.user_repository.get_by_user_name(user.get_user_name())
+        if checkUser is not None:
+            raise ResourceAlreadyExistsException('user', user.get_user_name(), 'username')
+
+        return user
 
     def get_new_salt(self):
         return self.get_random_salt(8)
@@ -78,7 +147,7 @@ class UserService:
             return False
 
         hashed_password = self.get_hashed_password(raw_password, user.get_salt())
-        if (hashed_password == user.get_password() and user.is_active()):
+        if (hashed_password == user.get_password() and user.get_is_active()):
             return user
 
         return False

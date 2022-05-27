@@ -29,22 +29,32 @@ class UserRepository(AbstractRepository):
 
         return self.fetch_one(request, (user_name,))
 
-    def insert(self, email, password, salt, user_name, token):
+    def insert(self, user):
         """Inserts an user"""
         request = "INSERT INTO users (email, password, salt, status, user_name, token)"
         request += " VALUES (%s, %s, %s, 0, %s, %s);"
-        self.write(request, (email, password, salt, user_name, token))
+        self.write(request, (user.get_email(), user.get_password(), user.get_salt(), user.get_user_name(), user.get_token()))
         
-        return self.get_by_email(email)
+        return self.get_by_email(user.get_email())
 
     def update(self, user):
         """Updates an user"""
         request = "UPDATE users SET email = %s, password = %s, status = %s, user_name = %s, token = %s WHERE id = %s;"
-        self.write(request, (user.get_email(), user.get_password(), user.is_active(), user.get_user_name(), user.get_token(), user.get_id()))
+        self.write(request, (user.get_email(), user.get_password(), user.get_is_active(), user.get_user_name(), user.get_token(), user.get_id()))
+
+        return self.get_by_id(user.get_id())
 
     @classmethod
     def hydrate(cls, row):
         """Hydrate an object from a row."""
-        user = User(row)
+        user = User(
+            row['id'],
+            row['email'],
+            row['password'],
+            row['status'],
+            row['user_name'],
+            row['salt'],
+            row['token'],
+        )
 
         return user

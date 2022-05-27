@@ -1,9 +1,7 @@
 """ Games controller for the GMG project """
 from flask import jsonify, request 
-from src.helpers.json_helper import JsonHelper
 from src.repository.game_repository import GameRepository
 from src.service.game_service import GameService
-from src.entity.game import Game
 from src.exception.missing_field_exception import MissingFieldException
 from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
 from src.exception.unknown_resource_exception import ResourceNotFoundException

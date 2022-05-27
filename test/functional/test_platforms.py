@@ -61,7 +61,7 @@ class TestPlatforms(AbstractTest):
         resp = self.api_call('get', 'platform/666', {}, True)
 
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'platform' with id  #666 has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'platform' with id #666 has not been found."}, resp.json())
 
         # Exist
         resp = self.api_call('get', 'platform/1', {}, True)
@@ -101,7 +101,7 @@ class TestPlatforms(AbstractTest):
 
         resp = self.api_call('delete', 'platform/' + platform_id, {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'platform' with id  #12 has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'platform' with id #12 has not been found."}, resp.json())
 
     def test_update_duplicate_name(self):
         resp = self.api_call('patch', 'platform/4', {'name': 'PC'}, True)
