@@ -5,12 +5,7 @@ from src.entity.platform import Platform
 from src.entity.version import Version
 
 class PlatformRepository(AbstractRepository):
-    def get_by_id(self, platform_id):
-        """Get one support by its id."""
-        request = f"SELECT * FROM {Platform.table_name} "
-        request += f"WHERE {Platform.primary_key} = %s LIMIT 1;"
-
-        return self.fetch_one(request, (platform_id,))
+    entity = Platform
 
     def get_by_name(self, name):
         """Get one support by its name."""

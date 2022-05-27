@@ -5,12 +5,7 @@ from src.entity.game import Game
 from src.entity.version import Version
 
 class GameRepository(AbstractRepository):
-    def get_by_id(self, game_id):
-        """Get one game by its id."""
-        request = f"SELECT * FROM {Game.table_name} "
-        request += f"WHERE {Game.primary_key} = %s LIMIT 1;"
-
-        return self.fetch_one(request, (game_id,))
+    entity = Game
 
     def get_by_title(self, title):
         """Get one support by its title."""

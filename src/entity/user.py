@@ -1,5 +1,6 @@
 """ User entity for the GMG project """
 
+# NOTE: THIS ENTITY WORKS SLIGHTLY DIFFERENTLY THAN THE OTHERS, FOR SECURITY MATTERS
 class User:
     """ This class represent a user"""
     expected_fields = {
@@ -8,6 +9,9 @@ class User:
         'status': {'field': 'status', 'method': '_is_active', 'required': False, 'type': 'int', 'default': 0},
         'username': {'field': 'user_name', 'method': '_user_name', 'required': True, 'type': 'text'},
     }
+
+    table_name = 'users'
+    primary_key = 'id'
 
     def __init__(self, id, email, password, status, user_name, salt, token):
         self.user_id = id

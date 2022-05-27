@@ -4,12 +4,7 @@ from src.entity.user import User
 
 class UserRepository(AbstractRepository):
     """ Another useless comment """
-
-    def get_by_id(self, user_id):
-        """Gets an user by id"""
-        request = "SELECT * FROM users WHERE id = %s;"
-
-        return self.fetch_one(request, (user_id,))
+    entity = User
 
     def get_by_email(self, user_email):
         """Gets an user by email"""
