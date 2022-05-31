@@ -16,12 +16,6 @@ class VersionRepository(AbstractRepository):
         request += f"AND {Version.table_name}.platform_id = {Platform.table_name}.{Platform.primary_key} "
 
         return request
-    
-    def get_by_id(self, version_id):
-        """Get one version by its id."""
-        request = self.get_select_request_start() + f"AND {Version.table_name}.{Version.primary_key} = %s LIMIT 1;"
-
-        return self.fetch_one(request, (version_id,))
 
     def get_by_unique_index(self, platform_id, game_id):
         """Get one version by the unique combination of the platform and the game."""
@@ -31,18 +25,6 @@ class VersionRepository(AbstractRepository):
 
         return self.fetch_one(request, (platform_id, game_id,))
 
-    def insert(self, version):
-        """Insert a new version"""
-        super().insert(version)
-
-        return self.get_by_unique_index(version.get_platform_id(), version.get_game_id())
-
-    def update(self, version):
-        """Update a version"""
-        super().update(version)
-
-        return self.get_by_id(version.get_id())
-
     def get_copies_count_for_version(self, version_id):
         request = f"SELECT COUNT(*) as count FROM {Copy.table_name} WHERE version_id = %s"
         
@@ -51,13 +33,7 @@ class VersionRepository(AbstractRepository):
     @classmethod
     def hydrate(cls, row):
         """Hydrate an object from a row."""
-        values = []
-        values.append(row['version_id'])
-
-        for api_field, data in Version.expected_fields.items():
-            values.append(row[data['field']])
-
-        version = Version(*values)
+        version = super().hydrate(row)
         version.set_platform_name(row['platformName'])
         version.set_game_title(row['gameTitle'])
 

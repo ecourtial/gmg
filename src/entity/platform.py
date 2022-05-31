@@ -1,6 +1,6 @@
-""" Platform entity for the GMG project """
+from src.entity.abstract_entity import AbstractEntity
 
-class Platform:
+class Platform(AbstractEntity):
     """ This class represent a platform (support), for instance "Playstation" """
 
     expected_fields = {
@@ -26,9 +26,3 @@ class Platform:
 
     def set_name(self, name):
         self.name = name
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name
-        }

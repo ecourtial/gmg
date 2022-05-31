@@ -1,4 +1,6 @@
-class Version:
+from src.entity.abstract_entity import AbstractEntity
+
+class Version(AbstractEntity):
     """ This class represent a version of a game, for instance, the PC version of Monkey Island IV """
     # If you change the order here, you need to also change it in the constructor!
     expected_fields = {
@@ -25,11 +27,13 @@ class Version:
         'bestGameForever': {'field': 'bgf', 'method': '_best_game_forever', 'required': True, 'type': 'int'},
         'toWatchPosition': {'field': 'to_watch_position', 'method': '_to_watch_position', 'required': False, 'type': 'int', 'default': 0},
         'toDoPosition': {'field': 'to_do_position', 'method': '_to_do_position', 'required': False, 'type': 'int', 'default': 0},
+        'finished': {'field': 'finished', 'method': '_finished', 'required': False, 'type': 'int', 'default': 0},
     }
 
     authorized_extra_fields_for_filtering = {
         'gameTitle',
         'platformName',
+        'version_id',
     }
 
     table_name = 'versions'
@@ -61,7 +65,8 @@ class Version:
             todo_with_help,
             bgf,
             to_watch_position,
-            to_do_position
+            to_do_position,
+            finished
     ):
         self.id = id
         self.platform_id = int(platform_id)
@@ -87,6 +92,7 @@ class Version:
         self.bgf = bool(bgf)
         self.to_watch_position = int(to_watch_position)
         self.to_do_position = int(to_do_position)
+        self.finished = bool(finished)
 
     def get_id(self):
         return self.id
@@ -241,13 +247,14 @@ class Version:
     def set_game_title(self, title):
         self.game_title = title
 
-    def serialize(self):
-        values = {}
-        values['id'] = self.id
+    def get_finished(self):
+        return self.finished
 
-        for api_field, data in Version.expected_fields.items():
-            method_to_call = getattr(self, 'get' + data['method'])
-            values[api_field] = method_to_call()
+    def set_finished(self, finished):
+        self.finished = bool(finished)
+
+    def serialize(self):
+        values = super().serialize()
 
         values['platformName'] = self.get_platform_name()
         values['gameTitle'] = self.get_game_title()

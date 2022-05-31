@@ -6,6 +6,9 @@ from src.controller.platform_controller import PlatformController
 from src.controller.game_controller import GameController
 from src.controller.user_controller import UserController
 from src.controller.version_controller import VersionController
+from src.controller.copy_controller import CopyController
+from src.controller.story_controller import StoryController
+from src.controller.transaction_controller import TransactionController
 from src.repository.user_repository import UserRepository
 from src.connection.mysql_factory import MySQLFactory
 
@@ -225,4 +228,115 @@ def delete_version(current_user, entity_id):
 def get_versions(current_user):
     """Get the versions"""
     controller = VersionController
+    return controller.get_list(MySQLFactory.get())
+
+# Copies
+
+@app.route('/api/v1/copy/<int:entity_id>', methods=['GET'])
+@token_required
+def get_copy_by_id(current_user, entity_id):
+    """Returns the copy according to its id"""
+    controller = CopyController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/copy', methods=['POST'])
+@token_required
+def create_copy(current_user):
+    """Create a copy"""
+    controller = CopyController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/copy/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_copy(current_user, entity_id):
+    """Update the copy according to its id"""
+    controller = CopyController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/copy/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_copy(current_user, entity_id):
+    """Delete the copy according to its id"""
+    controller = CopyController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/copies', methods=['GET'])
+@token_required
+def get_copies(current_user):
+    """Get the copies"""
+    controller = CopyController
+    return controller.get_list(MySQLFactory.get())
+
+# Stories
+
+@app.route('/api/v1/story/<int:entity_id>', methods=['GET'])
+@token_required
+def get_story_by_id(current_user, entity_id):
+    """Returns the story according to its id"""
+    controller = StoryController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/story', methods=['POST'])
+@token_required
+def create_story(current_user):
+    """Create a story"""
+    controller = StoryController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/story/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_story(current_user, entity_id):
+    """Update the story according to its id"""
+    controller = StoryController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/story/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_story(current_user, entity_id):
+    """Delete the story according to its id"""
+    controller = StoryController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/stories', methods=['GET'])
+@token_required
+def get_stories(current_user):
+    """Get the stories"""
+    controller = StoryController
+    return controller.get_list(MySQLFactory.get())
+
+# Transactions
+
+@app.route('/api/v1/transaction/<int:entity_id>', methods=['GET'])
+@token_required
+def get_transaction_by_id(current_user, entity_id):
+    """Returns the transaction according to its id"""
+    controller = TransactionController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/transaction', methods=['POST'])
+@token_required
+def create_transaction(current_user):
+    """Create a transaction"""
+    controller = TransactionController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/transaction/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_transaction(current_user, entity_id):
+    """Update the transaction according to its id"""
+    controller = TransactionController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/transaction/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_transaction(current_user, entity_id):
+    """Delete the transaction according to its id"""
+    controller = TransactionController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/transactions', methods=['GET'])
+@token_required
+def get_transactions(current_user):
+    """Get the transactions"""
+    controller = TransactionController
     return controller.get_list(MySQLFactory.get())

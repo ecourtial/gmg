@@ -1,12 +1,12 @@
-""" Game entity for the GMG project """
+from src.entity.abstract_entity import AbstractEntity
 
-class Game:
+class Game(AbstractEntity):
     expected_fields = {
         'title': {'field': 'title', 'method': '_title', 'required': True, 'type': 'text'},
-        'finished': {'field': 'finished', 'method': '_finished', 'required': True, 'type': 'int'},
+        'notes': {'field': 'notes', 'method': '_notes', 'required': False, 'type': 'text', 'default': ''},
     }
 
-    authorized_extra_fields_for_filtering = {}
+    authorized_extra_fields_for_filtering = {'id'}
 
     table_name = 'games'
     primary_key = 'id'
@@ -16,11 +16,11 @@ class Game:
             self,
             id,
             title,
-            finished
+            notes
     ):
         self.id = id
         self.title = title
-        self.finished = bool(finished)
+        self.notes = notes
 
     def get_id(self):
         """Return the id of the game, for instance "125"."""
@@ -35,15 +35,8 @@ class Game:
     def set_title(self, title):
         self.title = title
 
-    def get_finished(self):
-        return self.finished
+    def get_notes(self):
+        return self.notes
 
-    def set_finished(self, finished):
-        self.finished = bool(finished)
-
-    def serialize(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'finished': self.finished
-        }
+    def set_notes(self, notes):
+        self.notes = notes

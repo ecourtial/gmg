@@ -13,22 +13,7 @@ class PlatformRepository(AbstractRepository):
 
         return self.fetch_one(request, (name,))
 
-    def insert(self, platform):
-        super().insert(platform)
-
-        return self.get_by_name(platform.get_name())
-
-    def update(self, platform):
-        super().update(platform)
-
-        return self.get_by_id(platform.get_id())
-
     def get_versions_count_for_platform(self, platform_id):
         request = f"SELECT COUNT(*) as count FROM {Version.table_name} WHERE platform_id = %s"
         
         return self.fetch_cursor(request, (platform_id,))
-
-    @classmethod
-    def hydrate(cls, row):
-        """Hydrate an object from a row."""
-        return Platform(row['id'], row['name'])

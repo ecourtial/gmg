@@ -1,60 +1,9 @@
-from test.abstract_test import AbstractTest
+from test.abstract_tests import AbstractTests
 
-class TestPlatforms(AbstractTest):
-    
-    def test_all_routes_error_missing_user_token(self):
-        # get by id
-        resp = self.api_call('get', 'game/666')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-    
-        # create
-        resp = self.api_call('post', 'game')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-        # patch
-        resp = self.api_call('patch', 'game/666')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-        # delete
-        resp = self.api_call('delete', 'game/666')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-        # get list
-        resp = self.api_call('get', 'games')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-    def test_all_routes_error_bad_user_token(self):
-        headers = {'x-access-tokens': 'foo'}
-
-        # get by id
-        resp = self.api_call('get', 'game/666', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-    
-        # create
-        resp = self.api_call('post', 'game', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-
-        # patch
-        resp = self.api_call('patch', 'game/666', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-        
-        # delete
-        resp = self.api_call('delete', 'game/666', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-
-        # get list
-        resp = self.api_call('get', 'games', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
+class TestPlatforms(AbstractTests):
+    def test_commons(self):
+        super().check_all_routes_error_bad_user_token('game', 'games')
+        super().check_all_routes_error_missing_user_token('game', 'games')
 
     def test_get_game(self):
         # Does not exist
@@ -67,7 +16,7 @@ class TestPlatforms(AbstractTest):
         resp = self.api_call('get', 'game/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'finished': False, 'id': 1, 'title': 'Sega Soccer'}, resp.json())
+        self.assertEqual({'id': 1, 'title': 'Sega Soccer', 'notes': 'super jeu !!!'}, resp.json())
 
     def test_create_incomplete_payload(self):
         resp = self.api_call('post', 'game', {}, True)
@@ -83,11 +32,16 @@ class TestPlatforms(AbstractTest):
 
     def test_create_update_delete_success(self):
         # Create
-        resp = self.api_call('post', 'game', {'title': 'Something', 'finished': True}, True)
+        payload = {'title': 'Something', 'notes': 'First played at it in 1997.'}
+        resp = self.api_call('post', 'game', payload, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual('Something', resp.json()["title"])
         game_id = str(resp.json()["id"])
+
+        resp = self.api_call('get', 'game/' + game_id, None, True)
+        payload['id'] = 381
+        self.assertEqual(payload, resp.json())
 
         # Patch
         new_title = 'Something II - ' + game_id
@@ -119,7 +73,7 @@ class TestPlatforms(AbstractTest):
         resp = self.api_call('get', 'game/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'finished': False, 'id': 1, 'title': 'Sega Soccer'}, resp.json())
+        self.assertEqual({'id': 1, 'title': 'Sega Soccer', 'notes': 'super jeu !!!'}, resp.json())
 
     def test_get_list_default_filters(self):
         resp = self.api_call('get', 'games', {}, True)

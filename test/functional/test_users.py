@@ -1,6 +1,6 @@
-from test.abstract_test import AbstractTest
+from test.abstract_tests_tools import AbstractTestsTools
 
-class TestUsers(AbstractTest):
+class TestUsers(AbstractTestsTools):
     def test_authentication_incomplete_payload(self):
         payload = {'email': 'foo', 'someKey': 'bar'}
         resp = self.api_call('post', 'user/authenticate', payload)
@@ -59,7 +59,7 @@ class TestUsers(AbstractTest):
         self.assertEqual({'message': 'The user with email = foo is inactive.'}, resp.json())
 
         # Activate the user and update all the available data
-        payload = {'email': 'fooz', 'password': 'barz', 'username': 'mephistophelesz', 'status': 1}
+        payload = {'email': 'fooz', 'password': 'barz', 'username': 'mephistophelesz', 'active': 1}
         resp = self.api_call('patch', 'user/' + str(user_id), payload, True)
 
         self.assertEqual(200, resp.status_code)

@@ -1,60 +1,9 @@
-from test.abstract_test import AbstractTest
+from test.abstract_tests import AbstractTests
 
-class TestPlatforms(AbstractTest):
-    
-    def test_all_routes_error_missing_user_token(self):
-        # get by id
-        resp = self.api_call('get', 'platform/666')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-    
-        # create
-        resp = self.api_call('post', 'platform')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-        # patch
-        resp = self.api_call('patch', 'platform/666')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-        # delete
-        resp = self.api_call('delete', 'platform/666')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-        # get list
-        resp = self.api_call('get', 'platforms')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-    def test_all_routes_error_bad_user_token(self):
-        headers = {'x-access-tokens': 'foo'}
-
-        # get by id
-        resp = self.api_call('get', 'platform/666', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-    
-        # create
-        resp = self.api_call('post', 'platform', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-
-        # patch
-        resp = self.api_call('patch', 'platform/666', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-        
-        # delete
-        resp = self.api_call('delete', 'platform/666', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-
-        # get list
-        resp = self.api_call('get', 'platforms', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
+class TestPlatforms(AbstractTests):
+    def test_commons(self):
+        super().check_all_routes_error_bad_user_token('platform', 'platforms')
+        super().check_all_routes_error_missing_user_token('platform', 'platforms')
 
     def test_get_platform(self):
         # Does not exist
@@ -101,7 +50,7 @@ class TestPlatforms(AbstractTest):
 
         resp = self.api_call('delete', 'platform/' + platform_id, {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'platform' with id #13 has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'platform' with id #12 has not been found."}, resp.json())
 
     def test_update_duplicate_name(self):
         resp = self.api_call('patch', 'platform/4', {'name': 'PC'}, True)

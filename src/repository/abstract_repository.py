@@ -36,8 +36,17 @@ class AbstractRepository:
         return items_list
 
     @classmethod
-    def hydrate(cls, row):
-        """Hydrate an object from a row. Must be overriden"""
+    def hydrate(self, row):
+        """Hydrate an object from a row."""
+        values = []
+        values.append(row[self.entity.primary_key])
+
+        for api_field, data in self.entity.expected_fields.items():
+            values.append(row[data['field']])
+
+        object = self.entity(*values)
+
+        return object
 
     def write(self, request, data, commit=True):
         """Performs an UPDATE or WRITE statement"""
@@ -65,8 +74,8 @@ class AbstractRepository:
 
     def get_by_id(self, entity_id):
         """Get one support by its primary key."""
-        request = f"SELECT * FROM {self.entity.table_name} "
-        request += f"WHERE {self.entity.primary_key} = %s LIMIT 1;"
+        request = self.get_select_request_start()
+        request += f" AND {self.entity.table_name}.{self.entity.primary_key} = %s LIMIT 1;"
 
         return self.fetch_one(request, (entity_id,))
 
@@ -86,10 +95,10 @@ class AbstractRepository:
             if 0 != len(current_filter_values):
                 orRequest = ' AND ('
                 for filter_value in current_filter_values:
-                    if data['type']== 'int':
+                    if data['type']== 'int' or data['type']== 'strict-text':
                         orRequest += data['field'] + f" = %s OR "
                         value_to_bind = filter_value
-                    else:
+                    else: # text
                         orRequest += data['field'] + f" LIKE %s OR "
                         value_to_bind = f"%{filter_value}%"
                     
@@ -117,8 +126,9 @@ class AbstractRepository:
         else:
             order_by = self.entity.primary_key
         
-        if order not in ['ASC', 'DESC']:
-            order = 'ASC'
+        order = order.lower()
+        if order not in ['asc', 'desc']:
+            order = 'asc'
 
         request = self.get_select_request_start() + filter_request + f" ORDER BY {order_by} {order}"
         request += " LIMIT " + str(limit) + " OFFSET " + str(offset)
@@ -135,7 +145,7 @@ class AbstractRepository:
             "result": [entry.serialize() for entry in result]
         }
 
-    def insert(self, object):
+    def insert(self, object, commit = True):
         """Insert a new entry"""
         request = f"INSERT INTO {object.table_name} ("
         
@@ -158,9 +168,9 @@ class AbstractRepository:
             method_to_call = getattr(object, 'get' + data['method'])
             values.append(method_to_call())  
 
-        self.write(request, values)
+        return self.get_by_id(self.write(request, values, commit))
 
-    def update(self, object):
+    def update(self, object, commit = True):
         request = f"UPDATE {object.table_name} SET "
 
         for api_field, data in object.expected_fields.items():
@@ -177,4 +187,6 @@ class AbstractRepository:
             values.append(method_to_call())  
 
         values.append(object.get_id())
-        self.write(request, values)
+        self.write(request, values, commit)
+
+        return self.get_by_id(object.get_id())

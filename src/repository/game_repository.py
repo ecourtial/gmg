@@ -13,22 +13,7 @@ class GameRepository(AbstractRepository):
 
         return self.fetch_one(request, (title,))
 
-    def insert(self, game):
-        super().insert(game)
-
-        return self.get_by_title(game.get_title())
-
-    def update(self, game):
-        super().update(game)
-
-        return self.get_by_id(game.get_id())
-
     def get_versions_count_for_game(self, game_id):
         request = f"SELECT COUNT(*) as count FROM {Version.table_name} WHERE game_id = %s"
         
         return self.fetch_cursor(request, (game_id,))
-
-    @classmethod
-    def hydrate(cls, row):
-        """Hydrate an object from a row."""
-        return Game(row['id'], row['title'], row['finished'])

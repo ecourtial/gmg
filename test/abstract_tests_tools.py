@@ -1,8 +1,9 @@
 import unittest
+import unittest
 import requests
 import json
 
-class AbstractTest(unittest.TestCase):
+class AbstractTestsTools(unittest.TestCase):
     maxDiff = None
     
     def get_server_url(self):

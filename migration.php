@@ -26,6 +26,23 @@ function insertVersion(int $gameId, int $platform, array $meta): int
     return $lastId;
 }
 
+function insertDummyData(string $stmt, array $entries): void
+{
+    global $connection;
+
+    foreach ($entries as $entry) {
+        $stmt = $stmtBase;
+        foreach ($entry as $value) {
+            $stmt .= "'$value',";
+        }
+    
+        $stmt = substr($stmt, 0, strlen($stmt) - 1);
+        $stmt .= ");";
+    
+        $connection->exec($stmt);
+    }
+}
+
 # STARTS THE PROCESSING
 
 # Config
@@ -45,7 +62,7 @@ $keys = [
     'games' => 'games_ibfk_1',
     'games_meta' => 'games_meta_ibfk_1',
     'history' => 'history_ibfk_1',
-    'trades' => 'trades_ibfk_1',
+    'transactions' => 'transactions_ibfk_1',
 ];
 
 foreach ($keys as $table => $constraint) {
@@ -88,7 +105,8 @@ CREATE TABLE IF NOT EXISTS versions(
   `todo_with_help` tinyint unsigned NOT NULL DEFAULT '0', 
   `bgf` tinyint unsigned NOT NULL DEFAULT '0', 
   `to_watch_position` tinyint unsigned DEFAULT '0', 
-  `to_do_position` tinyint unsigned NOT NULL DEFAULT '0') 
+  `to_do_position` tinyint unsigned NOT NULL DEFAULT '0',
+  `finished` tinyint unsigned NOT NULL DEFAULT '0') 
   ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 ";
 
@@ -138,8 +156,8 @@ $connection->exec('DROP TABLE games_meta;');
 $query = $connection->prepare('ALTER TABLE games DROP COLUMN platform;');
 $query->execute();
 
-# Add a "finished" field in the games table
-$connection->exec('ALTER TABLE games ADD `finished` tinyint unsigned NOT NULL DEFAULT 0');
+# Add a "notes" field in the games table
+$connection->exec('ALTER TABLE games ADD `notes` text');
 
 # Add unique index on the platform name
 $query = $connection->prepare('CREATE UNIQUE INDEX platforms_name ON platforms(name);');
@@ -156,10 +174,11 @@ CREATE TABLE IF NOT EXISTS copies(
   `version_id` SMALLINT(11) UNSIGNED NOT NULL,
   `is_original` tinyint unsigned NOT NULL, 
   `box_type` VARCHAR(255) NOT NULL, 
-  `casing` VARCHAR(255) NOT NULL, 
+  `casing_type` VARCHAR(255) NOT NULL, 
   `on_compilation` tinyint unsigned NOT NULL,
-  `reedition` tinyint unsigned NOT NULL,
+  `is_reedition` tinyint unsigned NOT NULL,
   `has_manual` tinyint unsigned NOT NULL,
+  `status` VARCHAR(255) NOT NULL DEFAULT 'In', 
   `comments` text,
   KEY `version_id` (`version_id`),
   CONSTRAINT `copies_ibfk_1` FOREIGN KEY (`version_id`) REFERENCES `versions` (`version_id`)
@@ -170,40 +189,33 @@ $connection->exec($createStatement);
 
 # Add values to copies
 $entries = [
-    [348, 1, 'big-box', 'cd', 0, 0, 1, 'Bought it in 2004'],
-    [349, 1, 'none', 'cardboard-cd-sleeve', 1, 1, 0, 'Got it with my cereals'],
+    [348, 1, 'Big box', 'CD', 0, 0, 1, 'Bought it in 2004'],
+    [349, 1, 'none', 'Cardboard-sleeve', 1, 1, 0, 'Got it with my cereals'],
 ];
 
-$stmtBase = "INSERT into copies (version_id, is_original, box_type, casing, on_compilation, reedition, has_manual, comments) VALUES(";
+$stmtBase = "INSERT into copies (version_id, is_original, box_type, casing_type, on_compilation, is_reedition, has_manual, comments) VALUES(";
+insertDummyData($stmtBase, $entries);
 
-foreach ($entries as $entry) {
-    $stmt = $stmtBase;
-    foreach ($entry as $value) {
-        $stmt .= "'$value',";
-    }
-
-    $stmt = substr($stmt, 0, strlen($stmt) - 1);
-    $stmt .= ");";
-
-    $connection->exec($stmt);
-}
-
-# Dump trade table and creates a new one
+# Dump transaction table and creates a new one
 $connection->exec('DROP TABLE trades;');
 
-$createStatement = "CREATE TABLE `trades` (
-    `trade_id` int unsigned NOT NULL AUTO_INCREMENT,
+$createStatement = "CREATE TABLE `transactions` (
+    `transaction_id` int unsigned NOT NULL AUTO_INCREMENT,
     `copy_id` smallint unsigned NOT NULL,
     `year` smallint unsigned NOT NULL,
     `month` smallint unsigned NOT NULL,
     `day` smallint unsigned NOT NULL,
-    `type` tinyint unsigned NOT NULL,
-    PRIMARY KEY (`trade_id`),
+    `type` VARCHAR(255),
+    `notes` text,
+    PRIMARY KEY (`transaction_id`),
     KEY `copy_id` (`copy_id`),
-    CONSTRAINT `trades_ibfk_1` FOREIGN KEY (`copy_id`) REFERENCES `copies` (`copy_id`)
+    CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`copy_id`) REFERENCES `copies` (`copy_id`)
   ) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 
 $connection->exec($createStatement);
+
+$stmtBase = "INSERT into copies (version_id, is_original, box_type, casing_type, on_compilation, is_reedition, has_manual, comments) VALUES(";
+insertDummyData($stmtBase, $entries);
 
 # Setting back missing FK
 $connection->exec("ALTER TABLE stories ADD FOREIGN KEY (version_id) REFERENCES versions(version_id);");
@@ -212,3 +224,9 @@ $connection->exec("ALTER TABLE versions ADD FOREIGN KEY (game_id) REFERENCES gam
 
 # To remove: change user credentials
 $connection->exec("UPDATE users SET email = 'foo@bar.com', salt = 'someSalt', password = 'somePassword', token = 'tokentest123' WHERE id = 1;");
+
+# Insert some comments
+$connection->exec("UPDATE games SET notes = 'super jeu !!!' WHERE id = 1");
+$connection->exec("UPDATE games SET notes = 'bof bof' WHERE id = 2");
+
+$connection->exec("UPDATE versions SET comments = 'top en coop !!!' WHERE version_id = 1");

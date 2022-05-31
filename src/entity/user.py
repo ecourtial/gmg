@@ -1,12 +1,15 @@
 """ User entity for the GMG project """
 
-# NOTE: THIS ENTITY WORKS SLIGHTLY DIFFERENTLY THAN THE OTHERS, FOR SECURITY MATTERS
+# NOTE: THIS ENTITY WORKS SLIGHTLY DIFFERENTLY THAN THE OTHERS, FOR SECURITY MATTERS.
+# FOR INSTANCE, IT DOES NOT INHERIT FROM THE AbstractEntity, OR ITS REPOSITORY
+# DOES NOT INHERIT FROM THE AbstractRepository.
+# WE DON'T WANT TO EXPOSE SENSITIVE VALUES
 class User:
     """ This class represent a user"""
     expected_fields = {
         'email': {'field': 'email', 'method': '_email', 'required': True, 'type': 'text'},
         'password': {'field': 'password', 'method': '_password', 'required': True, 'type': 'text'},
-        'status': {'field': 'status', 'method': '_is_active', 'required': False, 'type': 'int', 'default': 0},
+        'active': {'field': 'status', 'method': '_is_active', 'required': False, 'type': 'int', 'default': 0},
         'username': {'field': 'user_name', 'method': '_user_name', 'required': True, 'type': 'text'},
     }
 

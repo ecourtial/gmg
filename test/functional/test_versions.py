@@ -1,67 +1,16 @@
-from test.abstract_test import AbstractTest
+from test.abstract_tests import AbstractTests
 
-class TestVersions(AbstractTest):
-    
-    def test_all_routes_error_missing_user_token(self):
-        # get by id
-        resp = self.api_call('get', 'version/666')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-    
-        # create
-        resp = self.api_call('post', 'version')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-        # patch
-        resp = self.api_call('patch', 'version/666')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-        # delete
-        resp = self.api_call('delete', 'version/666')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-        # get list
-        resp = self.api_call('get', 'versions')
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Missing token'}, resp.json())
-
-    def test_all_routes_error_bad_user_token(self):
-        headers = {'x-access-tokens': 'foo'}
-
-        # get by id
-        resp = self.api_call('get', 'version/666', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-    
-        # create
-        resp = self.api_call('post', 'version', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-
-        # patch
-        resp = self.api_call('patch', 'version/666', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-        
-        # delete
-        resp = self.api_call('delete', 'version/666', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
-
-        # get list
-        resp = self.api_call('get', 'versions', None, False, headers)
-        self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'Token is invalid'}, resp.json())
+class TestVersions(AbstractTests):
+    def test_commons(self):
+        super().check_all_routes_error_bad_user_token('version', 'versions')
+        super().check_all_routes_error_missing_user_token('version', 'versions')
 
     def test_get_version(self):
         # Does not exist
         resp = self.api_call('get', 'version/666', {}, True)
 
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': 'Version not found.'}, resp.json())
+        self.assertEqual({'message': "The resource of type 'version' with id #666 has not been found."}, resp.json())
 
         # Exist
         resp = self.api_call('get', 'version/1', {}, True)
@@ -69,7 +18,8 @@ class TestVersions(AbstractTest):
         self.assertEqual(200, resp.status_code)
         expected_result = {
             "bestGameForever": False,
-            "comments": None,
+            "comments": 'top en coop !!!',
+            "finished": False,
             "gameId": 1,
             "gameTitle": "Sega Soccer",
             "hallOfFame": False,
@@ -233,6 +183,7 @@ class TestVersions(AbstractTest):
         payload = {
             "bestGameForever": False,
             "comments": None,
+            'finished': False,
             "gameId": game_id,
             'gameTitle': None,
             "hallOfFame": True,
@@ -289,7 +240,7 @@ class TestVersions(AbstractTest):
 
         resp = self.api_call('delete', 'version/' + str_id, {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'version' with id #351 has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'version' with id #350 has not been found."}, resp.json())
 
         # Remove the game too (otherwise it will pollute the DB)
         resp = self.api_call('delete', 'game/' + str_game_id, {}, True)
@@ -430,5 +381,5 @@ class TestVersions(AbstractTest):
             self.assertEqual(1, resp.json()['page'])
             self.assertEqual(1, resp.json()['totalPageCount'])
 
-            self.assertEqual(376, resp.json()['result'][0]['gameId'])
-            self.assertEqual('Fifa 99', resp.json()['result'][0]['gameTitle'])
+            self.assertEqual(1, resp.json()['result'][0]['gameId'])
+            self.assertEqual('Sega Soccer', resp.json()['result'][0]['gameTitle'])

@@ -8,6 +8,8 @@ EDUCATIVE PROJECT, hence basic Python (PHP programmer)
 
 Why no front end. See my front-end.
 
+CONTRACT FIRST OR RESOURCE reprentation?
+
 A personal educational test project to manage my video games collection. Games can be sorted by support,
 todo list, watch list, ranking...
 
