@@ -1,19 +1,25 @@
 from test.abstract_tests_tools import AbstractTestsTools
 
 class TestUsers(AbstractTestsTools):
-    def test_authentication_incomplete_payload(self):
-        payload = {'email': 'foo', 'someKey': 'bar'}
-        resp = self.api_call('post', 'user/authenticate', payload)
+    def test_basic_authentication_missing_header(self):
+        resp = self.api_call('post', 'user/authenticate')
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'The following field is missing: password.'}, resp.json())
+        self.assertEqual({'message': 'The following header is missing: Authorization.'}, resp.json())
 
     def test_authentication_user_not_found(self):
-        payload = {'email': 'foo', 'password': 'bar'}
-        resp = self.api_call('post', 'user/authenticate', payload)
+        headers = {'Authorization': 'Basic YWxhZGRpbjpzZXNhbWVPdXZyZVRvaQ=='}
+        resp = self.api_call('post', 'user/authenticate', None, False, headers)
 
         self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'user' with email 'foo' has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'user' with email 'aladdin' has not been found."}, resp.json())
+
+    def test_authentication_impossible_to_decode_header(self):
+        headers = {'Authorization': 'Basic Am0v1mJhcg=='}
+        resp = self.api_call('post', 'user/authenticate', None, False, headers)
+
+        self.assertEqual(400, resp.status_code)
+        self.assertEqual({'message': 'Impossible to decode the value of the authentication header.'}, resp.json())
 
     def test_creation_missing_auth_header(self):
         payload = {'email': 'foo', 'password': 'bar', 'username': 'someusername'}
@@ -52,8 +58,8 @@ class TestUsers(AbstractTestsTools):
         user_id = resp.json()["id"]
 
         # Try to authenticate as the new user: fail because not active by default
-        payload = {'email': 'foo', 'password': 'bar'}
-        resp = self.api_call('post', 'user/authenticate', payload, True)
+        headers = {'Authorization': 'Basic Zm9vOmJhcg=='}
+        resp = self.api_call('post', 'user/authenticate', None, False, headers)
 
         self.assertEqual(403, resp.status_code)
         self.assertEqual({'message': 'The user with email = foo is inactive.'}, resp.json())
@@ -69,14 +75,14 @@ class TestUsers(AbstractTestsTools):
         self.assertEqual(user_id, resp.json()["id"])
 
         # Try to authenticate as the new user: success
-        payload = {'email': 'fooz', 'password': 'barz'}
-        resp = self.api_call('post', 'user/authenticate', payload, True)
+        headers = {'Authorization': 'Basic Zm9vejpiYXJ6'}
+        resp = self.api_call('post', 'user/authenticate', None, False, headers)
 
         self.assertEqual(200, resp.status_code)
         token = resp.json()["token"]
 
         # Renew my token
-        resp = self.api_call('post', 'user/renew-token', payload, False, {'x-access-tokens': token})
+        resp = self.api_call('post', 'user/renew-token', payload, False, {'Authorization': 'token ' + token})
         self.assertEqual(200, resp.status_code)
 
         self.assertEqual(True, resp.json()["active"])
@@ -85,7 +91,7 @@ class TestUsers(AbstractTestsTools):
         self.assertEqual(user_id, resp.json()["id"])
 
         # Try again: fail because the token has been properly changed
-        resp = self.api_call('post', 'user/renew-token', payload, False, {'x-access-tokens': token})
+        resp = self.api_call('post', 'user/renew-token', payload, False, {'Authorization': 'token ' + token})
         self.assertEqual(403, resp.status_code)
         self.assertEqual({'message': 'Token is invalid'}, resp.json())
 

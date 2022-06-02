@@ -7,13 +7,13 @@ from src.exception.unknown_resource_exception import ResourceNotFoundException
 
 class CopyService(AbstractService):
     resource_type = 'copy'
-    
+
     def __init__(self, mysql):
         self.repository = CopyRepository(mysql)
         self.version_repository = VersionRepository(mysql)
 
-    def validate_payload_for_creation_and_hydrate(self):
-        
+    def get_for_create(self):
+
         copy = super().validate_payload_for_creation_and_hydrate(Copy)
         version = self.version_repository.get_by_id(copy.get_version_id())
 
@@ -22,7 +22,7 @@ class CopyService(AbstractService):
 
         return copy
 
-    def validate_payload_for_update_and_hydrate(self, copy_id):
+    def get_for_update(self, copy_id):
         copy = self.repository.get_by_id(copy_id)
 
         if copy is None:

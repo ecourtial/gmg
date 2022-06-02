@@ -2,9 +2,14 @@ from src.entity.abstract_entity import AbstractEntity
 
 class Story(AbstractEntity):
     """ This class represent a history entry, for instance I watched or played this game in 2021 """
-    
+
     expected_fields = {
-        'versionId': {'field': 'version_id', 'method': '_version_id', 'required': True, 'type': 'int'},
+        'versionId': {
+            'field': 'version_id',
+            'method': '_version_id',
+            'required': True,
+            'type': 'int'
+        },
         'year': {'field': 'year', 'method': '_year', 'required': True, 'type': 'int'},
         'position': {'field': 'position', 'method': '_position', 'required': True, 'type': 'int'},
         'watched': {'field': 'watched', 'method': '_watched', 'required': True, 'type': 'int'},
@@ -17,7 +22,7 @@ class Story(AbstractEntity):
 
     table_name = 'stories'
     primary_key = 'id'
-    
+
     def __init__(
             self,
             entity_id,
@@ -25,7 +30,9 @@ class Story(AbstractEntity):
             year,
             position,
             watched,
-            played
+            played,
+            platform_name = None,
+            game_title = None,
     ):
         self.entity_id = entity_id
         self.version_id = version_id
@@ -33,6 +40,8 @@ class Story(AbstractEntity):
         self.position = position
         self.watched = bool(watched)
         self.played = bool(played)
+        self.platform_name = platform_name
+        self.game_title = game_title
 
     def get_id(self):
         return self.entity_id
@@ -52,8 +61,8 @@ class Story(AbstractEntity):
     def get_played(self):
         return self.played
 
-    def set_version_id(self, id):
-        self.version_id = id
+    def set_version_id(self, version_id):
+        self.version_id = version_id
 
     def set_year(self, year):
         self.year = year

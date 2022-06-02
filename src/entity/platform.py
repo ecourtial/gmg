@@ -12,13 +12,13 @@ class Platform(AbstractEntity):
     table_name = 'platforms'
     primary_key = 'id'
 
-    def __init__(self, id, name):
-        self.id = id
+    def __init__(self, entity_id, name):
+        self.entity_id = entity_id
         self.name = name
 
     def get_id(self):
         """Return the id of the platform, for instance "3"."""
-        return self.id
+        return self.entity_id
 
     def get_name(self):
         """Return the name of the platform, for instance "Playstation 2"."""

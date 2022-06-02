@@ -594,5 +594,13 @@ preferred-modules=
 overgeneral-exceptions=BaseException,
                        Exception
 
-# disable=R0913, R0914, R0902, R0904
-disable=R0913, W1514, R0801, R0902
+# C0114,C0115,C0116 are for doc
+# R0801 is for duplicated code
+# W0622 is for redefining a variable
+# R0914 is for too many local variables
+# R0902 is for too many instance attributes
+# R0904 is for too many public methods
+# R0913 is for too many arguments in a function
+# W0707: Consider explicitly re-raising using the 'from' keyword (raise-missing-from)
+
+disable=C0114,C0115,C0116,R0801,W0622,R0914,R0902,R0904,R0913,W0707

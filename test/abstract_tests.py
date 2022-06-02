@@ -28,7 +28,7 @@ class AbstractTests(AbstractTestsTools):
         self.assertEqual({'message': 'Missing token'}, resp.json())
 
     def check_all_routes_error_bad_user_token(self, singular_endpoint, plural_endpoint):
-        headers = {'x-access-tokens': 'foo'}
+        headers = {'Authorization': 'token foo'}
 
         # get by id
         resp = self.api_call('get', singular_endpoint + '/666', None, False, headers)

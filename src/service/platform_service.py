@@ -12,7 +12,7 @@ class PlatformService(AbstractService):
     def __init__(self, mysql):
         self.repository = PlatformRepository(mysql)
 
-    def validate_payload_for_creation_and_hydrate(self):
+    def get_for_create(self):
         platform = super().validate_payload_for_creation_and_hydrate(Platform)
 
         existing_version = self.repository.get_by_name(platform.get_name())
@@ -22,7 +22,7 @@ class PlatformService(AbstractService):
 
         return platform
 
-    def validate_payload_for_update_and_hydrate(self, platform_id):
+    def get_for_update(self, platform_id):
         # Verification
         platform = self.repository.get_by_id(platform_id)
 

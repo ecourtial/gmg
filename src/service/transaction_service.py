@@ -3,18 +3,17 @@ from src.service.abstract_service import AbstractService
 from src.repository.transaction_repository import TransactionRepository
 from src.repository.copy_repository import CopyRepository
 from src.entity.transaction import Transaction
-from src.entity.copy import Copy
 from src.exception.unknown_resource_exception import ResourceNotFoundException
 
 class TransactionService(AbstractService):
     resource_type = 'transaction'
-    
+
     def __init__(self, mysql):
         self.repository = TransactionRepository(mysql)
         self.copy_repository = CopyRepository(mysql)
-    
-    def validate_payload_for_creation_and_hydrate(self):
-        
+
+    def get_for_create(self):
+
         transaction = super().validate_payload_for_creation_and_hydrate(Transaction)
         copy = self.copy_repository.get_by_id(transaction.get_copy_id())
 
@@ -26,7 +25,7 @@ class TransactionService(AbstractService):
 
         return transaction
 
-    def validate_payload_for_update_and_hydrate(self, transaction_id):
+    def get_for_update(self, transaction_id):
         transaction = self.repository.get_by_id(transaction_id)
 
         if transaction is None:
@@ -54,7 +53,7 @@ class TransactionService(AbstractService):
 
         return True
 
-    def validate_transaction_status(self, copy, transaction):
+    def validate_transaction_status(self, copy, transaction):#pylint: disable=R0201
         """Check if the transaction is legit and toggle the status of the copy"""
         if ((transaction.get_type() in transaction.transaction_in and copy.get_status() == 'In') or
             (transaction.get_type() in transaction.transaction_out and copy.get_status() == 'Out')):

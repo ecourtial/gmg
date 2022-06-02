@@ -1,7 +1,7 @@
 """An abstract repository"""
 import math
 
-class AbstractRepository:
+class AbstractRepository:# pylint: disable=no-member
     """Another useless comment"""
     def __init__(self, mysql):
         self.mysql = mysql
@@ -14,7 +14,7 @@ class AbstractRepository:
 
         if row is None:
             return None
-        
+
         hydrated = self.hydrate(row)
         cursor.close()
 
@@ -35,13 +35,12 @@ class AbstractRepository:
         cursor.close()
         return items_list
 
-    @classmethod
     def hydrate(self, row):
         """Hydrate an object from a row."""
         values = []
         values.append(row[self.entity.primary_key])
 
-        for api_field, data in self.entity.expected_fields.items():
+        for api_field, data in self.entity.expected_fields.items():# pylint: disable=W0612
             values.append(row[data['field']])
 
         object = self.entity(*values)
@@ -62,7 +61,7 @@ class AbstractRepository:
 
     def fetch_cursor(self, request, data_tuple = None):
         """Fetch one result"""
-        if (data_tuple is None):
+        if data_tuple is None:
             data_tuple = {}
 
         cursor = self.mysql.cursor(dictionary=True)
@@ -84,7 +83,7 @@ class AbstractRepository:
         self.write(request, (entity_id,), True)
 
     def get_select_request_start(self):
-        return f"SELECT * FROM {self.entity.table_name} WHERE {self.entity.primary_key} IS NOT NULL "
+        return f"SELECT * FROM {self.entity.table_name} WHERE {self.entity.primary_key} IS NOT NULL " # pylint: disable=C0301
 
     def get_list(self, filters, page, limit, order_by, order):
         filter_request = ''
@@ -93,25 +92,26 @@ class AbstractRepository:
         for api_field, data in self.entity.expected_fields.items():
             current_filter_values = filters.getlist(api_field + '[]')
             if 0 != len(current_filter_values):
-                orRequest = ' AND ('
+                or_request = ' AND ('
                 for filter_value in current_filter_values:
                     if data['type']== 'int' or data['type']== 'strict-text':
-                        orRequest += data['field'] + f" = %s OR "
+                        or_request += data['field'] + " = %s OR "
                         value_to_bind = filter_value
                     else: # text
-                        orRequest += data['field'] + f" LIKE %s OR "
+                        or_request += data['field'] + " LIKE %s OR "
                         value_to_bind = f"%{filter_value}%"
-                    
+
                     values.append(value_to_bind)
 
-                length = len(orRequest)
-                orRequest = orRequest[:length-3]
-                orRequest += ') '
-                filter_request += orRequest
+                length = len(or_request)
+                or_request = or_request[:length-3]
+                or_request += ') '
+                filter_request += or_request
 
-    
-        count_request = f"SELECT count(*) as count FROM {self.entity.table_name} WHERE {self.entity.primary_key} IS NOT NULL {filter_request}"
-        totalResultCount = self.fetch_cursor(count_request, values)['count']
+
+        count_request = f"SELECT count(*) as count FROM {self.entity.table_name} "
+        count_request += f"WHERE {self.entity.primary_key} IS NOT NULL {filter_request}"
+        total_result_count = self.fetch_cursor(count_request, values)['count']
 
         page = int(page)
         limit = int(limit)
@@ -119,13 +119,12 @@ class AbstractRepository:
         page = 1 if page < 1 else page
         offset = (page * limit) - limit
 
-        if order_by in self.entity.expected_fields:
-            order_by = self.entity.expected_fields[order_by]['field']
-        elif order_by in self.entity.authorized_extra_fields_for_filtering:
-            order_by = order_by # Well, it's OK
-        else:
-            order_by = self.entity.primary_key
-        
+        if order_by not in self.entity.authorized_extra_fields_for_filtering:
+            if order_by in self.entity.expected_fields:
+                order_by = self.entity.expected_fields[order_by]['field']
+            else:
+                order_by = self.entity.primary_key
+
         order = order.lower()
         if order not in ['asc', 'desc']:
             order = 'asc'
@@ -134,46 +133,46 @@ class AbstractRepository:
         request += " LIMIT " + str(limit) + " OFFSET " + str(offset)
         result = self.fetch_multiple(request, values)
 
-        totalPageCount = int(math.ceil(totalResultCount/limit))
-        totalPageCount = 1 if totalResultCount == 0 else totalPageCount
+        total_page_count = int(math.ceil(total_result_count/limit))
+        total_page_count = 1 if total_result_count == 0 else total_page_count
 
         return {
             "resultCount": len(result),
-            "totalResultCount": totalResultCount,
+            "totalResultCount": total_result_count,
             "page": page,
-            "totalPageCount": totalPageCount,
+            "totalPageCount": total_page_count,
             "result": [entry.serialize() for entry in result]
         }
 
     def insert(self, object, commit = True):
         """Insert a new entry"""
         request = f"INSERT INTO {object.table_name} ("
-        
-        for api_field, data in object.expected_fields.items():
+
+        for api_field, data in object.expected_fields.items(): # pylint: disable=W0612
             request += data['field'] + ', '
 
         length = len(request)
         request = request[:length-2]
         request += ') VALUES ('
 
-        for api_field, data in object.expected_fields.items():
+        for api_field, data in object.expected_fields.items(): # pylint: disable=W0612
             request += '%s, '
 
         length = len(request)
         request = request[:length-2]
         request += ')'
-                    
+
         values = []
-        for api_field, data in object.expected_fields.items():
+        for api_field, data in object.expected_fields.items(): # pylint: disable=W0612
             method_to_call = getattr(object, 'get' + data['method'])
-            values.append(method_to_call())  
+            values.append(method_to_call())
 
         return self.get_by_id(self.write(request, values, commit))
 
     def update(self, object, commit = True):
         request = f"UPDATE {object.table_name} SET "
 
-        for api_field, data in object.expected_fields.items():
+        for api_field, data in object.expected_fields.items(): # pylint: disable=W0612
             request += data['field'] + ' = %s, '
 
         length = len(request)
@@ -184,7 +183,7 @@ class AbstractRepository:
         values = []
         for api_field, data in object.expected_fields.items():
             method_to_call = getattr(object, 'get' + data['method'])
-            values.append(method_to_call())  
+            values.append(method_to_call())
 
         values.append(object.get_id())
         self.write(request, values, commit)

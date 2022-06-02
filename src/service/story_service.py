@@ -1,4 +1,3 @@
-from src.exception.resource_has_children_exception import RessourceHasChildrenException
 from src.service.abstract_service import AbstractService
 from src.repository.story_repository import StoryRepository
 from src.repository.version_repository import VersionRepository
@@ -7,13 +6,13 @@ from src.exception.unknown_resource_exception import ResourceNotFoundException
 
 class StoryService(AbstractService):
     resource_type = 'story'
-    
+
     def __init__(self, mysql):
         self.repository = StoryRepository(mysql)
         self.version_repository = VersionRepository(mysql)
-    
-    def validate_payload_for_creation_and_hydrate(self):
-        
+
+    def get_for_create(self):
+
         story = super().validate_payload_for_creation_and_hydrate(Story)
         version = self.version_repository.get_by_id(story.get_version_id())
 
@@ -22,7 +21,7 @@ class StoryService(AbstractService):
 
         return story
 
-    def validate_payload_for_update_and_hydrate(self, story_id):
+    def get_for_update(self, story_id):
         story = self.repository.get_by_id(story_id)
 
         if story is None:

@@ -1,5 +1,4 @@
 """ Repository to handle the games """
-from itertools import count
 from src.repository.abstract_repository import AbstractRepository
 from src.entity.game import Game
 from src.entity.version import Version
@@ -15,5 +14,5 @@ class GameRepository(AbstractRepository):
 
     def get_versions_count_for_game(self, game_id):
         request = f"SELECT COUNT(*) as count FROM {Version.table_name} WHERE game_id = %s"
-        
+
         return self.fetch_cursor(request, (game_id,))

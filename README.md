@@ -8,6 +8,8 @@ EDUCATIVE PROJECT, hence basic Python (PHP programmer)
 
 Why no front end. See my front-end.
 
+DOC API
+
 CONTRACT FIRST OR RESOURCE reprentation?
 
 A personal educational test project to manage my video games collection. Games can be sorted by support,
@@ -15,15 +17,10 @@ todo list, watch list, ranking...
 
 ## Utilization
 
-* In dev mode: just do a __make start__. In production, make your gunicorn server to launch the application __app.py__.
+SEE MY DOC (LIENS)
 
-* An empty database is given in the repository: just import it.
-
-* In the root folder, copy the file _configuration.json.dist_ to _configuration.json_ and fill it with your values.
-
-* Once the application is running, go to __/register__ to create an account.
-
-* Then go to your database to enable the user you just created. That's it.
+So far the documentation is basic, but it is enough to help you to start your project.
+On top of that, API responses return explanatory messsages.
 
 ## Stack :light_rail:
 

@@ -1,4 +1,4 @@
-class AbstractEntity:
+class AbstractEntity: # pylint: disable=too-few-public-methods,E1101
     def serialize(self):
         values = {}
         values['id'] = self.get_id()

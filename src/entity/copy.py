@@ -3,15 +3,70 @@ from src.entity.abstract_entity import AbstractEntity
 
 class Copy(AbstractEntity):
     expected_fields = {
-        'versionId': {'field': 'version_id', 'method': '_version_id', 'required': True, 'type': 'int'},
-        'original': {'field': 'is_original', 'method': '_is_original', 'required': True, 'type': 'int'},
-        'boxType': {'field': 'box_type', 'method': '_box_type', 'required': True, 'type': 'strict-text', 'allowed_values': {'Big box', 'DVD', 'CD', 'None'}},
-        'casingType': {'field': 'casing_type', 'method': '_casing_type', 'required': True, 'type': 'strict-text', 'allowed_values': {'DVD', 'CD', 'Cardboard sleeve', 'Paper Sleeve', 'Plastic Sleeve', 'None'}},
-        'onCompilation': {'field': 'on_compilation', 'method': '_on_compilation', 'required': True, 'type': 'int'},
-        'reedition': {'field': 'is_reedition', 'method': '_is_reedition', 'required': True, 'type': 'int'},
-        'hasManual': {'field': 'has_manual', 'method': '_has_manual', 'required': True, 'type': 'int'},
-        'status': {'field': 'status', 'method': '_status', 'required': True, 'type': 'strict-text', 'allowed_values': {'In', 'Out'}},
-        'comments': {'field': 'comments', 'method': '_comments', 'required': False, 'type': 'text', 'default': ''},
+        'versionId': {
+            'field': 'version_id',
+            'method': '_version_id',
+            'required': True,
+            'type': 'int'
+        },
+        'original': {
+            'field': 'is_original',
+            'method': '_is_original',
+            'required': True,
+            'type': 'int'
+        },
+        'boxType': {
+            'field': 'box_type',
+            'method': '_box_type',
+            'required': True,
+            'type': 'strict-text',
+            'allowed_values': {'Big box', 'DVD', 'CD', 'None'}
+        },
+        'casingType': {
+            'field': 'casing_type',
+            'method': '_casing_type',
+            'required': True,
+            'type': 'strict-text',
+            'allowed_values': {
+                'DVD',
+                'CD',
+                'Cardboard sleeve',
+                'Paper Sleeve',
+                'Plastic Sleeve',
+                'None'
+            }
+        },
+        'onCompilation': {
+            'field': 'on_compilation',
+            'method': '_on_compilation',
+            'required': True, 'type': 'int'
+        },
+        'reedition': {
+            'field': 'is_reedition',
+            'method': '_is_reedition',
+            'required': True,
+            'type': 'int'
+        },
+        'hasManual': {
+            'field': 'has_manual',
+            'method': '_has_manual',
+            'required': True,
+            'type': 'int'
+        },
+        'status': {
+            'field': 'status',
+            'method': '_status',
+            'required': True,
+            'type': 'strict-text',
+            'allowed_values': {'In', 'Out'}
+        },
+        'comments': {
+            'field': 'comments',
+            'method': '_comments',
+            'required': False,
+            'type': 'text',
+            'default': ''
+        },
     }
 
     authorized_extra_fields_for_filtering = {
@@ -24,7 +79,7 @@ class Copy(AbstractEntity):
 # If you change the order here, you need to also change it in the array above!
     def __init__(
             self,
-            id,
+            entity_id,
             version_id,
             is_original,
             box_type,
@@ -33,9 +88,11 @@ class Copy(AbstractEntity):
             is_reedition,
             has_manual,
             status,
-            comments
+            comments,
+            platform_name = None,
+            game_title = None,
     ):
-        self.id = id
+        self.entity_id = entity_id
         self.version_id = int(version_id)
         self.is_original = bool(is_original)
         self.box_type = box_type
@@ -45,9 +102,11 @@ class Copy(AbstractEntity):
         self.has_manual = bool(has_manual)
         self.status = status
         self.comments = comments
+        self.platform_name = platform_name
+        self.game_title = game_title
 
     def get_id(self):
-        return self.id
+        return self.entity_id
 
     def get_version_id(self):
         return self.version_id
@@ -84,7 +143,7 @@ class Copy(AbstractEntity):
 
     def set_box_type(self, type):
         self.box_type = type
-    
+
     def set_casing_type(self, type):
         self.casing_type = type
 

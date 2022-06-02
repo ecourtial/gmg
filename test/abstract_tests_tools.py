@@ -19,7 +19,7 @@ class AbstractTestsTools(unittest.TestCase):
         headers = {} if headers is None else headers
 
         if authenticated_with_default_user is True:
-            headers['x-access-tokens'] = 'tokentest123'
+            headers['Authorization'] = 'token tokentest123'
 
         headers['Content-Type'] = 'application/json'
 

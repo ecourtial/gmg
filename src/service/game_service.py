@@ -12,7 +12,7 @@ class GameService(AbstractService):
     def __init__(self, mysql):
         self.repository = GameRepository(mysql)
 
-    def validate_payload_for_creation_and_hydrate(self):
+    def get_for_create(self):
         game = super().validate_payload_for_creation_and_hydrate(Game)
 
         existing_version = self.repository.get_by_title(game.get_title())
@@ -22,7 +22,7 @@ class GameService(AbstractService):
 
         return game
 
-    def validate_payload_for_update_and_hydrate(self, game_id):
+    def get_for_update(self, game_id):
         # Verification
         game = self.repository.get_by_id(game_id)
 

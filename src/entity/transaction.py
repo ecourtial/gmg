@@ -6,8 +6,25 @@ class Transaction(AbstractEntity):
         'year': {'field': 'year', 'method': '_year', 'required': True, 'type': 'int'},
         'month': {'field': 'month', 'method': '_month', 'required': True, 'type': 'int'},
         'day': {'field': 'day', 'method': '_day', 'required': True, 'type': 'int'},
-        'type': {'field': 'type', 'method': '_type', 'required': True, 'type': 'strict-text', 'allowed_values': {'Bought', 'Sold', 'Loan-out', 'Loan-out-return', 'Loan-in', 'Loan-in-return'}},
-        'notes': {'field': 'notes', 'method': '_notes', 'required': False, 'type': 'text', 'default': ''},
+        'type': {
+            'field': 'type',
+            'method': '_type',
+            'required': True,
+            'type': 'strict-text',
+            'allowed_values': {
+                'Bought', 'Sold',
+                'Loan-out',
+                'Loan-out-return',
+                'Loan-in', 'Loan-in-return'
+            }
+        },
+        'notes': {
+            'field': 'notes',
+            'method': '_notes',
+            'required': False,
+            'type': 'text',
+            'default': ''
+        },
     }
 
     authorized_extra_fields_for_filtering = {
@@ -16,7 +33,7 @@ class Transaction(AbstractEntity):
 
     table_name = 'transactions'
     primary_key = 'transaction_id'
-    
+
     transaction_in = {'Bought', 'Loan-out-return', 'Loan-in',}
     transaction_out = {'Sold', 'Loan-out', 'Loan-in-return'}
 
@@ -29,7 +46,9 @@ class Transaction(AbstractEntity):
             month,
             day,
             type,
-            notes
+            notes,
+            platform_name = None,
+            game_title = None,
     ):
         self.entity_id = entity_id
         self.copy_id = copy_id
@@ -38,6 +57,8 @@ class Transaction(AbstractEntity):
         self.day = day
         self.type = type
         self.notes = notes
+        self.platform_name = platform_name
+        self.game_title = game_title
 
     def get_id(self):
         return self.entity_id
@@ -60,8 +81,8 @@ class Transaction(AbstractEntity):
     def get_notes(self):
         return self.notes
 
-    def set_copy_id(self, id):
-        self.copy_id = id
+    def set_copy_id(self, entity_id):
+        self.copy_id = entity_id
 
     def set_year(self, year):
         self.year = year

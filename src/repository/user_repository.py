@@ -24,23 +24,44 @@ class UserRepository(AbstractRepository):
 
         return self.fetch_one(request, (user_name,))
 
-    def insert(self, user):
+    def insert(self, object, commit=True):
         """Inserts an user"""
         request = "INSERT INTO users (email, password, salt, status, user_name, token)"
         request += " VALUES (%s, %s, %s, 0, %s, %s);"
-        self.write(request, (user.get_email(), user.get_password(), user.get_salt(), user.get_user_name(), user.get_token()))
-        
-        return self.get_by_email(user.get_email())
+        self.write(
+            request,
+            (
+                object.get_email(),
+                object.get_password(),
+                object.get_salt(),
+                object.get_user_name(),
+                object.get_token()
+            ),
+            commit
+        )
 
-    def update(self, user):
+        return self.get_by_email(object.get_email())
+
+    def update(self, object, commit=True):
         """Updates an user"""
-        request = "UPDATE users SET email = %s, password = %s, status = %s, user_name = %s, token = %s WHERE id = %s;"
-        self.write(request, (user.get_email(), user.get_password(), user.get_is_active(), user.get_user_name(), user.get_token(), user.get_id()))
+        request = "UPDATE users SET email = %s, password = %s, status = %s, user_name = %s, token = %s " # pylint: disable=C0301
+        request += "WHERE id = %s;"
+        self.write(
+            request,
+            (
+                object.get_email(),
+                object.get_password(),
+                object.get_is_active(),
+                object.get_user_name(),
+                object.get_token(),
+                object.get_id()
+            ),
+            commit
+        )
 
-        return self.get_by_id(user.get_id())
+        return self.get_by_id(object.get_id())
 
-    @classmethod
-    def hydrate(cls, row):
+    def hydrate(self, row):
         """Hydrate an object from a row."""
         user = User(
             row['id'],

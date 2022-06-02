@@ -2,11 +2,15 @@
 import hashlib
 import random
 import string
+import base64
+from flask import request
 from src.exception.inactive_user_exception import InactiveUserException
 from src.exception.missing_field_exception import MissingFieldException
+from src.exception.missing_header_exception import MissingHeaderException
 from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
 from src.exception.unknown_resource_exception import ResourceNotFoundException
 from src.exception.unsupported_filter_exception import UnsupportedFilterException
+from src.exception.invalid_input import InvalidInput
 from src.repository.user_repository import UserRepository
 from src.helpers.json_helper import JsonHelper
 from src.entity.user import User
@@ -17,16 +21,25 @@ class UserService:
         self.user_repository = UserRepository(mysql)
 
     def authenticate(self):
-        email = JsonHelper.get_value_from_request('email', '')
-        password = JsonHelper.get_value_from_request('password', '')
+        if 'Authorization' in request.headers:
+            header_value = request.headers['Authorization']
+            if header_value.find(' ') != -1:
+                array = header_value.split(' ')
+                if array[0] == 'Basic':
+                    try:
+                        decoded_value  = base64.b64decode(array[1])
+                        decoded_value = decoded_value.decode('utf-8')
+                    except UnicodeDecodeError:
+                        raise InvalidInput(
+                            'Impossible to decode the value of the authentication header.'
+                        )
 
-        if email == '':
-            raise MissingFieldException('email')
+                    if decoded_value.find(':') != -1:
+                        array = decoded_value.split(':')
 
-        if password == '':
-            raise MissingFieldException('password')
+                        return self.get_authenticated_user(array[0], array[1])
 
-        return self.get_authenticated_user(email, password)
+        raise MissingHeaderException('Authorization')
 
     def get_by_filter(self, filter, filter_value):
         if filter == 'id':
@@ -49,26 +62,25 @@ class UserService:
 
         for api_field, data in User.expected_fields.items():
             value = JsonHelper.get_value_from_request(api_field, None)
-        
+
             if value is None:
                 if data['required'] is True:
                     raise MissingFieldException(api_field)
-                else:
-                    values.append(data['default'])
+                values.append(data['default'])
             else:
                 values.append(value)
 
         values.append(None)
         values.append(None)
 
-        user = User(*values)
+        user = User(*values) # pylint: disable=E1120
 
-        checkUser = self.user_repository.get_by_email(user.get_email())
-        if checkUser is not None:
+        check_user = self.user_repository.get_by_email(user.get_email())
+        if check_user is not None:
             raise ResourceAlreadyExistsException('user', user.get_email(), 'email')
 
-        checkUser = self.user_repository.get_by_user_name(user.get_user_name())
-        if checkUser is not None:
+        check_user = self.user_repository.get_by_user_name(user.get_user_name())
+        if check_user is not None:
             raise ResourceAlreadyExistsException('user', user.get_user_name(), 'username')
 
         return user
@@ -78,9 +90,9 @@ class UserService:
         user.set_salt(salt)
         user.set_password(self.get_hashed_password(user.get_password(), salt))
         user.set_token(self.get_new_token())
-        
+
         return self.user_repository.insert(user)
-    
+
     def update(self, user_id):
         # Verification
         user = self.user_repository.get_by_id(user_id)
@@ -91,28 +103,28 @@ class UserService:
         # Hydratation
         for api_field, data in User.expected_fields.items():
             value = JsonHelper.get_value_from_request(api_field, None)
-        
+
             if value is not None:
                 method_to_call = getattr(user, 'set' + data['method'])
                 method_to_call(value)
-        
+
         password = JsonHelper.get_value_from_request('password', None)
-        if (password != None):
+        if password is not None:
             user.set_password(self.get_hashed_password(password, user.get_salt()))
 
-        checkUser = self.user_repository.get_by_email(user.get_email())
-        if checkUser is not None:
+        check_user = self.user_repository.get_by_email(user.get_email())
+        if check_user is not None:
             raise ResourceAlreadyExistsException('user', user.get_email(), 'email')
 
-        checkUser = self.user_repository.get_by_user_name(user.get_user_name())
-        if checkUser is not None:
+        check_user = self.user_repository.get_by_user_name(user.get_user_name())
+        if check_user is not None:
             raise ResourceAlreadyExistsException('user', user.get_user_name(), 'username')
 
         return user
 
     def get_new_salt(self):
         return self.get_random_salt(8)
-    
+
     def get_new_token(self):
         return self.get_random_salt(32)
 

@@ -10,13 +10,13 @@ from src.helpers.json_helper import JsonHelper
 
 class VersionService(AbstractService):
     resource_type = 'version'
-    
+
     def __init__(self, mysql):
         self.repository = VersionRepository(mysql)
         self.game_repository = GameRepository(mysql)
         self.platform_repository = PlatformRepository(mysql)
 
-    def validate_payload_for_creation_and_hydrate(self):
+    def get_for_create(self):
         version = super().validate_payload_for_creation_and_hydrate(Version)
 
         platform = self.platform_repository.get_by_id(version.get_platform_id())
@@ -28,14 +28,20 @@ class VersionService(AbstractService):
         if game is None:
             raise ResourceNotFoundException('game', version.get_game_id())
 
-        existing_version = self.repository.get_by_unique_index(version.get_platform_id(), version.get_game_id())
+        existing_version = self.repository.get_by_unique_index(
+            version.get_platform_id(),
+            version.get_game_id()
+        )
 
         if existing_version is not None:
-            raise ResourceAlreadyExistsException('platform-game couple', str(version.get_platform_id()) + ':' + str(version.get_game_id()))
+            raise ResourceAlreadyExistsException(
+                'platform-game couple',
+                str(version.get_platform_id()) + ':' + str(version.get_game_id())
+            )
 
         return version
 
-    def validate_payload_for_update_and_hydrate(self, version_id):
+    def get_for_update(self, version_id):
         # Verification
         version = self.repository.get_by_id(version_id)
 

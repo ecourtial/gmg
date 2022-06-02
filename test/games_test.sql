@@ -222,7 +222,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'foo@bar.com','somePassword','someSalt',1,'Eric','tokentest123');
+INSERT INTO `users` VALUES (1,'foo@bar.com','802cee6fdb8f3964700a7d789bd034cee6e5dba100f2c3df1fcb2b9afdc97b2b','kK0pXVUq',1,'Eric','tokentest123');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -286,4 +286,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-31 12:49:54
+-- Dump completed on 2022-06-01  9:54:55

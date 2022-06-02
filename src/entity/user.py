@@ -9,8 +9,19 @@ class User:
     expected_fields = {
         'email': {'field': 'email', 'method': '_email', 'required': True, 'type': 'text'},
         'password': {'field': 'password', 'method': '_password', 'required': True, 'type': 'text'},
-        'active': {'field': 'status', 'method': '_is_active', 'required': False, 'type': 'int', 'default': 0},
-        'username': {'field': 'user_name', 'method': '_user_name', 'required': True, 'type': 'text'},
+        'active': {
+            'field': 'status',
+            'method': '_is_active',
+            'required': False,
+            'type': 'int',
+            'default': 0
+        },
+        'username': {
+            'field': 'user_name',
+            'method': '_user_name',
+            'required': True,
+            'type': 'text'
+        },
     }
 
     authorized_extra_fields_for_filtering = {}
@@ -18,8 +29,8 @@ class User:
     table_name = 'users'
     primary_key = 'id'
 
-    def __init__(self, id, email, password, status, user_name, salt, token):
-        self.user_id = id
+    def __init__(self, entity_id, email, password, status, user_name, salt, token):
+        self.user_id = entity_id
         self.email = email
         self.password = password
         self.status = int(status)

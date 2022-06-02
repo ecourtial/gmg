@@ -1,33 +1,159 @@
 from src.entity.abstract_entity import AbstractEntity
 
 class Version(AbstractEntity):
-    """ This class represent a version of a game, for instance, the PC version of Monkey Island IV """
+    """ This class represent a version of a game, e.g the PC version of Monkey Island IV """
     # If you change the order here, you need to also change it in the constructor!
     expected_fields = {
-        'platformId': {'field': 'platform_id', 'method': '_platform_id', 'required': True, 'type': 'int'},
-        'gameId': {'field': 'game_id', 'method': '_game_id', 'required': True, 'type': 'int'},
-        'releaseYear': {'field': 'release_year', 'method': '_release_year', 'required': True, 'type': 'int'},
-        'todoSoloSometimes': {'field': 'todo_solo_sometimes', 'method': '_todo_solo_sometimes', 'required': True, 'type': 'int'},
-        'todoMultiplayerSometimes': {'field': 'todo_multiplayer_sometimes', 'method': '_todo_multiplayer_sometimes', 'required': True, 'type': 'int'},
-        'singleplayerRecurring': {'field': 'singleplayer_recurring', 'method': '_singleplayer_recurring', 'required': True, 'type': 'int'},
-        'multiplayerRecurring': {'field': 'multiplayer_recurring', 'method': '_multiplayer_recurring', 'required': True, 'type': 'int'},
-        'toDo': {'field': 'to_do', 'method': '_to_do', 'required': True, 'type': 'int'},
-        'toBuy': {'field': 'to_buy', 'method': '_to_buy', 'required': True, 'type': 'int'},
-        'toWatchBackground': {'field': 'to_watch_background', 'method': '_to_watch_background', 'required': True, 'type': 'int'},
-        'toWatchSerious': {'field': 'to_watch_serious', 'method': '_to_watch_serious', 'required': True, 'type': 'int'},
-        'toRewatch': {'field': 'to_rewatch', 'method': '_to_rewatch', 'required': True, 'type': 'int'},
-        'topGame': {'field': 'top_game', 'method': '_top_game', 'required': True, 'type': 'int'},
-        'hallOfFame': {'field': 'hall_of_fame', 'method': '_hall_of_fame', 'required': True, 'type': 'int'},
-        'hallOfFameYear': {'field': 'hall_of_fame_year', 'method': '_hall_of_fame_year', 'required': False, 'type': 'int', 'default': 0},
-        'hallOfFamePosition': {'field': 'hall_of_fame_position', 'method': '_hall_of_fame_position', 'required': False, 'type': 'int', 'default': 0},
-        'playedItOften': {'field': 'played_it_often', 'method': '_played_it_often', 'required': True, 'type': 'int'},
-        'ongoing': {'field': 'ongoing', 'method': '_ongoing', 'required': True, 'type': 'int'},
-        'comments': {'field': 'comments', 'method': '_comments', 'required': False, 'type': 'text', 'default': ''},
-        'todoWithHelp': {'field': 'todo_with_help', 'method': '_todo_with_help', 'required': True, 'type': 'int'},
-        'bestGameForever': {'field': 'bgf', 'method': '_best_game_forever', 'required': True, 'type': 'int'},
-        'toWatchPosition': {'field': 'to_watch_position', 'method': '_to_watch_position', 'required': False, 'type': 'int', 'default': 0},
-        'toDoPosition': {'field': 'to_do_position', 'method': '_to_do_position', 'required': False, 'type': 'int', 'default': 0},
-        'finished': {'field': 'finished', 'method': '_finished', 'required': False, 'type': 'int', 'default': 0},
+        'platformId':
+            {'field': 'platform_id',
+            'method': '_platform_id',
+            'required': True,
+            'type': 'int'
+        },
+        'gameId': {
+            'field': 'game_id',
+            'method': '_game_id',
+            'required': True,
+            'type': 'int'
+        },
+        'releaseYear': {
+            'field': 'release_year',
+            'method': '_release_year',
+            'required': True,
+            'type': 'int'
+        },
+        'todoSoloSometimes': {
+            'field': 'todo_solo_sometimes',
+            'method': '_todo_solo_sometimes',
+            'required': True,
+            'type': 'int'
+        },
+        'todoMultiplayerSometimes': {
+            'field': 'todo_multiplayer_sometimes',
+            'method': '_todo_multiplayer_sometimes',
+            'required': True,
+            'type': 'int'
+        },
+        'singleplayerRecurring': {
+            'field': 'singleplayer_recurring',
+            'method': '_singleplayer_recurring',
+            'required': True,
+            'type': 'int'
+        },
+        'multiplayerRecurring': {
+            'field': 'multiplayer_recurring',
+            'method': '_multiplayer_recurring',
+            'required': True,
+            'type': 'int'
+        },
+        'toDo': {
+            'field': 'to_do',
+            'method': '_to_do',
+            'required': True,
+            'type': 'int'
+        },
+        'toBuy': {
+            'field': 'to_buy',
+            'method': '_to_buy',
+            'required': True,
+            'type': 'int'
+        },
+        'toWatchBackground': {
+            'field': 'to_watch_background',
+            'method': '_to_watch_background',
+            'required': True,
+            'type': 'int'
+        },
+        'toWatchSerious': {
+            'field': 'to_watch_serious',
+            'method': '_to_watch_serious',
+            'required': True,
+            'type': 'int'
+        },
+        'toRewatch': {
+            'field': 'to_rewatch',
+            'method': '_to_rewatch',
+            'required': True,
+            'type': 'int'
+        },
+        'topGame': {
+            'field': 'top_game',
+            'method': '_top_game',
+            'required': True,
+            'type': 'int'
+        },
+        'hallOfFame': {
+            'field': 'hall_of_fame',
+            'method': '_hall_of_fame',
+            'required': True,
+            'type': 'int'
+        },
+        'hallOfFameYear': {
+            'field': 'hall_of_fame_year',
+            'method': '_hall_of_fame_year',
+            'required': False,
+            'type': 'int',
+            'default': 0
+        },
+        'hallOfFamePosition': {
+            'field': 'hall_of_fame_position',
+            'method': '_hall_of_fame_position',
+            'required': False,
+            'type': 'int',
+            'default': 0
+        },
+        'playedItOften': {
+            'field': 'played_it_often',
+            'method': '_played_it_often',
+            'required': True,
+            'type': 'int'
+        },
+        'ongoing': {
+            'field': 'ongoing',
+            'method': '_ongoing',
+            'required': True,
+            'type': 'int'
+        },
+        'comments': {
+            'field': 'comments',
+            'method': '_comments',
+            'required': False,
+            'type': 'text',
+            'default': ''
+        },
+        'todoWithHelp': {
+            'field': 'todo_with_help',
+            'method': '_todo_with_help',
+            'required': True,
+            'type': 'int'
+        },
+        'bestGameForever': {
+            'field': 'bgf',
+            'method': '_best_game_forever',
+            'required': True,
+            'type': 'int'
+        },
+        'toWatchPosition': {
+            'field': 'to_watch_position',
+            'method': '_to_watch_position',
+            'required': False,
+            'type': 'int',
+            'default': 0
+        },
+        'toDoPosition': {
+            'field': 'to_do_position',
+            'method': '_to_do_position',
+            'required': False,
+            'type': 'int',
+            'default': 0
+        },
+        'finished': {
+            'field': 'finished',
+            'method': '_finished',
+            'required': False,
+            'type': 'int',
+            'default': 0
+        },
     }
 
     authorized_extra_fields_for_filtering = {
@@ -42,7 +168,7 @@ class Version(AbstractEntity):
     # If you change the order here, you need to also change it in the array above!
     def __init__(
             self,
-            id,
+            entity_id,
             platform_id,
             game_id,
             release_year,
@@ -66,9 +192,11 @@ class Version(AbstractEntity):
             bgf,
             to_watch_position,
             to_do_position,
-            finished
+            finished,
+            platform_name = None,
+            game_title = None,
     ):
-        self.id = id
+        self.entity_id = entity_id
         self.platform_id = int(platform_id)
         self.game_id = int(game_id)
         self.release_year = int(release_year)
@@ -93,21 +221,23 @@ class Version(AbstractEntity):
         self.to_watch_position = int(to_watch_position)
         self.to_do_position = int(to_do_position)
         self.finished = bool(finished)
+        self.platform_name = platform_name
+        self.game_title = game_title
 
     def get_id(self):
-        return self.id
+        return self.entity_id
 
     def get_platform_id(self):
         return self.platform_id
 
-    def set_platform_id(self, id):
-        self.platform_id = int(id)
+    def set_platform_id(self, entity_id):
+        self.platform_id = int(entity_id)
 
     def get_game_id(self):
         return self.game_id
 
-    def set_game_id(self, id):
-        self.game_id = int(id)
+    def set_game_id(self, entity_id):
+        self.game_id = int(entity_id)
 
     def get_release_year(self):
         return self.release_year
