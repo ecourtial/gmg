@@ -157,9 +157,7 @@ class Version(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering = {
-        'gameTitle',
-        'platformName',
-        'version_id',
+        'versionId': {'field': 'version_id'}
     }
 
     table_name = 'versions'

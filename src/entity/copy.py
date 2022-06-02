@@ -70,7 +70,7 @@ class Copy(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering = {
-        'copy_id'
+        'copyId': {'field': 'copy_id'}
     }
 
     table_name = 'copies'

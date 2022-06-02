@@ -28,7 +28,7 @@ class Transaction(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering = {
-        'transaction_id'
+        'id': {'field': 'transaction_id'}
     }
 
     table_name = 'transactions'

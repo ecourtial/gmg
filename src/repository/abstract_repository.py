@@ -89,7 +89,12 @@ class AbstractRepository:# pylint: disable=no-member
         filter_request = ''
         values = []
 
-        for api_field, data in self.entity.expected_fields.items():
+        usable_fields = {
+            **self.entity.expected_fields,
+            **self.entity.authorized_extra_fields_for_filtering
+        }
+
+        for api_field, data in usable_fields.items():
             current_filter_values = filters.getlist(api_field + '[]')
             if 0 != len(current_filter_values):
                 or_request = ' AND ('
@@ -119,11 +124,10 @@ class AbstractRepository:# pylint: disable=no-member
         page = 1 if page < 1 else page
         offset = (page * limit) - limit
 
-        if order_by not in self.entity.authorized_extra_fields_for_filtering:
-            if order_by in self.entity.expected_fields:
-                order_by = self.entity.expected_fields[order_by]['field']
-            else:
-                order_by = self.entity.primary_key
+        if order_by in usable_fields:
+            order_by = usable_fields[order_by]['field']
+        else:
+            order_by = self.entity.primary_key
 
         order = order.lower()
         if order not in ['asc', 'desc']:

@@ -349,7 +349,7 @@ class TestVersions(AbstractTests):
             self.assertEqual('Mario Kart Wii', resp.json()['result'][1]['gameTitle'])
 
     def test_filter_multiple_with_custom_sorting_not_native_fields(self):
-            resp = self.api_call('get', 'versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&order_by=platformName&order=DESC', None, True)
+            resp = self.api_call('get', 'versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&order_by=versionId&order=DESC', None, True)
 
             self.assertEqual(200, resp.status_code)
             self.assertEqual(2, resp.json()['resultCount'])
@@ -357,11 +357,11 @@ class TestVersions(AbstractTests):
             self.assertEqual(1, resp.json()['page'])
             self.assertEqual(1, resp.json()['totalPageCount'])
 
-            self.assertEqual(85, resp.json()['result'][0]['gameId'])
-            self.assertEqual('Mario Kart Wii', resp.json()['result'][0]['gameTitle'])
+            self.assertEqual(201, resp.json()['result'][0]['gameId'])
+            self.assertEqual('Discworld', resp.json()['result'][0]['gameTitle'])
 
-            self.assertEqual(201, resp.json()['result'][1]['gameId'])
-            self.assertEqual('Discworld', resp.json()['result'][1]['gameTitle'])
+            self.assertEqual(85, resp.json()['result'][1]['gameId'])
+            self.assertEqual('Mario Kart Wii', resp.json()['result'][1]['gameTitle'])
 
     def test_filter_pagination_and_offset(self):
             resp = self.api_call('get', 'versions?hallOfFame[]=1&page=3', None, True)

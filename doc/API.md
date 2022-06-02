@@ -45,7 +45,7 @@ There are 4 methods available:
 
 There is also another one to search for resources. The endpoint uses the GET verb and all the parameters are in the query string. Note that this time the resource in the URI is plural. Let's see an example:
 
-_versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&order_by=id_order=desc&page=2&limit=5_
+_versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&order_by=Id_order=desc&page=2&limit=5_
 
 In the above example you want to search for:
 * resource of type version;

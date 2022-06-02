@@ -16,7 +16,7 @@ class TestPlatforms(AbstractTests):
         resp = self.api_call('get', 'platform/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'id': 1, 'name': 'PC'}, resp.json())
+        self.assertEqual({'id': 1, 'name': 'PC', 'versionCount': 232}, resp.json())
 
     def test_create_incomplete_payload(self):
         resp = self.api_call('post', 'platform', {}, True)
@@ -36,6 +36,7 @@ class TestPlatforms(AbstractTests):
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual('Genesis', resp.json()["name"])
+        self.assertEqual(0, resp.json()["versionCount"])
         platform_id = str(resp.json()["id"])
 
         # Patch
@@ -67,7 +68,7 @@ class TestPlatforms(AbstractTests):
         resp = self.api_call('get', 'platform/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'id': 1, 'name': 'PC'}, resp.json())
+        self.assertEqual({'id': 1, 'name': 'PC', 'versionCount': 232}, resp.json())
 
     def test_get_list_default_filters(self):
         resp = self.api_call('get', 'platforms', {}, True)

@@ -12,7 +12,9 @@ class Game(AbstractEntity):
         },
     }
 
-    authorized_extra_fields_for_filtering = {'id'}
+    authorized_extra_fields_for_filtering = {
+        'id': {'field': 'id'}
+    }
 
     table_name = 'games'
     primary_key = 'id'

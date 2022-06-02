@@ -17,7 +17,7 @@ class Story(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering = {
-        'id'
+        'id': {'field': 'id'}
     }
 
     table_name = 'stories'
