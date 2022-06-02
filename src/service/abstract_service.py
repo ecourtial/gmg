@@ -3,7 +3,7 @@ from src.exception.missing_field_exception import MissingFieldException
 from src.exception.unsupported_value_exception import UnsupportedValueException
 from src.helpers.json_helper import JsonHelper
 
-class AbstractService: # pylint: disable=no-member, R0201
+class AbstractService: # pylint: disable=no-member,no-self-use
     def get_by_id(self, entity_id):
         object = self.repository.get_by_id(entity_id)
 

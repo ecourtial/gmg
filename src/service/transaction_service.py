@@ -53,7 +53,7 @@ class TransactionService(AbstractService):
 
         return True
 
-    def validate_transaction_status(self, copy, transaction):#pylint: disable=R0201
+    def validate_transaction_status(self, copy, transaction):#pylint: disable=no-self-use
         """Check if the transaction is legit and toggle the status of the copy"""
         if ((transaction.get_type() in transaction.transaction_in and copy.get_status() == 'In') or
             (transaction.get_type() in transaction.transaction_out and copy.get_status() == 'Out')):
