@@ -31,6 +31,7 @@ class TestCopies(AbstractTests):
             "reedition": True,
             "hasManual": False,
             "status": "In",
+            'type': 'Physical',
             "comments": "Found it somewhere"
         }
         resp = self.api_call('post', 'copy', payload, True)
@@ -76,9 +77,11 @@ class TestCopies(AbstractTests):
                 "reedition": False,
                 "hasManual": True,
                 "status": "In",
+                'type': 'Physical',
                 "comments": "Bought it in 2004",
-                'gameTitle': 'Sega Soccer',
-                'platformName': 'Megadrive II',
+                'gameTitle': 'Tonic Trouble',
+                'platformName': 'PC',
+                'transactionCount': 2,
         }
 
         self.assertEqual(200, resp.status_code)
@@ -95,9 +98,11 @@ class TestCopies(AbstractTests):
                 "reedition": True,
                 "hasManual": False,
                 "status": "In",
+                'type': 'Virtual',
                 "comments": "Found it somewhere",
-                'gameTitle': 'Super Monaco GP',
-                'platformName': 'Megadrive II',
+                'gameTitle': 'Tonic Trouble',
+                'platformName': 'PC',
+                'transactionCount': 0
         }
 
         resp = self.api_call('post', 'copy', payload, True)
@@ -121,8 +126,10 @@ class TestCopies(AbstractTests):
             "hasManual": False,
             "status": "In",
             "comments": "Found it somewhere",
-            'platformName': 'Megadrive II',
-            'gameTitle': 'Super Monaco GP',
+            'platformName': 'PC',
+            'gameTitle': 'Tonic Trouble',
+            'transactionCount': 0,
+            'type': 'Physical',
         }
 
         resp = self.api_call('patch', 'copy/' + copy_id, payload, True)
@@ -173,14 +180,14 @@ class TestCopies(AbstractTests):
         resp = self.api_call('delete', 'copy/1', None, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': "The following resource type 'copy' has children of type 'trade', so it cannot be deleted."}, resp.json())
+        self.assertEqual({'message': "The following resource type 'copy' has children of type 'transaction', so it cannot be deleted."}, resp.json())
 
     def test_get_list_default_filters(self):
         resp = self.api_call('get', 'copies', None, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual(2, resp.json()['resultCount'])
-        self.assertEqual(2, resp.json()['totalResultCount'])
+        self.assertEqual(3, resp.json()['resultCount'])
+        self.assertEqual(3, resp.json()['totalResultCount'])
         self.assertEqual(1, resp.json()['page'])
         self.assertEqual(1, resp.json()['totalPageCount'])
 
@@ -200,8 +207,8 @@ class TestCopies(AbstractTests):
         resp = self.api_call('get', 'copies?boxType[]=none', None, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual(1, resp.json()['resultCount'])
-        self.assertEqual(1, resp.json()['totalResultCount'])
+        self.assertEqual(2, resp.json()['resultCount'])
+        self.assertEqual(2, resp.json()['totalResultCount'])
         self.assertEqual(1, resp.json()['page'])
         self.assertEqual(1, resp.json()['totalPageCount'])
 
@@ -209,13 +216,13 @@ class TestCopies(AbstractTests):
         self.assertEqual(349, resp.json()['result'][0]['versionId'])
 
     def test_filter_multiple(self):
-        resp = self.api_call('get', 'copies?&original[]=1&order_by=id&order=DESC&page=1&limit=1', None, True)
+        resp = self.api_call('get', 'copies?&original[]=1&orderBy[]=id-desc&page=1&limit=1', None, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual(1, resp.json()['resultCount'])
-        self.assertEqual(2, resp.json()['totalResultCount'])
+        self.assertEqual(3, resp.json()['totalResultCount'])
         self.assertEqual(1, resp.json()['page'])
-        self.assertEqual(2, resp.json()['totalPageCount'])
+        self.assertEqual(3, resp.json()['totalPageCount'])
 
-        self.assertEqual(2, resp.json()['result'][0]['id'])
-        self.assertEqual(349, resp.json()['result'][0]['versionId'])
+        self.assertEqual(3, resp.json()['result'][0]['id'])
+        self.assertEqual(245, resp.json()['result'][0]['versionId'])

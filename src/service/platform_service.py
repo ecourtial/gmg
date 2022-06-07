@@ -45,9 +45,7 @@ class PlatformService(AbstractService):
         if platform is None:
             raise ResourceNotFoundException('platform', platform_id)
 
-        count = self.repository.get_versions_count_for_platform(platform_id)['count']
-
-        if count > 0:
+        if platform.get_version_count() > 0:
             raise RessourceHasChildrenException('platform', 'version')
 
         self.repository.delete(platform_id)

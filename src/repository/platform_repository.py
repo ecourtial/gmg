@@ -8,10 +8,10 @@ class PlatformRepository(AbstractRepository):
 
     def get_select_request_start(self):
         request = f"SELECT {Platform.table_name}.*, v.versionCount AS versionCount "
-        request += f"FROM "
-        request += f"     (SELECT COUNT(*) AS versionCount, {Platform.table_name}.id AS platform_id "
+        request += 'FROM '
+        request += f"     (SELECT COUNT(*) AS versionCount, {Platform.table_name}.id AS platform_id " # pylint: disable=C0301
         request += f"      FROM {Version.table_name}, {Platform.table_name}  "
-        request += f"      WHERE {Version.table_name}.platform_id = {Platform.table_name}.{Platform.primary_key} "
+        request += f"      WHERE {Version.table_name}.platform_id = {Platform.table_name}.{Platform.primary_key} " # pylint: disable=C0301
         request += f"      GROUP BY {Platform.table_name}.{Platform.primary_key}) AS v "
         request += f"RIGHT JOIN {Platform.table_name} ON "
         request += f"{Platform.table_name}.{Platform.primary_key} = v.platform_id WHERE TRUE "
@@ -24,15 +24,9 @@ class PlatformRepository(AbstractRepository):
 
         return self.fetch_one(request, (name,))
 
-    def get_versions_count_for_platform(self, platform_id):
-        request = f"SELECT COUNT(*) as count FROM {Version.table_name} WHERE platform_id = %s"
-
-        return self.fetch_cursor(request, (platform_id,))
-
     def hydrate(self, row):
         """Hydrate an object from a row."""
         version = super().hydrate(row)
         version.set_version_count(row['versionCount'])
 
         return version
-

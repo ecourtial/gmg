@@ -43,7 +43,9 @@ class TestVersions(AbstractTests):
             "todoMultiplayerSometimes": False,
             "todoSoloSometimes": False,
             "todoWithHelp": False,
-            "topGame": False
+            "topGame": False,
+            "storyCount" : 0,
+            "copyCount" : 0
         }
 
         self.assertEqual(expected_result, resp.json())
@@ -212,7 +214,7 @@ class TestVersions(AbstractTests):
 
         # Create
         resp = self.api_call('post', 'version', payload, True)
-
+        
         self.assertEqual(200, resp.status_code)
 
         payload['id'] = int(resp.json()["id"])
@@ -220,6 +222,8 @@ class TestVersions(AbstractTests):
         payload['gameTitle'] = 'Something'
         payload['gameId'] = int(resp.json()["gameId"])
         payload['platformName'] = 'Megadrive II'
+        payload['storyCount'] = 0
+        payload['copyCount'] = 0
 
         self.assertEqual(payload, resp.json())
 
@@ -319,7 +323,7 @@ class TestVersions(AbstractTests):
         self.assertEqual('Discworld', resp.json()['result'][1]['gameTitle'])
 
     def test_filter_multiple_with_unknown_sorting(self):
-        resp = self.api_call('get', 'versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&order_by=foo&order=bar', None, True)
+        resp = self.api_call('get', 'versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&orderBy[]=foo-bar', None, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual(2, resp.json()['resultCount'])
@@ -334,7 +338,7 @@ class TestVersions(AbstractTests):
         self.assertEqual('Discworld', resp.json()['result'][1]['gameTitle'])
 
     def test_filter_multiple_with_custom_sorting(self):
-            resp = self.api_call('get', 'versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&order_by=gameId&order=DESC', None, True)
+            resp = self.api_call('get', 'versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&orderBy[]=gameId-DESC', None, True)
 
             self.assertEqual(200, resp.status_code)
             self.assertEqual(2, resp.json()['resultCount'])
@@ -349,7 +353,7 @@ class TestVersions(AbstractTests):
             self.assertEqual('Mario Kart Wii', resp.json()['result'][1]['gameTitle'])
 
     def test_filter_multiple_with_custom_sorting_not_native_fields(self):
-            resp = self.api_call('get', 'versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&order_by=versionId&order=DESC', None, True)
+            resp = self.api_call('get', 'versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&orderBy[]=id-DESC', None, True)
 
             self.assertEqual(200, resp.status_code)
             self.assertEqual(2, resp.json()['resultCount'])

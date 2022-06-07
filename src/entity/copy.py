@@ -60,6 +60,16 @@ class Copy(AbstractEntity):
             'type': 'strict-text',
             'allowed_values': {'In', 'Out'}
         },
+        'type': {
+            'field': 'type',
+            'method': '_type',
+            'required': True,
+            'type': 'strict-text',
+            'allowed_values': {
+                'Physical',
+                'Virtual',
+            }
+        },
         'comments': {
             'field': 'comments',
             'method': '_comments',
@@ -70,7 +80,10 @@ class Copy(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering = {
-        'copyId': {'field': 'copy_id'}
+        'id': {'field': 'copy_id', 'origin': 'native', 'type': 'int'},
+        'transactionCount': {'field': 'transactionCount', 'origin': 'computed', 'type': 'int'},
+        'platformName': {'field': 'platformName', 'origin': 'computed', 'type': 'string'},
+        'gameTitle': {'field': 'gameTitle', 'origin': 'computed', 'type': 'string'},
     }
 
     table_name = 'copies'
@@ -88,9 +101,11 @@ class Copy(AbstractEntity):
             is_reedition,
             has_manual,
             status,
+            type,
             comments,
             platform_name = None,
             game_title = None,
+            transaction_count = None,
     ):
         self.entity_id = entity_id
         self.version_id = int(version_id)
@@ -101,9 +116,11 @@ class Copy(AbstractEntity):
         self.is_reedition = bool(is_reedition)
         self.has_manual = bool(has_manual)
         self.status = status
+        self.type = type
         self.comments = comments
         self.platform_name = platform_name
         self.game_title = game_title
+        self.transaction_count = int(transaction_count or 0)
 
     def get_id(self):
         return self.entity_id
@@ -132,6 +149,9 @@ class Copy(AbstractEntity):
     def get_status(self):
         return self.status
 
+    def get_type(self):
+        return self.type
+
     def get_comments(self):
         return self.comments
 
@@ -159,6 +179,9 @@ class Copy(AbstractEntity):
     def set_status(self, status):
         self.status = status
 
+    def set_type(self, type):
+        self.type = type
+
     def set_comments(self, comments):
         self.comments = comments
 
@@ -174,10 +197,17 @@ class Copy(AbstractEntity):
     def set_platform_name(self, platform_name):
         self.platform_name = platform_name
 
+    def get_transaction_count(self):
+        return self.transaction_count
+
+    def set_transaction_count(self, transaction_count):
+        self.transaction_count = int(transaction_count or 0)
+
     def serialize(self):
         values = super().serialize()
 
         values['platformName'] = self.get_platform_name()
         values['gameTitle'] = self.get_game_title()
+        values['transactionCount'] = self.get_transaction_count()
 
         return values

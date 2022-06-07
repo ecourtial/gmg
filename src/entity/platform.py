@@ -8,7 +8,8 @@ class Platform(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering = {
-        'id': {'field': 'id'}
+        'id': {'field': 'id', 'origin': 'native', 'type': 'int'},
+        'versionCount': {'field': 'versionCount', 'origin': 'computed', 'type': 'int'}
     }
 
     table_name = 'platforms'

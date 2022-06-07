@@ -77,9 +77,10 @@ class VersionService(AbstractService):
         if version is None:
             raise ResourceNotFoundException('version', version_id)
 
-        count = self.repository.get_copies_count_for_version(version_id)['count']
+        if version.get_story_count() > 0:
+            raise RessourceHasChildrenException('version', 'story')
 
-        if count > 0:
+        if version.get_copy_count() > 0:
             raise RessourceHasChildrenException('version', 'copy')
 
         self.repository.delete(version_id)

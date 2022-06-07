@@ -17,7 +17,9 @@ class Story(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering = {
-        'id': {'field': 'id'}
+        'id': {'field': 'id', 'origin': 'native', 'type': 'int'},
+        'platformName': {'field': 'platformName', 'origin': 'computed', 'type': 'string'},
+        'gameTitle': {'field': 'gameTitle', 'origin': 'computed', 'type': 'string'},
     }
 
     table_name = 'stories'

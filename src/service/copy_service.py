@@ -43,10 +43,8 @@ class CopyService(AbstractService):
         if copy is None:
             raise ResourceNotFoundException('copy', copy_id)
 
-        count = self.repository.get_trades_count_for_copy(copy_id)['count']
-
-        if count > 0:
-            raise RessourceHasChildrenException('copy', 'trade')
+        if copy.get_transaction_count() > 0:
+            raise RessourceHasChildrenException('copy', 'transaction')
 
         self.repository.delete(copy_id)
 

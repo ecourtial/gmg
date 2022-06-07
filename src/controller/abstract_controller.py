@@ -79,7 +79,5 @@ class AbstractController:# pylint: disable=no-member
 
         page = request.args.get('page', 1)
         limit = request.args.get('limit', 30)
-        order_by = request.args.get('order_by', '')
-        order = request.args.get('order', '')
 
-        return jsonify(repo.get_list(request.args, page, limit, order_by, order))
+        return jsonify(repo.get_list(request.args, page, limit))

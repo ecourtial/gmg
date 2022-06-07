@@ -170,7 +170,7 @@ class TestTransactions(AbstractTests):
         self.assertEqual(1, resp.json()['result'][0]['copyId'])
 
     def test_filter_multiple(self):
-        resp = self.api_call('get', 'transactions?type[]=Loan-out&order_by=id&order=DESC&page=1&limit=1', None, True)
+        resp = self.api_call('get', 'transactions?type[]=Loan-out&orderBy[]=id-DESC&page=1&limit=1', None, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual(1, resp.json()['resultCount'])
@@ -192,6 +192,7 @@ class TestTransactions(AbstractTests):
                 "reedition": True,
                 "hasManual": False,
                 "status": "In",
+                'type': 'Physical',
                 "comments": "Well well well..."
         }
 
@@ -268,6 +269,7 @@ class TestTransactions(AbstractTests):
                 "onCompilation": True,
                 "reedition": True,
                 "hasManual": False,
+                'type': 'Physical',
                 "status": "Out",
                 "comments": "Well well well..."
         }

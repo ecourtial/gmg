@@ -12,10 +12,12 @@ class Transaction(AbstractEntity):
             'required': True,
             'type': 'strict-text',
             'allowed_values': {
-                'Bought', 'Sold',
+                'Bought',
+                'Sold',
                 'Loan-out',
                 'Loan-out-return',
-                'Loan-in', 'Loan-in-return'
+                'Loan-in',
+                'Loan-in-return'
             }
         },
         'notes': {
@@ -28,7 +30,9 @@ class Transaction(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering = {
-        'id': {'field': 'transaction_id'}
+        'id': {'field': 'transaction_id', 'origin': 'native', 'type': 'int'},
+        'platformName': {'field': 'platformName', 'origin': 'computed', 'type': 'string'},
+        'gameTitle': {'field': 'gameTitle', 'origin': 'computed', 'type': 'string'},
     }
 
     table_name = 'transactions'

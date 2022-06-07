@@ -16,7 +16,7 @@ class TestPlatforms(AbstractTests):
         resp = self.api_call('get', 'game/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'id': 1, 'title': 'Sega Soccer', 'notes': 'super jeu !!!'}, resp.json())
+        self.assertEqual({'id': 1, 'title': 'Sega Soccer', 'notes': 'super jeu !!!', 'versionCount': 1}, resp.json())
 
     def test_create_incomplete_payload(self):
         resp = self.api_call('post', 'game', {}, True)
@@ -41,6 +41,7 @@ class TestPlatforms(AbstractTests):
 
         resp = self.api_call('get', 'game/' + game_id, None, True)
         payload['id'] = 381
+        payload['versionCount'] = 0
         self.assertEqual(payload, resp.json())
 
         # Patch
@@ -73,7 +74,7 @@ class TestPlatforms(AbstractTests):
         resp = self.api_call('get', 'game/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'id': 1, 'title': 'Sega Soccer', 'notes': 'super jeu !!!'}, resp.json())
+        self.assertEqual({'id': 1, 'title': 'Sega Soccer', 'notes': 'super jeu !!!', 'versionCount': 1}, resp.json())
 
     def test_get_list_default_filters(self):
         resp = self.api_call('get', 'games', {}, True)
@@ -98,3 +99,41 @@ class TestPlatforms(AbstractTests):
 
         self.assertEqual(4, resp.json()['result'][1]['id'])
         self.assertEqual('Revenge Of Shinobi', resp.json()['result'][1]['title'])
+
+    def test_filter_extra_field(self):
+        resp = self.api_call('get', 'games?versionCount[]=gt-1', {}, True)
+
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(8, resp.json()['resultCount'])
+        self.assertEqual(8, resp.json()['totalResultCount'])
+        self.assertEqual(1, resp.json()['page'])
+        self.assertEqual(1, resp.json()['totalPageCount'])
+
+        self.assertEqual(8, resp.json()['result'][0]['id'])
+        self.assertEqual('Tomb Raider', resp.json()['result'][0]['title'])
+        self.assertEqual(2, resp.json()['result'][0]['versionCount'])
+
+        self.assertEqual(287, resp.json()['result'][7]['id'])
+        self.assertEqual('Tomb Raider V', resp.json()['result'][7]['title'])
+        self.assertEqual(2, resp.json()['result'][7]['versionCount'])
+
+    def test_filter_order_by_on_native_and_extra_field(self):
+        resp = self.api_call('get', 'games?orderBy[]=versionCount-desc&orderBy[]=title-asc', {}, True)
+
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(30, resp.json()['resultCount'])
+        self.assertEqual(341, resp.json()['totalResultCount'])
+        self.assertEqual(1, resp.json()['page'])
+        self.assertEqual(12, resp.json()['totalPageCount'])
+
+        self.assertEqual(29, resp.json()['result'][0]['id'])
+        self.assertEqual('Fifa 97', resp.json()['result'][0]['title'])
+        self.assertEqual(2, resp.json()['result'][0]['versionCount'])
+
+        self.assertEqual(27, resp.json()['result'][1]['id'])
+        self.assertEqual('Fifa 98', resp.json()['result'][1]['title'])
+        self.assertEqual(2, resp.json()['result'][1]['versionCount'])
+
+        self.assertEqual(373, resp.json()['result'][29]['id'])
+        self.assertEqual('Anno 1602', resp.json()['result'][29]['title'])
+        self.assertEqual(1, resp.json()['result'][29]['versionCount'])

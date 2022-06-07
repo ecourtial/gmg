@@ -34,7 +34,9 @@ The editable fields are the following:
 * active
 * username
 
-## 2- Other resources
+## 2- Other resources:
+
+### 1- CRUD operations
 
 The other resources follow the same pattern for CRUD operations.
 There are 4 methods available:
@@ -43,13 +45,35 @@ There are 4 methods available:
 * PATCH (e.g: _game/1_)
 * DELETE (e.g: _game/1_)
 
+### 2- Basic filtering
+
 There is also another one to search for resources. The endpoint uses the GET verb and all the parameters are in the query string. Note that this time the resource in the URI is plural. Let's see an example:
 
-_versions?hallOfFameYear[]=2008&hallOfFameYear[]=2012&order_by=Id_order=desc&page=2&limit=5_
+```versions?toDo[]=1&hallOfFameYear[]=2008&hallOfFameYear[]=2012&orderBy[]=Id-desc&page=2&limit=5```
 
 In the above example you want to search for:
 * resource of type version;
+* that are in your todo list (note the toDo = 1 for a boolean to _true_);
 * which have the _hallOfFameYear_ field set to 2008 or 2012;
 * ordered by the version id, DESC;
 * the second page of the result;
 * each page containing a maximum of 5 results.
+
+_Tip_: you can also order by random. Just use one filter value for _orderBy_ with _rand as the filter's value:
+```versions?toDo[]=1&hallOfFameYear[]=2008&hallOfFameYear[]=2012&orderBy[]=rand&page=2&limit=5```
+
+### 3- Filtering on numeric fields
+
+A numeric field can also be used for sorting. Let's look at the following example:
+
+```versions?copyCount[]=gt-0```
+
+Here you want to get all the versions (with the defaut pagination: first page, max result limit set to 30) but only the ones who have copies (hence the > 0 operator).
+
+
+| API syntax | Signification |           Example              |
+|------------|---------------|--------------------------------|
+|lt          |Lesser than    |```versions?copyCount[]=lt-2``` |
+|gt          |Greater than   |```versions?copyCount[]=gt-1``` |
+|eq          |Equal          |```versions?copyCount[]=eq-1``` |
+|neq         |Not equal      |```versions?copyCount[]=neq-1```|

@@ -46,9 +46,7 @@ class GameService(AbstractService):
         if game is None:
             raise ResourceNotFoundException('game', game_id)
 
-        count = self.repository.get_versions_count_for_game(game_id)['count']
-
-        if count > 0:
+        if game.get_version_count() > 0:
             raise RessourceHasChildrenException('game', 'version')
 
         self.repository.delete(game_id)

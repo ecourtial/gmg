@@ -13,7 +13,8 @@ class Game(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering = {
-        'id': {'field': 'id'}
+        'id': {'field': 'id', 'origin': 'native', 'type': 'int'},
+        'versionCount': {'field': 'versionCount', 'origin': 'computed', 'type': 'int'}
     }
 
     table_name = 'games'
@@ -24,11 +25,13 @@ class Game(AbstractEntity):
             self,
             entity_id,
             title,
-            notes
+            notes,
+            version_count = None,
     ):
         self.entity_id = entity_id
         self.title = title
         self.notes = notes
+        self.version_count = int(version_count or 0)
 
     def get_id(self):
         """Return the id of the game, for instance "125"."""
@@ -48,3 +51,16 @@ class Game(AbstractEntity):
 
     def set_notes(self, notes):
         self.notes = notes
+
+    def get_version_count(self):
+        return self.version_count
+
+    def set_version_count(self, version_count):
+        self.version_count = int(version_count or 0)
+
+    def serialize(self):
+        values = super().serialize()
+
+        values['versionCount'] = self.get_version_count()
+
+        return values

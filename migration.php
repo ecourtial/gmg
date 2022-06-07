@@ -179,6 +179,7 @@ CREATE TABLE IF NOT EXISTS copies(
   `is_reedition` tinyint unsigned NOT NULL,
   `has_manual` tinyint unsigned NOT NULL,
   `status` VARCHAR(255) NOT NULL DEFAULT 'In', 
+  `type` VARCHAR(255) NOT NULL,
   `comments` text,
   KEY `version_id` (`version_id`),
   CONSTRAINT `copies_ibfk_1` FOREIGN KEY (`version_id`) REFERENCES `versions` (`version_id`)

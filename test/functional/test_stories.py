@@ -135,7 +135,7 @@ class TestCopies(AbstractTests):
         self.assertEqual(231, resp.json()['result'][0]['versionId'])
 
     def test_filter_multiple(self):
-        resp = self.api_call('get', 'stories?&position[]=1&order_by=year&order=DESC&page=1&limit=3', None, True)
+        resp = self.api_call('get', 'stories?&position[]=1&orderBy[]=year-DESC&page=1&limit=3', None, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual(3, resp.json()['resultCount'])

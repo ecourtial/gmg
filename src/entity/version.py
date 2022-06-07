@@ -157,7 +157,11 @@ class Version(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering = {
-        'versionId': {'field': 'version_id'}
+        'id': {'field': 'version_id', 'origin': 'native', 'type': 'int'},
+        'storyCount': {'field': 'storyCount', 'origin': 'computed', 'type': 'int'},
+        'copyCount': {'field': 'copyCount', 'origin': 'computed', 'type': 'int'},
+        'platformName': {'field': 'platformName', 'origin': 'computed', 'type': 'string'},
+        'gameTitle': {'field': 'gameTitle', 'origin': 'computed', 'type': 'string'},
     }
 
     table_name = 'versions'
@@ -193,6 +197,8 @@ class Version(AbstractEntity):
             finished,
             platform_name = None,
             game_title = None,
+            story_count = None,
+            copy_count = None,
     ):
         self.entity_id = entity_id
         self.platform_id = int(platform_id)
@@ -221,6 +227,8 @@ class Version(AbstractEntity):
         self.finished = bool(finished)
         self.platform_name = platform_name
         self.game_title = game_title
+        self.story_count = story_count
+        self.copy_count = copy_count
 
     def get_id(self):
         return self.entity_id
@@ -381,10 +389,24 @@ class Version(AbstractEntity):
     def set_finished(self, finished):
         self.finished = bool(finished)
 
+    def get_story_count(self):
+        return self.story_count
+
+    def set_story_count(self, story_count):
+        self.story_count = int(story_count or 0)
+
+    def get_copy_count(self):
+        return self.copy_count
+
+    def set_copy_count(self, copy_count):
+        self.copy_count = int(copy_count or 0)
+
     def serialize(self):
         values = super().serialize()
 
         values['platformName'] = self.get_platform_name()
         values['gameTitle'] = self.get_game_title()
+        values['storyCount'] = self.get_story_count()
+        values['copyCount'] = self.get_copy_count()
 
         return values
