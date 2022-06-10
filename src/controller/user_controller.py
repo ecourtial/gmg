@@ -29,7 +29,13 @@ class UserController:
             return jsonify({'message': str(error)}), 403
 
         return jsonify(
-            {'id': user.get_id(), 'username': user.get_user_name(), 'token': user.get_token()}
+            {
+                'id': user.get_id(),
+                'email': user.get_email(),
+                'username': user.get_user_name(),
+                'active': user.get_is_active(),
+                'token': user.get_token()
+            }
         ), 200
 
     @classmethod
