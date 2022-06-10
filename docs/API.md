@@ -17,13 +17,13 @@ Each endpoint is accessible using the prefix _api/v1/_.
 
 The _user_ resource is very specific, for security concerns. The following endpoints are available:
 
-| Endpoint                        | Role                                                     |
-|---------------------------------|----------------------------------------------------------|
-| user/authenticate               | Authenticate the user using [basic HTTP authentication](https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Authorization).   |
-| user (GET)                      | Get a a given user according to one of the following filter: id, email or userName. For instance: user?id=1                    |
-| user (POST)                  | Creates a user.                                |
-| user/{id} (PATCH)                      | Updates some values of the user. |
-| user/renew-token (POST)  | Renews the current user token and return it.                       |
+| Endpoint                        | Role                                                                                                                          |
+|---------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| user/authenticate (POST)        | Authenticate the user using [basic HTTP authentication](https://developer.mozilla.org/fr/docs/Web/HTTP/Headers/Authorization).|
+| user (GET)                      | Get a a given user according to one of the following filter: id, email or userName. For instance: user?id=1                   |
+| user (POST)                     | Creates a user.                                                                                                               |
+| user/{id} (PATCH)               | Updates some values of the user.                                                                                              |
+| user/renew-token (POST)         | Renews the current user token and return it.                                                                                  |
 |
 
 By default, a user created with the API is disabled. You have to user the PATCH method to change the 'active' field to true.
