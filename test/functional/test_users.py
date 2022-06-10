@@ -12,7 +12,7 @@ class TestUsers(AbstractTestsTools):
         resp = self.api_call('post', 'user/authenticate', None, False, headers)
 
         self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'user' with email 'aladdin' has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'user' with username 'aladdin' has not been found."}, resp.json())
 
     def test_authentication_impossible_to_decode_header(self):
         headers = {'Authorization': 'Basic Am0v1mJhcg=='}
@@ -58,11 +58,11 @@ class TestUsers(AbstractTestsTools):
         user_id = resp.json()["id"]
 
         # Try to authenticate as the new user: fail because not active by default
-        headers = {'Authorization': 'Basic Zm9vOmJhcg=='}
+        headers = {'Authorization': 'Basic bWVwaGlzdG9waGVsZXM6YmFy'}
         resp = self.api_call('post', 'user/authenticate', None, False, headers)
 
         self.assertEqual(403, resp.status_code)
-        self.assertEqual({'message': 'The user with email = foo is inactive.'}, resp.json())
+        self.assertEqual({'message': 'The user with username = mephistopheles is inactive.'}, resp.json())
 
         # Activate the user and update all the available data
         payload = {'email': 'fooz', 'password': 'barz', 'username': 'mephistophelesz', 'active': 1}
@@ -75,7 +75,7 @@ class TestUsers(AbstractTestsTools):
         self.assertEqual(user_id, resp.json()["id"])
 
         # Try to authenticate as the new user: success
-        headers = {'Authorization': 'Basic Zm9vejpiYXJ6'}
+        headers = {'Authorization': 'Basic bWVwaGlzdG9waGVsZXN6OmJhcno='}
         resp = self.api_call('post', 'user/authenticate', None, False, headers)
 
         self.assertEqual(200, resp.status_code)

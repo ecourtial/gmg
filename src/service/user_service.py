@@ -144,14 +144,14 @@ class UserService:
         letters = string.ascii_letters + string.digits
         return ''.join(random.choice(letters) for i in range(string_length))
 
-    def get_authenticated_user(self, email, raw_password):
+    def get_authenticated_user(self, username, raw_password):
         """Load a user and check if the credentials are correct"""
-        user = self.user_repository.get_by_email(email)
+        user = self.user_repository.get_by_user_name(username)
         if user is None:
-            raise ResourceNotFoundException('user', email, 'email')
+            raise ResourceNotFoundException('user', username, 'username')
 
         hashed_password = self.get_hashed_password(raw_password, user.get_salt())
         if (hashed_password == user.get_password() and user.get_is_active()):
             return user
 
-        raise InactiveUserException('email', email)
+        raise InactiveUserException('username', username)
