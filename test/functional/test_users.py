@@ -54,7 +54,7 @@ class TestUsers(AbstractTestsTools):
         self.assertEqual(200, resp.status_code)
         self.assertEqual(False, resp.json()["active"])
         self.assertEqual('foo', resp.json()["email"])
-        self.assertEqual('mephistopheles', resp.json()["userName"])
+        self.assertEqual('mephistopheles', resp.json()["username"])
         user_id = resp.json()["id"]
 
         # Try to authenticate as the new user: fail because not active by default
@@ -71,7 +71,7 @@ class TestUsers(AbstractTestsTools):
         self.assertEqual(200, resp.status_code)
         self.assertEqual(True, resp.json()["active"])
         self.assertEqual('fooz', resp.json()["email"])
-        self.assertEqual('mephistophelesz', resp.json()["userName"])
+        self.assertEqual('mephistophelesz', resp.json()["username"])
         self.assertEqual(user_id, resp.json()["id"])
 
         # Try to authenticate as the new user: success
@@ -87,7 +87,7 @@ class TestUsers(AbstractTestsTools):
 
         self.assertEqual(True, resp.json()["active"])
         self.assertEqual('fooz', resp.json()["email"])
-        self.assertEqual('mephistophelesz', resp.json()["userName"])
+        self.assertEqual('mephistophelesz', resp.json()["username"])
         self.assertEqual(user_id, resp.json()["id"])
 
         # Try again: fail because the token has been properly changed
@@ -104,7 +104,7 @@ class TestUsers(AbstractTestsTools):
     def test_get_by_filter_fails_unknown_filter(self):
         resp = self.api_call('get', 'user?filter=toto', {}, True)
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'The following filter is not allowed: toto. Allowed filters are: id, email, userName.'}, resp.json())
+        self.assertEqual({'message': 'The following filter is not allowed: toto. Allowed filters are: id, email, username.'}, resp.json())
 
     def test_get_by_filter_no_result(self):
         resp = self.api_call('get', 'user?filter=username&value=toto', {}, True)
@@ -114,12 +114,12 @@ class TestUsers(AbstractTestsTools):
     def test_get_by_filters(self):
         resp = self.api_call('get', 'user?filter=username&value=Eric', {}, True)
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'active': True, 'email': 'foo@bar.com', 'id': 1, 'userName': 'Eric'}, resp.json())
+        self.assertEqual({'active': True, 'email': 'foo@bar.com', 'id': 1, 'username': 'Eric'}, resp.json())
 
         resp = self.api_call('get', 'user?filter=email&value=foo@bar.com', {}, True)
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'active': True, 'email': 'foo@bar.com', 'id': 1, 'userName': 'Eric'}, resp.json())
+        self.assertEqual({'active': True, 'email': 'foo@bar.com', 'id': 1, 'username': 'Eric'}, resp.json())
 
         resp = self.api_call('get', 'user?filter=id&value=1', {}, True)
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'active': True, 'email': 'foo@bar.com', 'id': 1, 'userName': 'Eric'}, resp.json())
+        self.assertEqual({'active': True, 'email': 'foo@bar.com', 'id': 1, 'username': 'Eric'}, resp.json())

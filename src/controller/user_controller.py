@@ -47,7 +47,7 @@ class UserController:
             {
                 'id': user.get_id(),
                 'email': user.get_email(),
-                'userName': user.get_user_name(),
+                'username': user.get_user_name(),
                 'active': user.get_is_active()
             }
         ), 200

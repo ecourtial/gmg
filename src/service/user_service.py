@@ -49,7 +49,7 @@ class UserService:
         elif filter == 'username':
             user = self.user_repository.get_by_user_name(filter_value)
         else:
-            raise UnsupportedFilterException(filter, ['id', 'email', 'userName'])
+            raise UnsupportedFilterException(filter, ['id', 'email', 'username'])
 
         if user is None:
             raise ResourceNotFoundException('user', filter_value, filter)
