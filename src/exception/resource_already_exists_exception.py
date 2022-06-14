@@ -7,3 +7,6 @@ class ResourceAlreadyExistsException(Exception):
             id = "'" + id + "'"
 
         super().__init__(f"The resource of type '{type}' with {key} {id} already exists.")
+
+    def get_code(self):
+        return 8

@@ -1,6 +1,7 @@
 """Controller to handle user operations"""
 from flask import jsonify
 from src.exception.inactive_user_exception import InactiveUserException
+from src.exception.invalid_credentials_exception import InvalidCredentialsException
 from src.exception.invalid_input import InvalidInput
 from src.exception.missing_field_exception import MissingFieldException
 from src.exception.missing_header_exception import MissingHeaderException
@@ -18,15 +19,17 @@ class UserController:
         try:
             user = user_service.authenticate()
         except MissingFieldException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except InvalidInput as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except MissingHeaderException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except ResourceNotFoundException as error:
-            return jsonify({'message': str(error)}), 403
+            return jsonify({'message': str(error), 'code': error.get_code()}), 403
+        except InvalidCredentialsException as error:
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 403
         except InactiveUserException as error:
-            return jsonify({'message': str(error)}), 403
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 403
 
         return jsonify(
             {
@@ -45,9 +48,9 @@ class UserController:
         try:
             user = user_service.get_by_filter(filter, filter_value)
         except UnsupportedFilterException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except ResourceNotFoundException as error:
-            return jsonify({'message': str(error)}), 404
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 404
 
         return jsonify(
             {
@@ -65,9 +68,9 @@ class UserController:
         try:
             user = service.validate_payload_for_creation_and_hydrate()
         except MissingFieldException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except ResourceAlreadyExistsException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
 
         user = service.create(user)
 
@@ -80,11 +83,11 @@ class UserController:
         try:
             user = service.update(user_id)
         except ResourceNotFoundException as error:
-            return jsonify({'message': str(error)}), 404
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 404
         except MissingFieldException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except ResourceAlreadyExistsException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
 
         repo = UserRepository(mysql)
         user = repo.update(user)

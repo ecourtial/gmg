@@ -4,3 +4,6 @@ class InconsistentOperation(Exception):
         msg = 'Inconsistent transaction. You tried to create a transaction of '
         msg += f"type '{transaction_type}' while the copy status is '{current_copy_status}'."
         super().__init__(msg)
+
+    def get_code(self):
+        return 4

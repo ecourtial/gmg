@@ -14,7 +14,7 @@ class AbstractController:# pylint: disable=no-member
         try:
             copy = service.get_by_id(entity_id)
         except ResourceNotFoundException as error:
-            return jsonify({'message': str(error)}), 404
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 404
 
         return jsonify(copy.serialize()), 200
 
@@ -25,15 +25,15 @@ class AbstractController:# pylint: disable=no-member
         try:
             object = service.get_for_create()
         except UnsupportedValueException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except MissingFieldException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except ResourceAlreadyExistsException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except InconsistentOperation as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except ResourceNotFoundException as error:
-            return jsonify({'message': str(error)}), 404
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 404
 
         repo = cls.repository(mysql)
         object = repo.insert(object)
@@ -47,13 +47,13 @@ class AbstractController:# pylint: disable=no-member
         try:
             object = service.get_for_update(entity_id)
         except UnsupportedValueException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except ResourceNotFoundException as error:
-            return jsonify({'message': str(error)}), 404
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 404
         except ResourceAlreadyExistsException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except InconsistentOperation as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
 
         repo = cls.repository(mysql)
         object = repo.update(object)
@@ -67,9 +67,9 @@ class AbstractController:# pylint: disable=no-member
         try:
             service.delete(entity_id)
         except ResourceNotFoundException as error:
-            return jsonify({'message': str(error)}), 404
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 404
         except RessourceHasChildrenException as error:
-            return jsonify({'message': str(error)}), 400
+            return jsonify({'message': str(error), 'code':  error.get_code()}), 400
 
         return jsonify({'message': service.resource_type + ' successfully deleted.'}), 200
 

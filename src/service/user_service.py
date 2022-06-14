@@ -10,6 +10,7 @@ from src.exception.missing_header_exception import MissingHeaderException
 from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
 from src.exception.unknown_resource_exception import ResourceNotFoundException
 from src.exception.unsupported_filter_exception import UnsupportedFilterException
+from src.exception.invalid_credentials_exception import InvalidCredentialsException
 from src.exception.invalid_input import InvalidInput
 from src.repository.user_repository import UserRepository
 from src.helpers.json_helper import JsonHelper
@@ -113,11 +114,11 @@ class UserService:
             user.set_password(self.get_hashed_password(password, user.get_salt()))
 
         check_user = self.user_repository.get_by_email(user.get_email())
-        if check_user is not None:
+        if check_user is not None and check_user.get_id() != user_id:
             raise ResourceAlreadyExistsException('user', user.get_email(), 'email')
 
         check_user = self.user_repository.get_by_user_name(user.get_user_name())
-        if check_user is not None:
+        if check_user is not None and check_user.get_id() != user_id:
             raise ResourceAlreadyExistsException('user', user.get_user_name(), 'username')
 
         return user
@@ -151,7 +152,10 @@ class UserService:
             raise ResourceNotFoundException('user', username, 'username')
 
         hashed_password = self.get_hashed_password(raw_password, user.get_salt())
-        if (hashed_password == user.get_password() and user.get_is_active()):
-            return user
+        if hashed_password != user.get_password():
+            raise InvalidCredentialsException()
+            
+        if user.get_is_active() == False:
+            raise InactiveUserException('username', username)
 
-        raise InactiveUserException('username', username)
+        return user

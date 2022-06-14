@@ -16,7 +16,7 @@ class TestTransactions(AbstractTests):
         resp = self.api_call('post', 'transaction', payload, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'The following field is missing: copyId.'}, resp.json())
+        self.assertEqual({'message': 'The following field is missing: copyId.', 'code': 6}, resp.json())
     
     def test_create_fails_copy_id_not_found(self):
         payload = {
@@ -30,7 +30,7 @@ class TestTransactions(AbstractTests):
         resp = self.api_call('post', 'transaction', payload, True)
         
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'copy' with id #99999 has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'copy' with id #99999 has not been found.", 'code': 1}, resp.json())
 
     def test_create_invalid_types(self):
         payload = {
@@ -45,14 +45,14 @@ class TestTransactions(AbstractTests):
         resp = self.api_call('post', 'transaction', payload, True)
         
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': "The field 'type' does not support the value 'Loan-oute'. Supported values are: Bought, Loan-in, Loan-in-return, Loan-out, Loan-out-return, Sold."}, resp.json())
+        self.assertEqual({'message': "The field 'type' does not support the value 'Loan-oute'. Supported values are: Bought, Loan-in, Loan-in-return, Loan-out, Loan-out-return, Sold.", 'code': 11}, resp.json())
 
     def test_get_transaction(self):
         # Does not exist
         resp = self.api_call('get', 'transaction/666', {}, True)
 
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'transaction' with id #666 has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'transaction' with id #666 has not been found.", 'code': 1}, resp.json())
 
         # Exist
         resp = self.api_call('get', 'transaction/90', {}, True)
@@ -119,13 +119,13 @@ class TestTransactions(AbstractTests):
 
         resp = self.api_call('delete', 'transaction/' + transaction_id, {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': f"The resource of type 'transaction' with id #{transaction_id} has not been found."}, resp.json())
+        self.assertEqual({'message': f"The resource of type 'transaction' with id #{transaction_id} has not been found.", 'code': 1}, resp.json())
 
     def test_update_fails_because_transaction_not_found(self):
         resp = self.api_call('patch', 'transaction/9999', None, True)
 
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'transaction' with id #9999 has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'transaction' with id #9999 has not been found.", 'code': 1}, resp.json())
 
     def test_update_fails_invalid_types(self):
         payload = {
@@ -140,13 +140,13 @@ class TestTransactions(AbstractTests):
         resp = self.api_call('patch', 'transaction/90', payload, True)
         
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': "The field 'type' does not support the value 'Loan-ine'. Supported values are: Bought, Loan-in, Loan-in-return, Loan-out, Loan-out-return, Sold."}, resp.json())
+        self.assertEqual({'message': "The field 'type' does not support the value 'Loan-ine'. Supported values are: Bought, Loan-in, Loan-in-return, Loan-out, Loan-out-return, Sold.", 'code': 11}, resp.json())
 
     def test_delete_fails_because_not_found(self):
         resp = self.api_call('delete', 'transaction/9999', None, True)
 
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'transaction' with id #9999 has not been found."}, resp.json())
+        self.assertEqual({'message': "The resource of type 'transaction' with id #9999 has not been found.", 'code': 1}, resp.json())
 
     def test_get_list_default_filters(self):
         resp = self.api_call('get', 'transactions', None, True)

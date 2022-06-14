@@ -51,12 +51,12 @@ def token_required(decorated_function):
                     token = array[1]
 
         if not token:
-            return jsonify({'message': 'Missing token'}), 403
+            return jsonify({'message': 'Missing token', 'code': 12}), 403
 
         user_repo = UserRepository(MySQLFactory.get())
         current_user = user_repo.get_active_by_token(token)
         if None is current_user:
-            return jsonify({'message': 'Token is invalid'}), 403
+            return jsonify({'message': 'Token is invalid', 'code': 13}), 403
 
         # This method is the only one to need the current_user
         if 'renew_token' == decorated_function.__name__:
