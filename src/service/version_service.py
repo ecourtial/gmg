@@ -2,6 +2,7 @@ from src.service.abstract_service import AbstractService
 from src.repository.version_repository import VersionRepository
 from src.repository.platform_repository import PlatformRepository
 from src.repository.game_repository import GameRepository
+from src.repository.transaction_repository import TransactionRepository
 from src.entity.version import Version
 from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
 from src.exception.unknown_resource_exception import ResourceNotFoundException
@@ -15,6 +16,7 @@ class VersionService(AbstractService):
         self.repository = VersionRepository(mysql)
         self.game_repository = GameRepository(mysql)
         self.platform_repository = PlatformRepository(mysql)
+        self.transaction_repository = TransactionRepository(mysql)
 
     def get_for_create(self):
         version = super().validate_payload_for_creation_and_hydrate(Version)
@@ -82,6 +84,10 @@ class VersionService(AbstractService):
 
         if version.get_copy_count() > 0:
             raise RessourceHasChildrenException('version', 'copy')
+
+        # Note (TODO): use an alias in the query instead (as above)
+        if self.transaction_repository.get_count_by_version(version_id) > 0:
+            raise RessourceHasChildrenException('version', 'transaction')
 
         self.repository.delete(version_id)
 

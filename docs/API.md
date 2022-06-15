@@ -59,7 +59,7 @@ In the above example you want to search for:
 * the second page of the result;
 * each page containing a maximum of 5 results.
 
-_Tip_: you can also order by random. Just use one filter value for _orderBy_ with _rand as the filter's value:
+_Tip_: you can also order by random. Just use one filter value for _orderBy_ with _rand_ as the filter's value:
 ```versions?toDo[]=1&hallOfFameYear[]=2008&hallOfFameYear[]=2012&orderBy[]=rand&page=2&limit=5```
 
 ### 3- Filtering on numeric fields

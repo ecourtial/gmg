@@ -16,10 +16,27 @@ class TestTransactions(AbstractTests):
         resp = self.api_call('post', 'transaction', payload, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': 'The following field is missing: copyId.', 'code': 6}, resp.json())
+        self.assertEqual({'message': 'The following field is missing: versionId.', 'code': 6}, resp.json())
     
+    def test_create_fails_version_id_not_found(self):
+        payload = {
+            "versionId": 99998,
+            "copyId": 99999,
+            "year": 2022,
+            "month": 2,
+            "day": 4,
+            "type": "Loan-out",
+            "notes": ""
+        }
+        resp = self.api_call('post', 'transaction', payload, True)
+        
+        self.assertEqual(404, resp.status_code)
+        self.assertEqual({'message': "The resource of type 'version' with id #99998 has not been found.", 'code': 1}, resp.json())
+
+
     def test_create_fails_copy_id_not_found(self):
         payload = {
+            "versionId": 338,
             "copyId": 99999,
             "year": 2022,
             "month": 2,
@@ -34,6 +51,7 @@ class TestTransactions(AbstractTests):
 
     def test_create_invalid_types(self):
         payload = {
+            "versionId": 338,
             "copyId": 99999,
             "year": 2022,
             "month": 2,
@@ -59,6 +77,7 @@ class TestTransactions(AbstractTests):
 
         expectedPayload = {
             "id": 90,
+            "versionId": 348,
             "copyId": 1,
             "year": 2022,
             "month": 2,
@@ -75,6 +94,7 @@ class TestTransactions(AbstractTests):
     def test_create_update_delete_success(self):
         # Create
         payload = {
+            "versionId": 349,
             "copyId": 2,
             "year": 2022,
             "month": 2,
@@ -109,6 +129,7 @@ class TestTransactions(AbstractTests):
         payload['id'] = int(transaction_id)
         payload['platformName'] = resp.json()["platformName"]
         payload['gameTitle'] = resp.json()["gameTitle"]
+        payload['versionId'] = resp.json()["versionId"]
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual(payload, resp.json()) 
@@ -127,8 +148,39 @@ class TestTransactions(AbstractTests):
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'transaction' with id #9999 has not been found.", 'code': 1}, resp.json())
 
+    def test_create_fails_because_version_id_and_copy_version_id_dont_match(self):
+        payload = {
+            "versionId": 349,
+            "copyId": 1,
+            "year": 2022,
+            "month": 2,
+            "day": 4,
+            "type": "Loan-out",
+            "notes": ""
+        }
+        resp = self.api_call('post', 'transaction', payload, True)
+
+        self.assertEqual(400, resp.status_code)
+        self.assertEqual({'message': "Inconsistent transaction. You tried to create a transaction with versionId = '349' while the copy versionId is '348'.", 'code': 14}, resp.json())
+
+    def test_update_fails_because_version_id_and_copy_version_id_dont_match(self):
+        payload = {
+            "versionId": 349,
+            "copyId": 1,
+            "year": 2022,
+            "month": 2,
+            "day": 4,
+            "type": "Loan-out",
+            "notes": ""
+        }
+        resp = self.api_call('patch', 'transaction/90', payload, True)
+
+        self.assertEqual(400, resp.status_code)
+        self.assertEqual({'message': "Inconsistent transaction. You tried to create a transaction with versionId = '349' while the copy versionId is '348'.", 'code': 14}, resp.json())
+
     def test_update_fails_invalid_types(self):
         payload = {
+            "versionId": 349,
             "copyId": 2,
             "year": 2022,
             "month": 2,
@@ -152,8 +204,8 @@ class TestTransactions(AbstractTests):
         resp = self.api_call('get', 'transactions', None, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual(4, resp.json()['resultCount'])
-        self.assertEqual(4, resp.json()['totalResultCount'])
+        self.assertEqual(5, resp.json()['resultCount'])
+        self.assertEqual(5, resp.json()['totalResultCount'])
         self.assertEqual(1, resp.json()['page'])
         self.assertEqual(1, resp.json()['totalPageCount'])
 
@@ -204,6 +256,7 @@ class TestTransactions(AbstractTests):
 
         # Next: create an outbound transaction
         tr_payload = {
+            "versionId": 338,
             "copyId": int(copy_id),
             "year": 2022,
             "month": 2,
@@ -235,6 +288,7 @@ class TestTransactions(AbstractTests):
 
         # Now let's create an inbound transaction
         tr_payload = {
+            "versionId": 338,
             "copyId": int(copy_id),
             "year": 2022,
             "month": 2,
@@ -252,14 +306,25 @@ class TestTransactions(AbstractTests):
         resp = self.api_call('get', 'copy/' + copy_id, {}, True)
         self.assertEqual('In', resp.json()['status'])
 
+        # Now let's change the transaction type to 'Sold'
+        # The copy should be deleted
+
+        tr_payload = {
+            "type": "Sold",
+        }
+
+        resp = self.api_call('patch', 'transaction/' + tr_id, tr_payload, True)
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(None, resp.json()["copyId"])
+
+        resp = self.api_call('get', 'copy/' + copy_id, {}, True)
+        self.assertEqual(404, resp.status_code)
+
         # Delete for cleanup
         resp = self.api_call('delete', 'transaction/' + tr_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
-        resp = self.api_call('delete', 'copy/' + copy_id, {}, True)
-        self.assertEqual(200, resp.status_code)
-
-    def test_inconsistent_operation(self):
+    def test_inconsistent_status_operation(self):
         # First, let's create a copy with the status to "Out"
         payload = {
                 "versionId": 338,
@@ -282,6 +347,7 @@ class TestTransactions(AbstractTests):
 
         # Now let's try to create an outbound transaction, it should fail
         tr_payload = {
+            "versionId": 338,
             "copyId": int(copy_id),
             "year": 2022,
             "month": 2,
@@ -301,4 +367,28 @@ class TestTransactions(AbstractTests):
 
         # Delete for cleanup
         resp = self.api_call('delete', 'copy/' + copy_id, {}, True)
+        self.assertEqual(200, resp.status_code)
+
+    def test_can_create_with_no_copy_id(self):
+        tr_payload = {
+            "versionId": 338,
+            "copyId": None,
+            "year": 2022,
+            "month": 2,
+            "day": 4,
+            "type": "Loan-out",
+            "notes": "",
+            'gameTitle': 'Faust',
+            'platformName': 'PC',
+        }
+
+        resp = self.api_call('post', 'transaction', tr_payload, True)
+
+        self.assertEqual(200, resp.status_code)
+        tr_id = str(resp.json()["id"])
+        tr_payload['id'] = resp.json()["id"]
+        self.assertEqual(tr_payload, resp.json())
+
+        # Delete for cleanup
+        resp = self.api_call('delete', 'transaction/' + tr_id, {}, True)
         self.assertEqual(200, resp.status_code)

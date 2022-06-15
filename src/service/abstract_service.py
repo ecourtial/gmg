@@ -12,6 +12,12 @@ class AbstractService: # pylint: disable=no-member,no-self-use
 
         return object
 
+    def insert(self, object):
+        return self.repository.insert(object)
+
+    def update(self, object):
+        return self.repository.update(object)
+
     def validate_payload_for_creation_and_hydrate(self, object):
         values = []
         values.append(None)
@@ -22,11 +28,16 @@ class AbstractService: # pylint: disable=no-member,no-self-use
             if value is None:
                 if data['required'] is True:
                     raise MissingFieldException(api_field)
-                values.append(data['default'])
+
+                if 'default' in data:
+                    values.append(data['default'])
+                else:
+                    values.append(None)
             else:
                 if 'allowed_values' in data and value not in data['allowed_values']:
                     raise UnsupportedValueException(api_field, value, data['allowed_values'])
 
+                value = self.cast_type(data, value)
                 values.append(value)
 
         return object(*values)
@@ -40,4 +51,14 @@ class AbstractService: # pylint: disable=no-member,no-self-use
                     raise UnsupportedValueException(api_field, value, data['allowed_values'])
 
                 method_to_call = getattr(object, 'set' + data['method'])
+                value = self.cast_type(data, value)
                 method_to_call(value)
+
+    def cast_type(self, data, value):
+        if data['type'] == 'int':
+            try:
+                value = int(value)
+            except ValueError:
+                value = 0
+
+        return value

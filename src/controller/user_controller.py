@@ -11,7 +11,7 @@ from src.exception.unsupported_filter_exception import UnsupportedFilterExceptio
 from src.repository.user_repository import UserRepository
 from src.service.user_service import UserService
 
-class UserController:
+class UserController:# pylint: disable=R0911
     @classmethod
     def authenticate(cls, mysql):
         user_service = UserService(mysql)

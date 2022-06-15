@@ -286,6 +286,18 @@ class TestVersions(AbstractTests):
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The following resource type 'version' has children of type 'copy', so it cannot be deleted.", 'code': 9}, resp.json())
 
+    def test_delete_fails_because_has_stories(self):
+        resp = self.api_call('delete', 'version/231', None, True)
+
+        self.assertEqual(400, resp.status_code)
+        self.assertEqual({'message': "The following resource type 'version' has children of type 'story', so it cannot be deleted.", 'code': 9}, resp.json())
+
+    def test_delete_fails_because_has_transactions(self):
+        resp = self.api_call('delete', 'version/340', None, True)
+
+        self.assertEqual(400, resp.status_code)
+        self.assertEqual({'message': "The following resource type 'version' has children of type 'transaction', so it cannot be deleted.", 'code': 9}, resp.json())
+
     def test_get_list_default_filters(self):
         resp = self.api_call('get', 'versions', None, True)
 

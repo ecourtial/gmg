@@ -147,7 +147,8 @@ The application relies on 6 resources (not including the users).
 | Field                    | Type  | Editable | Unique | Role                                                                        |         Notes                           |
 |--------------------------|-------|----------|--------|-----------------------------------------------------------------------------|-----------------------------------------|
 | id                       | int   | No       |  Yes   | The version unique id.                                                      |                                         |
-| copyId                   | int   | Yes      |  No    | The id of the copy the transaction relates to.                              |                                         |
+| versionId                | int   | Yes      |  No    | The version id of the game the transaction relates to.                      |                                         |
+| copyId                   | int   | Yes      |  No    | The id of the copy the transaction relates to (might be null if the copy has been sold, see below).                              |                                         |
 | year                     | int   | Yes      |  No    | The year when this transaction happened.                                    |                                         |
 | month                    | int   | Yes      |  No    | The month when this transaction happened.                                   |                                         |
 | day                      | int   | Yes      |  No    | The day when this transaction happened.                                     |                                         |
@@ -166,3 +167,9 @@ The application relies on 6 resources (not including the users).
 |Loan-out-return       | Someone returns you the copy after a loan.     |
 |Loan-in               | Someone loans you the copy.                    |
 |Loan-in-return        | After a loan, you return the copy.             |
+
+_NOTE_: when creating a transaction, the status of the copy will be altered accordingly to the type of the transaction. The drawback of this aspect is that if you edit a transaction by changing its _copy_id_, the previously targeted copy will be in a bad status, so act accordingly to update it too and set it to the good status.
+
+On top of that, if the transaction is of type "Sold", the copy will be deleted.
+
+Finally, you cannot edit a transaction if the copy no longer exists. If you did something wrong, delete the transaction and start over.

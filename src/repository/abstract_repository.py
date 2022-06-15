@@ -10,9 +10,9 @@ class AbstractRepository(AbstractCoreRepository):
 
         return self.fetch_one(request, (entity_id,))
 
-    def delete(self, entity_id):
+    def delete(self, entity_id, commit = True):
         request = f"DELETE FROM {self.entity.table_name} WHERE {self.entity.primary_key} = %s" # pylint: disable=E1101
-        self.write(request, (entity_id,), True)
+        self.write(request, (entity_id,), commit)
 
     def get_select_request_start(self):
         return f"SELECT * FROM {self.entity.table_name} WHERE {self.entity.primary_key} IS NOT NULL " # pylint: disable=C0301,E1101

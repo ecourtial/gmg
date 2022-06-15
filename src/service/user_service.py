@@ -154,8 +154,8 @@ class UserService:
         hashed_password = self.get_hashed_password(raw_password, user.get_salt())
         if hashed_password != user.get_password():
             raise InvalidCredentialsException()
-            
-        if user.get_is_active() == False:
+
+        if user.get_is_active() is False:
             raise InactiveUserException('username', username)
 
         return user

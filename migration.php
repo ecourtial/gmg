@@ -202,15 +202,17 @@ $connection->exec('DROP TABLE trades;');
 
 $createStatement = "CREATE TABLE `transactions` (
     `transaction_id` int unsigned NOT NULL AUTO_INCREMENT,
-    `copy_id` smallint unsigned NOT NULL,
+    `version_id` SMALLINT unsigned NOT NULL,
+    `copy_id` smallint unsigned,
     `year` smallint unsigned NOT NULL,
     `month` smallint unsigned NOT NULL,
     `day` smallint unsigned NOT NULL,
-    `type` VARCHAR(255),
+    `type` VARCHAR(255) NOT NULL,
     `notes` text,
     PRIMARY KEY (`transaction_id`),
     KEY `copy_id` (`copy_id`),
-    CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`copy_id`) REFERENCES `copies` (`copy_id`)
+    CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`copy_id`) REFERENCES `copies` (`copy_id`),
+    CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`version_id`) REFERENCES `versions` (`version_id`),
   ) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci";
 
 $connection->exec($createStatement);

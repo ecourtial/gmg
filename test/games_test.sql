@@ -173,7 +173,8 @@ DROP TABLE IF EXISTS `transactions`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `transactions` (
   `transaction_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `copy_id` smallint unsigned NOT NULL,
+  `version_id` smallint unsigned NOT NULL,
+  `copy_id` smallint unsigned DEFAULT NULL,
   `year` smallint unsigned NOT NULL,
   `month` smallint unsigned NOT NULL,
   `day` smallint unsigned NOT NULL,
@@ -181,8 +182,10 @@ CREATE TABLE `transactions` (
   `notes` text,
   PRIMARY KEY (`transaction_id`),
   KEY `copy_id` (`copy_id`),
-  CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`copy_id`) REFERENCES `copies` (`copy_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `transactions_ibfk_2` (`version_id`),
+  CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`copy_id`) REFERENCES `copies` (`copy_id`),
+  CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`version_id`) REFERENCES `versions` (`version_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -191,7 +194,7 @@ CREATE TABLE `transactions` (
 
 LOCK TABLES `transactions` WRITE;
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-INSERT INTO `transactions` VALUES (90,1,2022,2,4,'Loan-out',''),(91,1,2022,4,8,'Loan-out-return',''),(92,2,2022,2,4,'Loan-out',''),(93,2,2022,2,5,'Loan-in','');
+INSERT INTO `transactions` VALUES (90,348,1,2022,2,4,'Loan-out',''),(91,348,1,2022,4,8,'Loan-out-return',''),(92,349,2,2022,2,4,'Loan-out',''),(93,349,2,2022,2,5,'Loan-in',''),(106,340,NULL,2022,3,4,'Sold',NULL);
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,4 +290,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-03 14:05:07
+-- Dump completed on 2022-06-15 19:54:07

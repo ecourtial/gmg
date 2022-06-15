@@ -2,7 +2,8 @@ from src.entity.abstract_entity import AbstractEntity
 
 class Transaction(AbstractEntity):
     expected_fields = {
-        'copyId': {'field': 'copy_id', 'method': '_copy_id', 'required': True, 'type': 'int'},
+        'versionId': {'field': 'version_id', 'method': '_version_id', 'required': True, 'type': 'int'}, # pylint: disable=C0301
+        'copyId': {'field': 'copy_id', 'method': '_copy_id', 'required': False, 'type': 'int'},
         'year': {'field': 'year', 'method': '_year', 'required': True, 'type': 'int'},
         'month': {'field': 'month', 'method': '_month', 'required': True, 'type': 'int'},
         'day': {'field': 'day', 'method': '_day', 'required': True, 'type': 'int'},
@@ -45,6 +46,7 @@ class Transaction(AbstractEntity):
     def __init__(
             self,
             entity_id,
+            version_id,
             copy_id,
             year,
             month,
@@ -55,6 +57,7 @@ class Transaction(AbstractEntity):
             game_title = None,
     ):
         self.entity_id = entity_id
+        self.version_id = version_id
         self.copy_id = copy_id
         self.year = year
         self.month = month
@@ -66,6 +69,9 @@ class Transaction(AbstractEntity):
 
     def get_id(self):
         return self.entity_id
+
+    def get_version_id(self):
+        return self.version_id
 
     def get_copy_id(self):
         return self.copy_id
@@ -84,6 +90,9 @@ class Transaction(AbstractEntity):
 
     def get_notes(self):
         return self.notes
+
+    def set_version_id(self, version_id):
+        self.version_id = version_id
 
     def set_copy_id(self, entity_id):
         self.copy_id = entity_id

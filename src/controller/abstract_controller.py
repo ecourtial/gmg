@@ -24,6 +24,7 @@ class AbstractController:# pylint: disable=no-member
 
         try:
             object = service.get_for_create()
+            object = service.insert(object)
         except UnsupportedValueException as error:
             return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except MissingFieldException as error:
@@ -35,9 +36,6 @@ class AbstractController:# pylint: disable=no-member
         except ResourceNotFoundException as error:
             return jsonify({'message': str(error), 'code':  error.get_code()}), 404
 
-        repo = cls.repository(mysql)
-        object = repo.insert(object)
-
         return cls.get_by_id(mysql, object.get_id())
 
     @classmethod
@@ -46,6 +44,7 @@ class AbstractController:# pylint: disable=no-member
 
         try:
             object = service.get_for_update(entity_id)
+            object = service.update(object)
         except UnsupportedValueException as error:
             return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except ResourceNotFoundException as error:
@@ -54,9 +53,6 @@ class AbstractController:# pylint: disable=no-member
             return jsonify({'message': str(error), 'code':  error.get_code()}), 400
         except InconsistentOperation as error:
             return jsonify({'message': str(error), 'code':  error.get_code()}), 400
-
-        repo = cls.repository(mysql)
-        object = repo.update(object)
 
         return cls.get_by_id(mysql, object.get_id())
 
