@@ -15,7 +15,7 @@ class AbstractRepository(AbstractCoreRepository):
         self.write(request, (entity_id,), commit)
 
     def get_select_request_start(self):
-        return f"SELECT * FROM {self.entity.table_name} WHERE {self.entity.primary_key} IS NOT NULL " # pylint: disable=C0301,E1101
+        return f"SELECT * FROM {self.entity.table_name} WHERE {self.entity.primary_key} IS NOT NULL " # pylint: disable=E1101
 
     def get_list(self, filters, page, limit):
         filter_request = ''
@@ -34,13 +34,13 @@ class AbstractRepository(AbstractCoreRepository):
             current_filter_values = filters.getlist(api_field + '[]')
             # A filter is given for this field
             if 0 != len(current_filter_values):
-                filter_request += AbstractRepository.create_get_list_filter_condition(current_filter_values, data, field, values) # pylint: disable=C0301
+                filter_request += AbstractRepository.create_get_list_filter_condition(current_filter_values, data, field, values)
 
         # Count the total of result without pagination
         count_request = "SELECT count(*) as count "
         count_request += f"FROM ({self.get_select_request_start()}) AS e, {self.entity.table_name} " # pylint: disable=E1101
         count_request += f"WHERE {self.entity.table_name}.{self.entity.primary_key} IS NOT NULL " # pylint: disable=E1101
-        count_request += f"AND {self.entity.table_name}.{self.entity.primary_key} = e.{self.entity.primary_key} " # pylint: disable=C0301, E1101
+        count_request += f"AND {self.entity.table_name}.{self.entity.primary_key} = e.{self.entity.primary_key} " # pylint: disable=E1101
         count_request += filter_request
         total_result_count = self.fetch_cursor(count_request, values)['count']
 

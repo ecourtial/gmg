@@ -2,7 +2,7 @@ from src.entity.abstract_entity import AbstractEntity
 
 class Transaction(AbstractEntity):
     expected_fields = {
-        'versionId': {'field': 'version_id', 'method': '_version_id', 'required': True, 'type': 'int'}, # pylint: disable=C0301
+        'versionId': {'field': 'version_id', 'method': '_version_id', 'required': True, 'type': 'int'},
         'copyId': {'field': 'copy_id', 'method': '_copy_id', 'required': False, 'type': 'int'},
         'year': {'field': 'year', 'method': '_year', 'required': True, 'type': 'int'},
         'month': {'field': 'month', 'method': '_month', 'required': True, 'type': 'int'},

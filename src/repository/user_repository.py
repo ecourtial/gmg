@@ -44,7 +44,7 @@ class UserRepository(AbstractRepository):
 
     def update(self, object, commit=True):
         """Updates an user"""
-        request = "UPDATE users SET email = %s, password = %s, status = %s, user_name = %s, token = %s " # pylint: disable=C0301
+        request = "UPDATE users SET email = %s, password = %s, status = %s, user_name = %s, token = %s "
         request += "WHERE id = %s;"
         self.write(
             request,

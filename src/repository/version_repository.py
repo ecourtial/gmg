@@ -11,7 +11,7 @@ class VersionRepository(AbstractRepository):
 
     def get_select_request_start(self):
         request = "SELECT versions.*, v.storyCount AS storyCount, c.copyCount AS copyCount, "
-        request += f"{Game.table_name}.title AS gameTitle, {Platform.table_name}.name AS platformName " # pylint: disable=C0301
+        request += f"{Game.table_name}.title AS gameTitle, {Platform.table_name}.name AS platformName "
         request += 'FROM '
         request += f"     (SELECT COUNT(*) AS storyCount, a.{Version.primary_key} "
         request += f"      FROM {Story.table_name}, {Version.table_name} a "

@@ -1,5 +1,5 @@
 from src.exception.duplicate_consecutive_operation import DuplicateConsecutiveOperation
-from src.exception.inconsistent_transaction_type_operation import InconsistentTransactionTypeOperation # pylint: disable=C0301
+from src.exception.inconsistent_transaction_type_operation import InconsistentTransactionTypeOperation
 from src.exception.inconsistent_version_and_copy_id import InconsistentVersionAndCopyIdException
 from src.service.abstract_service import AbstractService
 from src.repository.transaction_repository import TransactionRepository

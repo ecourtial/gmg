@@ -9,9 +9,9 @@ class PlatformRepository(AbstractRepository):
     def get_select_request_start(self):
         request = f"SELECT {Platform.table_name}.*, v.versionCount AS versionCount "
         request += 'FROM '
-        request += f"     (SELECT COUNT(*) AS versionCount, {Platform.table_name}.id AS platform_id " # pylint: disable=C0301
+        request += f"     (SELECT COUNT(*) AS versionCount, {Platform.table_name}.id AS platform_id "
         request += f"      FROM {Version.table_name}, {Platform.table_name}  "
-        request += f"      WHERE {Version.table_name}.platform_id = {Platform.table_name}.{Platform.primary_key} " # pylint: disable=C0301
+        request += f"      WHERE {Version.table_name}.platform_id = {Platform.table_name}.{Platform.primary_key} "
         request += f"      GROUP BY {Platform.table_name}.{Platform.primary_key}) AS v "
         request += f"RIGHT JOIN {Platform.table_name} ON "
         request += f"{Platform.table_name}.{Platform.primary_key} = v.platform_id WHERE TRUE "
