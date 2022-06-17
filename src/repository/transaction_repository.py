@@ -23,8 +23,8 @@ class TransactionRepository(AbstractRepository):
             (version_id,)
         )['count']
 
-    def reset_copy_id_for_transactions(self, copy_id, Commit=True):
-        self.write(f"UPDATE {Transaction.table_name} SET copy_id = NULL WHERE copy_id = %s", (copy_id,), Commit)
+    def reset_copy_id_for_transactions(self, copy_id, commit=True):
+        self.write(f"UPDATE {Transaction.table_name} SET copy_id = NULL WHERE copy_id = %s", (copy_id,), commit)
 
     def get_last_transaction_for_copy(self, copy_id):
         return self.fetch_one(

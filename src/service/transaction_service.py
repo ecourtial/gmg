@@ -129,16 +129,16 @@ class TransactionService(AbstractService):
         if copy is not None:
             # You cannot create the same transaction type (Inbound or Outbound type) twice
             last_transaction_for_copy = self.repository.get_last_transaction_for_copy(copy.get_id())
-            if (last_transaction_for_copy is not None):
+            if last_transaction_for_copy is not None:
                 if transaction.get_type() in transaction.transaction_out:
                     transaction_type = "outbound"
                 else:
                     transaction_type = "inbound"
-            
+
                 if last_transaction_for_copy.get_type() in transaction.transaction_out:
                     last_transaction_type = "outbound"
                 else:
                     last_transaction_type = "inbound"
-            
+
                 if transaction_type == last_transaction_type:
                     raise DuplicateConsecutiveOperation(transaction_type)

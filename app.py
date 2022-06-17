@@ -134,7 +134,6 @@ def renew_token(current_user):
 # Platforms
 
 @app.route('/api/v1/platform/<int:entity_id>', methods=['GET'])
-@token_required
 def get_platform_by_id(entity_id):
     """Returns the platform according to its id"""
     controller = PlatformController
@@ -162,7 +161,6 @@ def delete_platform(entity_id):
     return controller.delete(MySQLFactory.get(), entity_id)
 
 @app.route('/api/v1/platforms', methods=['GET'])
-@token_required
 def get_platforms():
     """Get the platforms"""
     controller = PlatformController
@@ -171,7 +169,6 @@ def get_platforms():
 # Games
 
 @app.route('/api/v1/game/<int:entity_id>', methods=['GET'])
-@token_required
 def get_game_by_id(entity_id):
     """Returns the game according to its id"""
     controller = GameController
@@ -199,7 +196,6 @@ def delete_game(entity_id):
     return controller.delete(MySQLFactory.get(), entity_id)
 
 @app.route('/api/v1/games', methods=['GET'])
-@token_required
 def get_games():
     """Get the games"""
     controller = GameController
@@ -208,7 +204,6 @@ def get_games():
 # Versions
 
 @app.route('/api/v1/version/<int:entity_id>', methods=['GET'])
-@token_required
 def get_version_by_id(entity_id):
     """Returns the version according to its id"""
     controller = VersionController
@@ -236,7 +231,6 @@ def delete_version(entity_id):
     return controller.delete(MySQLFactory.get(), entity_id)
 
 @app.route('/api/v1/versions', methods=['GET'])
-@token_required
 def get_versions():
     """Get the versions"""
     controller = VersionController
@@ -245,7 +239,6 @@ def get_versions():
 # Copies
 
 @app.route('/api/v1/copy/<int:entity_id>', methods=['GET'])
-@token_required
 def get_copy_by_id(entity_id):
     """Returns the copy according to its id"""
     controller = CopyController
@@ -273,7 +266,6 @@ def delete_copy(entity_id):
     return controller.delete(MySQLFactory.get(), entity_id)
 
 @app.route('/api/v1/copies', methods=['GET'])
-@token_required
 def get_copies():
     """Get the copies"""
     controller = CopyController
@@ -282,7 +274,6 @@ def get_copies():
 # Stories
 
 @app.route('/api/v1/story/<int:entity_id>', methods=['GET'])
-@token_required
 def get_story_by_id(entity_id):
     """Returns the story according to its id"""
     controller = StoryController
@@ -310,7 +301,6 @@ def delete_story(entity_id):
     return controller.delete(MySQLFactory.get(), entity_id)
 
 @app.route('/api/v1/stories', methods=['GET'])
-@token_required
 def get_stories():
     """Get the stories"""
     controller = StoryController
@@ -319,7 +309,6 @@ def get_stories():
 # Transactions
 
 @app.route('/api/v1/transaction/<int:entity_id>', methods=['GET'])
-@token_required
 def get_transaction_by_id(entity_id):
     """Returns the transaction according to its id"""
     controller = TransactionController
@@ -347,7 +336,6 @@ def delete_transaction(entity_id):
     return controller.delete(MySQLFactory.get(), entity_id)
 
 @app.route('/api/v1/transactions', methods=['GET'])
-@token_required
 def get_transactions():
     """Get the transactions"""
     controller = TransactionController
