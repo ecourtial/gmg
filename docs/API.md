@@ -13,6 +13,11 @@ There are 7 kinds of resource in this application:
 
 Each endpoint is accessible using the prefix _api/v1/_.
 
+The read-only endpoints (GET) do not need authentication (with one exception for the _get user_ one).
+The POST, PATCH and DELETE endpoints need header authentication:
+
+```Authorization: token tokentest123```
+
 ## 1- Users
 
 The _user_ resource is very specific, for security concerns. The following endpoints are available:
