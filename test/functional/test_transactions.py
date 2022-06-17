@@ -359,7 +359,7 @@ class TestTransactions(AbstractTests):
         resp = self.api_call('post', 'transaction', tr_payload, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual("Inconsistent transaction. You tried to create a transaction of type 'Loan-out' while the copy status is 'Out'.", resp.json()['message'])
+        self.assertEqual({'code': 4, 'message': "Inconsistent transaction. You tried to create a transaction of type 'Loan-out' while the copy status is 'Out'."}, resp.json())
 
         # The current copy status should still be "Out"
         resp = self.api_call('get', 'copy/' + copy_id, {}, True)
@@ -391,4 +391,63 @@ class TestTransactions(AbstractTests):
 
         # Delete for cleanup
         resp = self.api_call('delete', 'transaction/' + tr_id, {}, True)
+        self.assertEqual(200, resp.status_code)
+
+
+    def test_cannot_create_two_inbound_transaction_in_a_row(self):
+        # Since the copy creation is not automatic when creating 
+        # an inbound transaction, we first need to create the copy
+        # and THEN the inbound transaction.
+        # However, after that, data must remain consistent and as
+        # we do not accept two consecutive Outbound transaction, we
+        # cannot accept two inbound ones.
+        
+        # First, let's create a copy with the status to "In"
+        # It could represent, for instance, a Game I just bought.
+        payload = {
+                "versionId": 338,
+                "original": True,
+                "boxType": "Big box",
+                "casingType": "CD",
+                "onCompilation": True,
+                "reedition": True,
+                "hasManual": False,
+                'type': 'Physical',
+                "status": "In",
+                "comments": "Well well well..."
+        }
+
+        resp = self.api_call('post', 'copy', payload, True)
+        copy_id = str(resp.json()["id"])
+        
+        # Now let's create the first inbound transaction
+        tr_payload = {
+            "versionId": 338,
+            "copyId": resp.json()["id"],
+            "year": 2022,
+            "month": 2,
+            "day": 4,
+            "type": "Bought",
+            "notes": "",
+            'gameTitle': 'Faust',
+            'platformName': 'PC',
+        }
+
+        resp = self.api_call('post', 'transaction', tr_payload, True)
+
+        self.assertEqual(200, resp.status_code)
+        tr_id = str(resp.json()["id"])
+        tr_payload['id'] = resp.json()["id"]
+        self.assertEqual(tr_payload, resp.json())
+
+        # Now, let's try the same operation: it should fail
+        resp = self.api_call('post', 'transaction', tr_payload, True)
+        self.assertEqual(400, resp.status_code)
+        self.assertEqual({'code': 15, 'message': "Inconsistent transaction. You tried to create a transaction an inbound transaction while the last registered transaction for this copy has of the same kind!"}, resp.json())
+
+        # Delete for cleanup
+        resp = self.api_call('delete', 'transaction/' + tr_id, {}, True)
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.api_call('delete', 'copy/' + copy_id, {}, True)
         self.assertEqual(200, resp.status_code)

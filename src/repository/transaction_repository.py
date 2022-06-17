@@ -23,6 +23,15 @@ class TransactionRepository(AbstractRepository):
             (version_id,)
         )['count']
 
+    def reset_copy_id_for_transactions(self, copy_id, Commit=True):
+        self.write(f"UPDATE {Transaction.table_name} SET copy_id = NULL WHERE copy_id = %s", (copy_id,), Commit)
+
+    def get_last_transaction_for_copy(self, copy_id):
+        return self.fetch_one(
+            f"{self.get_select_request_start()} AND copy_id = %s ORDER BY transaction_id DESC LIMIT 1",
+            (copy_id,)
+        )
+
     def hydrate(self, row):
         """Hydrate an object from a row."""
         version = super().hydrate(row)

@@ -1,3 +1,4 @@
+from src.exception.duplicate_consecutive_operation import DuplicateConsecutiveOperation
 from src.exception.inconsistent_transaction_type_operation import InconsistentTransactionTypeOperation # pylint: disable=C0301
 from src.exception.inconsistent_version_and_copy_id import InconsistentVersionAndCopyIdException
 from src.service.abstract_service import AbstractService
@@ -31,10 +32,16 @@ class TransactionService(AbstractService):
     def insert(self, object):
         version = self.get_version(object)
         copy = self.get_copy(object)
+        self.check_no_duplicate_type_consecutive(copy, object)
         self.check_version_copy_consistency(version, copy)
         self.update_copy_status(object, copy)
         self.update_copy_id(object)
-        object = self.repository.insert(object) # False is important here
+
+        commit = False
+        if copy is None:
+            commit = True
+
+        object = self.repository.insert(object, commit)
         self.update_copy_in_db(object, copy)
 
         return object
@@ -42,10 +49,16 @@ class TransactionService(AbstractService):
     def update(self, object):
         version = self.get_version(object)
         copy = self.get_copy(object)
+        self.check_no_duplicate_type_consecutive(copy, object)
         self.check_version_copy_consistency(version, copy)
         self.update_copy_status(object, copy)
         self.update_copy_id(object)
-        object = self.repository.update(object) # False is important here
+
+        commit = False
+        if copy is None:
+            commit = True
+
+        object = self.repository.update(object, commit)
         self.update_copy_in_db(object, copy)
 
         return object
@@ -85,9 +98,9 @@ class TransactionService(AbstractService):
 
     def update_copy_status(self, transaction, copy): #pylint: disable=no-self-use
         if copy is not None:
-            if ((transaction.get_type() in transaction.transaction_in and copy.get_status() == 'In') or # pylint: disable=C0301
-                (transaction.get_type() in transaction.transaction_out and copy.get_status() == 'Out')): # pylint: disable=C0301
-                raise InconsistentTransactionTypeOperation(transaction.get_type(), copy.get_status()) # pylint: disable=C0301
+            # You cannot create an outbound transaction if you already don't have the copy anymore
+            if transaction.get_type() in transaction.transaction_out and copy.get_status() == 'Out':
+                raise InconsistentTransactionTypeOperation(transaction.get_type(), copy.get_status())
 
             if transaction.get_type() in transaction.transaction_in:
                 copy.set_status('In')
@@ -97,6 +110,7 @@ class TransactionService(AbstractService):
     def update_copy_in_db(self, transaction, copy): #pylint: disable=no-self-use
         if copy is not None:
             if self.is_sold_transaction(transaction):
+                self.repository.reset_copy_id_for_transactions(copy.get_id(), False)
                 self.copy_repository.delete(copy.get_id())
             else:
                 self.copy_repository.update(copy)
@@ -110,3 +124,21 @@ class TransactionService(AbstractService):
     def update_copy_id(self, transaction):
         if self.is_sold_transaction(transaction):
             transaction.set_copy_id(None)
+
+    def check_no_duplicate_type_consecutive(self, copy, transaction):
+        if copy is not None:
+            # You cannot create the same transaction type (Inbound or Outbound type) twice
+            last_transaction_for_copy = self.repository.get_last_transaction_for_copy(copy.get_id())
+            if (last_transaction_for_copy is not None):
+                if transaction.get_type() in transaction.transaction_out:
+                    transaction_type = "outbound"
+                else:
+                    transaction_type = "inbound"
+            
+                if last_transaction_for_copy.get_type() in transaction.transaction_out:
+                    last_transaction_type = "outbound"
+                else:
+                    last_transaction_type = "inbound"
+            
+                if transaction_type == last_transaction_type:
+                    raise DuplicateConsecutiveOperation(transaction_type)
