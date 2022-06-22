@@ -145,6 +145,7 @@ The application relies on 6 resources (not including the users).
 |5.25-inch floppy      |                                                |
 |Other disc            |                                                |
 |Other floppy          |                                                |
+|None                  |                                                |
 
 ### Allowed types for _status_
 

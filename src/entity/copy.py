@@ -58,7 +58,8 @@ class Copy(AbstractEntity):
                 '3.5-inch floppy',
                 '5.25-inch floppy',
                 'Other disc',
-                'Other floppy'
+                'Other floppy',
+                'None'
             }
         },
         'onCompilation': {
