@@ -238,6 +238,7 @@ class TestTransactions(AbstractTests):
         payload = {
                 "versionId": 338,
                 "original": True,
+                'language': 'fr',
                 "boxType": "Big box",
                 "casingType": "CD-like",
                 "onCompilation": True,
@@ -329,6 +330,7 @@ class TestTransactions(AbstractTests):
         payload = {
                 "versionId": 338,
                 "original": True,
+                'language': 'fr',
                 "boxType": "Big box",
                 "casingType": "CD-like",
                 "onCompilation": True,
@@ -407,6 +409,7 @@ class TestTransactions(AbstractTests):
         payload = {
                 "versionId": 338,
                 "original": True,
+                'language': 'fr',
                 "boxType": "Big box",
                 "casingType": "CD-like",
                 "onCompilation": True,

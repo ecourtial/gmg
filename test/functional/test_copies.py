@@ -25,6 +25,7 @@ class TestCopies(AbstractTests):
         payload = {
             "versionId": 9999,
             "original": True,
+            'language': 'fr',
             "boxType": "Big box",
             "casingType": "CD-like",
             "onCompilation": True,
@@ -43,6 +44,7 @@ class TestCopies(AbstractTests):
         payload = {
             "versionId": 1,
             "original": True,
+            'language': 'fr',
             "boxType": "Big boxe",
             "casingType": "CD-like",
             "onCompilation": True,
@@ -71,6 +73,7 @@ class TestCopies(AbstractTests):
                 "id": 1,
                 "versionId": 348,
                 "original": True,
+                'language': 'fr',
                 "boxType": "Big box",
                 "casingType": "CD-like",
                 "onCompilation": False,
@@ -92,6 +95,7 @@ class TestCopies(AbstractTests):
         payload = {
                 "versionId": 348,
                 "original": True,
+                'language': 'fr',
                 "boxType": "Big box",
                 "casingType": "CD-like",
                 "onCompilation": True,
@@ -119,6 +123,7 @@ class TestCopies(AbstractTests):
         payload = {
             "versionId": 348,
             "original": False,
+            'language': 'fr',
             "boxType": "Big box",
             "casingType": "CD-like",
             "onCompilation": True,

@@ -97,6 +97,7 @@ The application relies on 6 resources (not including the users).
 | id                       | int   | No       |  Yes   | The version unique id.                                                      |                                         |
 | versionId                | int   | Yes      |  No    | The id of the version the story relates to.                                 |                                         |
 | original                 | bool  | Yes      |  No    | Is the copy an original (not a copy from an original)?                      |                                         |
+| language                 | string  | Yes      |  No    | Any language value. We recommend to use ISO standards, or _multi_ if mutilanguage.                      |                                         |
 | boxType                  | string| Yes      |  No    | Type of the box (See allowed types below).                                  |                                         |
 | casingType               | string| Yes      |  No    | Casing type of the box (See allowed types below).                           |                                         |
 | onCompilation            | bool  | Yes      |  No    | Is the copy of the game on a compilation?                                   |                                         |

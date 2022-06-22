@@ -15,6 +15,12 @@ class Copy(AbstractEntity):
             'required': True,
             'type': 'int'
         },
+        'language': {
+            'field': 'language',
+            'method': '_language',
+            'required': True,
+            'type': 'string'
+        },
         'boxType': {
             'field': 'box_type',
             'method': '_box_type',
@@ -96,6 +102,7 @@ class Copy(AbstractEntity):
             entity_id,
             version_id,
             is_original,
+            language,
             box_type,
             casing_type,
             on_compilation,
@@ -111,6 +118,7 @@ class Copy(AbstractEntity):
         self.entity_id = entity_id
         self.version_id = int(version_id)
         self.is_original = bool(is_original)
+        self.language = language
         self.box_type = box_type
         self.casing_type = casing_type
         self.on_compilation = bool(on_compilation)
@@ -131,6 +139,9 @@ class Copy(AbstractEntity):
 
     def get_is_original(self):
         return self.is_original
+
+    def get_language(self):
+        return self.language
 
     def get_box_type(self):
         return self.box_type
@@ -161,6 +172,9 @@ class Copy(AbstractEntity):
 
     def set_is_original(self, is_original):
         self.is_original = bool(is_original)
+
+    def set_language(self, language):
+        self.language = language
 
     def set_box_type(self, type):
         self.box_type = type
