@@ -43,6 +43,24 @@ class Copy(AbstractEntity):
                 'None'
             }
         },
+        'supportType': {
+            'field': 'support_type',
+            'method': '_support_type',
+            'required': True,
+            'type': 'strict-text',
+            'allowed_values': {
+                'DVD-ROM',
+                'CD-ROM',
+                'GD-ROM',
+                'MINI-DVD-ROM',
+                'MINI-CD-ROM',
+                'Cartridge',
+                '3.5-inch floppy',
+                '5.25-inch floppy',
+                'Other disc',
+                'Other floppy'
+            }
+        },
         'onCompilation': {
             'field': 'on_compilation',
             'method': '_on_compilation',
@@ -105,6 +123,7 @@ class Copy(AbstractEntity):
             language,
             box_type,
             casing_type,
+            support_type,
             on_compilation,
             is_reedition,
             has_manual,
@@ -121,6 +140,7 @@ class Copy(AbstractEntity):
         self.language = language
         self.box_type = box_type
         self.casing_type = casing_type
+        self.support_type = support_type
         self.on_compilation = bool(on_compilation)
         self.is_reedition = bool(is_reedition)
         self.has_manual = bool(has_manual)
@@ -148,6 +168,9 @@ class Copy(AbstractEntity):
 
     def get_casing_type(self):
         return self.casing_type
+
+    def get_support_type(self):
+        return self.support_type
 
     def get_on_compilation(self):
         return self.on_compilation
@@ -181,6 +204,9 @@ class Copy(AbstractEntity):
 
     def set_casing_type(self, type):
         self.casing_type = type
+
+    def set_support_type(self, support_type):
+        self.support_type = support_type
 
     def set_on_compilation(self, status):
         self.on_compilation = bool(status)

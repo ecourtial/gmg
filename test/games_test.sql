@@ -29,6 +29,7 @@ CREATE TABLE `copies` (
   `language` varchar(255) NOT NULL,
   `box_type` varchar(255) NOT NULL,
   `casing_type` varchar(255) NOT NULL,
+  `support_type` varchar(255) NOT NULL,
   `on_compilation` tinyint unsigned NOT NULL,
   `is_reedition` tinyint unsigned NOT NULL,
   `has_manual` tinyint unsigned NOT NULL,
@@ -47,7 +48,7 @@ CREATE TABLE `copies` (
 
 LOCK TABLES `copies` WRITE;
 /*!40000 ALTER TABLE `copies` DISABLE KEYS */;
-INSERT INTO `copies` VALUES (1,348,1,'fr','Big box','CD-like',0,0,1,'In','Physical','Bought it in 2004'),(2,349,1,'fr','none','Cardboard sleeve',1,1,0,'In','Physical','Got it with my cereals'),(3,245,1,'fr','None','CD-like',1,1,0,'In','Physical','pues');
+INSERT INTO `copies` VALUES (1,348,1,'fr','Big box','CD-like','CD-ROM',0,0,1,'In','Physical','Bought it in 2004'),(2,349,1,'fr','none','Cardboard sleeve','CD-ROM',1,1,0,'In','Physical','Got it with my cereals'),(3,245,1,'fr','None','CD-like','CD-ROM',1,1,0,'In','Physical','pues');
 /*!40000 ALTER TABLE `copies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,4 +292,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-22  7:21:27
+-- Dump completed on 2022-06-22  7:43:52

@@ -100,6 +100,7 @@ The application relies on 6 resources (not including the users).
 | language                 | string  | Yes      |  No    | Any language value. We recommend to use ISO standards, or _multi_ if mutilanguage.                      |                                         |
 | boxType                  | string| Yes      |  No    | Type of the box (See allowed types below).                                  |                                         |
 | casingType               | string| Yes      |  No    | Casing type of the box (See allowed types below).                           |                                         |
+| supportType               | string| Yes      |  No    | The game support type (See allowed types below).                           |                                         |
 | onCompilation            | bool  | Yes      |  No    | Is the copy of the game on a compilation?                                   |                                         |
 | reedition                | bool  | Yes      |  No    | Is the copy of the game on a reedition, like a platinum, a classic one?     |                                         |
 | hasManual                | bool  | Yes      |  No    | Does the copy has a manual?                                                 |                                         |
@@ -129,6 +130,21 @@ The application relies on 6 resources (not including the users).
 |Plastic sleeve        | Just a sleeve for the disc.                                             |
 |Other                 | Other casing.                                                           |
 |None                  | For instance, a loose CD.                                               |
+
+### Allowed types for _supportType_
+
+| Value                | Meaning                                        |
+|----------------------|------------------------------------------------|
+|DVD-ROM               |                                                |
+|CD-ROM                |                                                |
+|GD-ROM                |                                                |
+|MINI-DVD-ROM          |                                                |
+|MINI-CD-ROM           |                                                |
+|Cartridge             |                                                |
+|3.5-inch floppy       |                                                |
+|5.25-inch floppy      |                                                |
+|Other disc            |                                                |
+|Other floppy          |                                                |
 
 ### Allowed types for _status_
 
