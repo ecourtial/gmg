@@ -110,23 +110,24 @@ The application relies on 6 resources (not including the users).
 
 ### Allowed types for _boxType_
 
-| Value        | Meaning                                         |
-|--------------|-------------------------------------------------|
-|Big box       | The big cardboard box.                          |
-|DVD           | The DVD casing (Saturn, PS2...).                |
-|CD            | CD Casing (Playstation, PC without big box...). |
-|None          | No box at all.                                  |
+| Value        | Meaning                                                 |
+|--------------|---------------------------------------------------------|
+|Big box       | The big cardboard boxes we had for PC games in the 90's.|
+|Cartridge box | Cardboard boxes for Nintendo 64 for instance.           |
+|Other         | Other cases with special boxes                          |
+|None          | No box at all.                                          |
 
 ### Allowed types for _casingType_
 
-| Value                | Meaning                                         |
-|----------------------|-------------------------------------------------|
-|DVD                   | The DVD casing (Saturn, PS2...).                |
-|CD                    | CD Casing (Playstation, PC without big box...). |
-|Cardboard sleeve      | Just a sleeve for the disc.                     |
-|Paper sleeve          | Just a sleeve for the disc.                     |
-|Plastic sleeve        | Just a sleeve for the disc.                     |
-|None                  | For instance, a loose CD.                       |
+| Value                | Meaning                                                                 |
+|----------------------|-------------------------------------------------------------------------|
+|DVD-like              | The DVD-like casing (Genesis/Megadrive, Saturn, PS2, Gamecube, Xbox...).|
+|CD-like               | CD-like Casing (Playstation, Dreamcast, PC...).                         |
+|Cardboard sleeve      | Just a sleeve for the disc.                                             |
+|Paper sleeve          | Just a sleeve for the disc.                                             |
+|Plastic sleeve        | Just a sleeve for the disc.                                             |
+|Other                 | Other casing.                                                           |
+|None                  | For instance, a loose CD.                                               |
 
 ### Allowed types for _status_
 

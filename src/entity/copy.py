@@ -28,11 +28,12 @@ class Copy(AbstractEntity):
             'required': True,
             'type': 'strict-text',
             'allowed_values': {
-                'DVD',
-                'CD',
+                'DVD-like',
+                'CD-like',
                 'Cardboard sleeve',
                 'Paper Sleeve',
                 'Plastic Sleeve',
+                'Other',
                 'None'
             }
         },

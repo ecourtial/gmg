@@ -46,7 +46,7 @@ CREATE TABLE `copies` (
 
 LOCK TABLES `copies` WRITE;
 /*!40000 ALTER TABLE `copies` DISABLE KEYS */;
-INSERT INTO `copies` VALUES (1,348,1,'Big box','CD',0,0,1,'In','Physical','Bought it in 2004'),(2,349,1,'none','Cardboard sleeve',1,1,0,'In','Physical','Got it with my cereals'),(3,245,1,'None','CD',1,1,0,'In','Physical','pues');
+INSERT INTO `copies` VALUES (1,348,1,'Big box','CD-like',0,0,1,'In','Physical','Bought it in 2004'),(2,349,1,'none','Cardboard sleeve',1,1,0,'In','Physical','Got it with my cereals'),(3,245,1,'None','CD-like',1,1,0,'In','Physical','pues');
 /*!40000 ALTER TABLE `copies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,4 +290,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-15 19:54:07
+-- Dump completed on 2022-06-22  7:05:56
