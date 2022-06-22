@@ -20,7 +20,7 @@ class Copy(AbstractEntity):
             'method': '_box_type',
             'required': True,
             'type': 'strict-text',
-            'allowed_values': {'Big box', 'DVD', 'CD', 'None'}
+            'allowed_values': {'Big box', 'Cartridge box', 'Other', 'None'}
         },
         'casingType': {
             'field': 'casing_type',
