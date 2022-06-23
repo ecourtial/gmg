@@ -23,7 +23,8 @@ The application relies on 6 resources (not including the users).
 |----------|---------|----------|--------|-----------------------|----------------------------------------------------|
 | id       | int     | No       |  Yes   | The user unique id.   |                                                    |
 | email    | string  | Yes      |  Yes   | The user email.       |                                                    |
-| userName | string  | Yes      |  Yes   | The user pseudo.      |                                                    |
+| username | string  | Yes      |  Yes   | The user pseudo.      |                                                    |
+| password | string  | Yes      |  No    | The user password.    |                                                    |
 | active   | bool    | Yes      |  No    | Is the user active?   |                                                    |
 | token    | string  | No       |  No    | The user API token.   | Only visible throught the _authenticate_ endpoint. |
 

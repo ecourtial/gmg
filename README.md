@@ -3,24 +3,30 @@
 
 ## Description :notebook:
 
+### A back-end application for your video games inventory
 
-EDUCATIVE PROJECT, hence basic Python (PHP programmer)
+GMG is an educational test project. Being a PHP programmer, I developed this project using Python 3.x and Flask 2.
+The goal of this application is to expose API endpoints to manage you video games collection, with various features.
+There is no graphical interfaces, only API endpoints. Data is stored in MySQL.
 
-Why no front end. See my front-end.
+### What? No user interface?
 
-DOC API
+I did not include a GUI because:
+- I am not good at it;
+- it would have implied extra work;
+- coupling between the front and the back;
+- taste and colors...
 
-CONTRACT FIRST OR RESOURCE reprentation?
+The developer who want to use this application is free to develop it's own front app connected through the REST endpoints, it is a classic. You can create a classy shiny state of the art front app or just a basic one using only one part of the features the back-end offers.
 
-A personal educational test project to manage my video games collection. Games can be sorted by support,
-todo list, watch list, ranking...
+However, I developed my own front app, available here (you can see my running version here), using PHP 8.1 and Symfony. However, it does not include the support for all the features given by the back application.
 
 ## Utilization
 
-SEE MY DOC (LIENS)
-
-So far the documentation is basic, but it is enough to help you to start your project.
-On top of that, API responses return explanatory messsages.
+A basic documentation is available:
+* [How to install the project](docs/SETUP.md)
+* [Introduction to the API](docs/API.md)
+* [Resources managed by the application and their API representation](docs/RESOURCES.md)
 
 ## Stack :light_rail:
 
@@ -28,7 +34,7 @@ On top of that, API responses return explanatory messsages.
 * Nginx
 * Gunicorn
 * Python 3.7
-* Flask
+* Flask 2
 * Circle CI
 * unittest
 * pylint
