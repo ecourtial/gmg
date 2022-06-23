@@ -2,6 +2,8 @@
 
 ## Introduction
 
+The API is very basic. It represents resources, there is no contact-oriented endpoint. It was decided to do so because it would have been difficult to find a generic use case for every kind of user. It means that sometimes, you will have to do many calls to get all the information you need.
+
 There are 7 kinds of resource in this application:
 - users;
 - platforms;
