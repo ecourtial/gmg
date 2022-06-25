@@ -19,7 +19,7 @@ I did not include a GUI because:
 
 The developer who want to use this application is free to develop it's own front app connected through the REST endpoints, it is a classic. You can create a classy shiny state of the art front app or just a basic one using only one part of the features the back-end offers.
 
-However, I developed my own front app, available here (you can see my running version here), using PHP 8.1 and Symfony. However, it does not include the support for all the features given by the back application.
+However, I developed my own front app, available [here](https://github.com/ecourtial/gmg-front), using PHP 8.1 and Symfony. You can use it if you don't have specific needs. Note: it does not include the support for all the features given by the back application.
 
 ## Utilization
 
