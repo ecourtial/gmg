@@ -1,17 +1,17 @@
 version: "3.6"
 services:
   nginx:
-    build: Docker/nginx
+    build: docker/nginx
     container_name: nginx_gmg
     ports:
       - "80:80"
     volumes:
-      - ./Docker/data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro  
+      - ./docker/data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - python
 
   python:
-    build: Docker/python
+    build: docker/python
     container_name: python_gmg
     working_dir: /code
     restart: always
@@ -21,10 +21,11 @@ services:
       - mysql
 
   mysql:
-    image: mysql:5.7
+    build: docker/mysql
     container_name: mysql_gmg
     volumes:
         - ./docker/data/db:/var/lib/mysql
+        - .:/code
     command: "--default-authentication-plugin=mysql_native_password"
     ports:
         - "3306:3306"
@@ -33,3 +34,8 @@ services:
         - MYSQL_DATABASE=games
         - MYSQL_USER=game
         - MYSQL_PASSWORD=azerty
+
+networks:
+  default: 
+    external:
+      name: shared-gmg

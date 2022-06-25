@@ -2,59 +2,66 @@ version: '2.1'
 executors:
   python:
     docker:
-      - image: python:latest
+      - image: python:3.7
+        name: python
+      - image: mysql:8.0
+        name: mysql
+        environment:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: games
+          MYSQL_USER: game
+          MYSQL_PASSWORD: azerty
     working_directory: ~/repo
+    resource_class: medium
+
+commands:
+  extra_checkout:
+    description: Add extra packages and apps.
+    steps:
+      - checkout
+      - run:
+          name: "Install requirements for checkout"
+          command: |
+            apt update && apt install -y netcat default-mysql-client git openssh-client curl make nano libzip-dev
+      - run:
+          name: "Install required Python packages"
+          command: |
+            cd docker/python && pip3 install --no-cache-dir -r requirements.txt && pip3 install --force-reinstall pylint==2.13.9 && cd && cd repo
+      - run:
+          name: "Create application configuration"
+          command: |
+            cp configuration.json.dist configuration.json
 
 jobs:
   unittest:
     executor: python
     steps:
-      - checkout
+      - extra_checkout
       - run:
-          name: Run Unittest
-          command: python3 -m unittest discover .
+      # Our primary container isn't MYSQL so run a sleep command until it's ready.
+          name: Waiting for MySQL to be ready
+          command: |
+            for i in `seq 1 90`;
+            do
+              nc -z mysql 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
+      - run:
+          name: Unit tests
+          command: |
+            mysql -h mysql -u game -pazerty games < test/games_test.sql
+            nohup gunicorn --workers=1 --bind=0.0.0.0:9000 app:app &
+            make test_command_python
 
   linter:
     executor: python
     steps:
-      - checkout  
-      - run:
-          name: Install pylint
-          command: pip3 install pylint
+      - extra_checkout  
       - run:
           name: Run pylint
-          command: pip3 install --no-cache-dir  -r docker/python/requirements.txt && pylint --rcfile=standard.rc src/ ./app.py
-
-  sonarcloud:
-    docker:
-        - image: python:latest
-    working_directory: ~/repo
-    steps:
-      - checkout
-      - run:
-          name: Install Sonarqube
-          environment:
-            VERSION: 4.1.0.1829
-          command: |
-            apt update
-            apt install unzip -y
-            mkdir -p /tmp/scanner
-            curl -Ol https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${VERSION}-linux.zip
-            unzip -qq -o sonar-scanner-cli-${VERSION}-linux.zip -d /tmp/scanner
-            mv /tmp/scanner/sonar-scanner-${VERSION}-linux /usr/local/sonar-scanner
-            chmod +x /usr/local/sonar-scanner/bin/sonar-scanner
-            chmod +x /usr/local/sonar-scanner/jre/bin/java
-      - run:
-          name: Run Sonarqube scanner
-          environment:
-            SONARQUBE_SCANNER_PARAMS: '{"sonar.host.url":"https://sonarcloud.io"}'
-            SONAR_SCANNER_OPTS: "-Xmx2048m"
-          command: |
-            if [[ -z ${CIRCLE_PULL_REQUEST} ]]; then \
-                /usr/local/sonar-scanner/bin/sonar-scanner; \
-            else \
-                /usr/local/sonar-scanner/bin/sonar-scanner -Dsonar.pullrequest.key=${CIRCLE_PULL_REQUEST##*/} -Dsonar.pullrequest.branch=${CIRCLE_BRANCH}; \
-            fi
+          command: pylint --rcfile=standard.rc src/ ./app.py
 
 workflows:
   version: '2.1'
@@ -62,5 +69,3 @@ workflows:
     jobs:
       - linter
       - unittest
-      - sonarcloud:
-          context: SonarCloud

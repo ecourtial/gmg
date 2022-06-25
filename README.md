@@ -3,20 +3,30 @@
 
 ## Description :notebook:
 
-A personal educational test project to manage my video games collection. Games can be sorted by support,
-todo list, watch list, ranking...
+### A back-end application for your video games inventory
+
+GMG is an educational test project. Being a PHP programmer, I developed this project using Python 3.x and Flask 2.
+The goal of this application is to expose API endpoints to manage you video games collection, with various features.
+There is no graphical interfaces, only API endpoints. Data is stored in MySQL.
+
+### What? No user interface?
+
+I did not include a GUI because:
+- I am not good at it;
+- it would have implied extra work;
+- coupling between the front and the back;
+- taste and colors...
+
+The developer who want to use this application is free to develop it's own front app connected through the REST endpoints, it is a classic. You can create a classy shiny state of the art front app or just a basic one using only one part of the features the back-end offers.
+
+However, I developed my own front app, available [here](https://github.com/ecourtial/gmg-front), using PHP 8.1 and Symfony. You can use it if you don't have specific needs. Note: it does not include the support for all the features given by the back application.
 
 ## Utilization
 
-* In dev mode: just do a __make start__. In production, make your gunicorn server to launch the application __app.py__.
-
-* An empty database is given in the repository: just import it.
-
-* In the root folder, copy the file _configuration.json.dist_ to _configuration.json_ and fill it with your values.
-
-* Once the application is running, go to __/register__ to create an account.
-
-* Then go to your database to enable the user you just created. That's it.
+A basic documentation is available:
+* [How to install the project](docs/SETUP.md)
+* [Introduction to the API](docs/API.md)
+* [Resources managed by the application and their API representation](docs/RESOURCES.md)
 
 ## Stack :light_rail:
 
@@ -24,70 +34,8 @@ todo list, watch list, ranking...
 * Nginx
 * Gunicorn
 * Python 3.7
-* Flask
-* Jinja 2
+* Flask 2
 * Circle CI
-* jQuery
-* RequireJS
 * unittest
 * pylint
-* Ansible
-
-## Changelog
-
-## 3.6.0
-
-* In the todo and to watch screens: separate games with a position from the others.
-* In the trading history: games are also separated by month, not only per year.
-
-## 3.5.0
-
-* Platform is now visible in the history screen.
-* Added a trading feature: you can list the games you bought or sell.
-* Added a position (rank) in the "to play" and "to watch" sections.
-* Restructuration of the menu
-
-### 3.4.0
-
-* Added watched and played badges in the history section.
-
-### 3.3.0
-
-* Added a new feature: "Best Game Forever". Different from the hall of fames. BGF games are still valuable today, while some entries in the HOF were valuable only at time.
-
-### 3.2.0
-
-* Added a blacktheme (the white one is no longer applied).
-* Added a "Has the box" badge when we have the original box (not a re-edition).
-* Fixed the "To do with help" badge that was not displayed in the header of a game details page.
-* Resized the textarea for the comment section when editing a game.
-
-### 3.1.0
-
-* Added a "todo with help" icon in the game list if the game is to be completed with some help.
-* The game id is now visible in the game lists.
-* Added a History menu to log the games we finish (watched or played).
-
-### 3.0.1
-
-* Fixed a bug when adding a new game while edition was still working.
-
-## Todo
-
-Yet the project is fully working, there are some features or elements to improve:
-
-* Internationalization.
-
-* Add a logical check if the user already exists when creating an account.
-
-* Improve error handling on front-end... after improving it on back-end (return the proper HTTP headers according to the error).
-
-* Add the possibility to remove a platform.
-
-* Improve form validation.
-
-* Add the possibility to store the user id of the user who registered a game and the id of the last user to edit a given game.
-
-* Add unit tests (so far only the game entity is covered).
-
-* Remove coupling between front and back. Use REST APIs instead of the current implementation.
+* MySQL 8

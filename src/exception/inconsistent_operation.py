@@ -1,0 +1,2 @@
+class InconsistentOperation(Exception):
+    "Abstract"

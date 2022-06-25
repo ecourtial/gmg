@@ -4,33 +4,73 @@ from src.entity.user import User
 
 class UserRepository(AbstractRepository):
     """ Another useless comment """
-
-    def get_by_id(self, user_id):
-        """Gets an user by id"""
-        request = "SELECT * FROM users WHERE id = %s;"
-
-        return self.fetch_one(request, (user_id,))
+    entity = User
 
     def get_by_email(self, user_email):
         """Gets an user by email"""
-        request = "SELECT * FROM users WHERE email = %s;"
+        request = self.get_select_request_start() + "AND email = %s;"
 
         return self.fetch_one(request, (user_email,))
 
-    def insert(self, email, password, salt, user_name):
+    def get_active_by_token(self, user_token):
+        """Gets an user by its token"""
+        request = self.get_select_request_start() + "AND token = %s AND status = 1 LIMIT 1;"
+
+        return self.fetch_one(request, (user_token,))
+
+    def get_by_user_name(self,  user_name):
+        """Check if a user already exists"""
+        request = self.get_select_request_start() + "AND user_name = %s LIMIT 1;"
+
+        return self.fetch_one(request, (user_name,))
+
+    def insert(self, object, commit=True):
         """Inserts an user"""
-        request = "INSERT INTO users (email, password, salt, status, user_name)"
-        request += " VALUES (%s, %s, %s, 0, %s);"
-        self.write(request, (email, password, salt, user_name))
+        request = "INSERT INTO users (email, password, salt, status, user_name, token)"
+        request += " VALUES (%s, %s, %s, 0, %s, %s);"
+        self.write(
+            request,
+            (
+                object.get_email(),
+                object.get_password(),
+                object.get_salt(),
+                object.get_user_name(),
+                object.get_token()
+            ),
+            commit
+        )
 
-    def update(self, email_ref, new_email, password):
+        return self.get_by_email(object.get_email())
+
+    def update(self, object, commit=True):
         """Updates an user"""
-        request = "UPDATE users SET email = %s, password = %s WHERE email = %s;"
-        self.write(request, (new_email, password, email_ref))
+        request = "UPDATE users SET email = %s, password = %s, status = %s, user_name = %s, token = %s "
+        request += "WHERE id = %s;"
+        self.write(
+            request,
+            (
+                object.get_email(),
+                object.get_password(),
+                object.get_is_active(),
+                object.get_user_name(),
+                object.get_token(),
+                object.get_id()
+            ),
+            commit
+        )
 
-    @classmethod
-    def hydrate(cls, row):
+        return self.get_by_id(object.get_id())
+
+    def hydrate(self, row):
         """Hydrate an object from a row."""
-        user = User(row)
+        user = User(
+            row['id'],
+            row['email'],
+            row['password'],
+            row['status'],
+            row['user_name'],
+            row['salt'],
+            row['token'],
+        )
 
         return user

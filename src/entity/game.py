@@ -1,53 +1,66 @@
-""" Game entity for the GMG project """
-import json
+from src.entity.abstract_entity import AbstractEntity
 
-class Game:
+class Game(AbstractEntity):
+    expected_fields = {
+        'title': {'field': 'title', 'method': '_title', 'required': True, 'type': 'text'},
+        'notes': {
+            'field': 'notes',
+            'method': '_notes',
+            'required': False,
+            'type': 'text',
+            'default': ''
+        },
+    }
+
+    authorized_extra_fields_for_filtering = {
+        'id': {'field': 'id', 'origin': 'native', 'type': 'int'},
+        'versionCount': {'field': 'versionCount', 'origin': 'computed', 'type': 'int'}
+    }
+
+    table_name = 'games'
+    primary_key = 'id'
+
     """ This class represent a game, for instance "The Secret Of Monkey Island" """
     def __init__(
             self,
-            game_id,
+            entity_id,
             title,
-            platform
+            notes,
+            version_count = None,
     ):
-        self.game_id = game_id
+        self.entity_id = entity_id
         self.title = title
-        self.platform = platform
-        self.meta = []
+        self.notes = notes
+        self.version_count = int(version_count or 0)
 
-    def get_game_id(self):
+    def get_id(self):
         """Return the id of the game, for instance "125"."""
 
-        return self.game_id
+        return self.entity_id
 
     def get_title(self):
         """Return the title of the game, for instance "Woodruff and the Schnibble of Azimuth"."""
 
         return self.title
 
-    def get_platform(self):
-        """Platform?"""
+    def set_title(self, title):
+        self.title = title
 
-        return self.platform
+    def get_notes(self):
+        return self.notes
 
-    def get_meta(self):
-        """Return metadata"""
+    def set_notes(self, notes):
+        self.notes = notes
 
-        return self.meta
+    def get_version_count(self):
+        return self.version_count
 
-    def set_meta(self, meta):
-        """Set the metadata"""
-        self.meta = meta
-
-    def to_json(self):
-        """Jsonify the object"""
-        return json.dumps(self, default=lambda o: o.__dict__)
+    def set_version_count(self, version_count):
+        self.version_count = int(version_count or 0)
 
     def serialize(self):
-        """serialize the object"""
-        return {
-            'game_id': self.game_id,
-            'title': self.title,
-            'platform': self.platform.get_platform_id(),
-            'platform_name': self.platform.get_name(),
-            'meta' : self.meta
-        }
+        values = super().serialize()
+
+        values['versionCount'] = self.get_version_count()
+
+        return values

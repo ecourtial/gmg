@@ -1,4 +1,4 @@
 __pycache__/
-Docker/data/db
+docker/data/db
 test/**/*.pyc
 configuration.json
