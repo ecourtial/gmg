@@ -34,8 +34,3 @@ services:
         - MYSQL_DATABASE=games
         - MYSQL_USER=game
         - MYSQL_PASSWORD=azerty
-
-networks:
-  default: 
-    external:
-      name: shared-gmg
