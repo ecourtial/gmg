@@ -31,3 +31,6 @@ import_db_command:
 
 test_command_python:
 	python -m unittest discover .
+
+migration:
+	docker compose exec mysql bash -c 'cd /code && mysql -u game -pazerty games < migrations/${FILE}.sql'

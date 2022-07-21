@@ -27,6 +27,7 @@ A basic documentation is available:
 * [How to install the project](docs/SETUP.md)
 * [Introduction to the API](docs/API.md)
 * [Resources managed by the application and their API representation](docs/RESOURCES.md)
+* [Migrations and update guide](docs/MIGRATIONS.md)
 
 ## Stack :light_rail:
 
@@ -39,3 +40,7 @@ A basic documentation is available:
 * unittest
 * pylint
 * MySQL 8
+
+## Changelog
+
+The changelog is available [here](CHANGELOG.md)

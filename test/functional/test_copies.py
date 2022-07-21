@@ -85,6 +85,7 @@ class TestCopies(AbstractTests):
                 "status": "In",
                 'type': 'Physical',
                 "comments": "Bought it in 2004",
+                'isROM': False,
                 'gameTitle': 'Tonic Trouble',
                 'platformName': 'PC',
                 'transactionCount': 2,
@@ -118,6 +119,7 @@ class TestCopies(AbstractTests):
         self.assertEqual(200, resp.status_code)
         copy_id = str(resp.json()["id"])
         payload['id'] = int(copy_id)
+        payload['isROM'] = False
         self.assertEqual(payload, resp.json())
 
         resp = self.api_call('get', 'copy/' + str(copy_id), None, True)
@@ -136,6 +138,7 @@ class TestCopies(AbstractTests):
             "hasManual": False,
             "status": "In",
             "comments": "Found it somewhere",
+            "isROM": True,
             'platformName': 'PC',
             'gameTitle': 'Tonic Trouble',
             'transactionCount': 0,
@@ -144,6 +147,7 @@ class TestCopies(AbstractTests):
 
         resp = self.api_call('patch', 'copy/' + copy_id, payload, True)
         payload['id'] = int(copy_id)
+        payload['isROM'] = True
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual(payload, resp.json()) 
