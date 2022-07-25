@@ -17,6 +17,7 @@ Change them as soon as your project is running!
 
 The usual process to setup a project is the following:
 * Import the empty database (available at the root of the folder).
+* Run all the migrations ([see here](./MIGRATIONS.md))
 * Deploy the code.
 * Configure the application.
 * Start the application.
