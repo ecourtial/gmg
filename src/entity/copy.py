@@ -154,7 +154,7 @@ class Copy(AbstractEntity):
         self.has_manual = bool(has_manual)
         self.status = status
         self.type = type
-        self.is_rom = bool(is_rom or False)
+        self.is_rom = bool(is_rom)
         self.comments = comments
         self.platform_name = platform_name
         self.game_title = game_title
