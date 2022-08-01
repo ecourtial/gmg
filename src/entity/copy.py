@@ -39,6 +39,7 @@ class Copy(AbstractEntity):
                 'Cardboard sleeve',
                 'Paper Sleeve',
                 'Plastic Sleeve',
+                'Plastic tube',
                 'Other',
                 'None'
             }

@@ -61,6 +61,27 @@ class TestCopies(AbstractTests):
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, None, Other.", 'code': 11}, resp.json())
 
+    def test_create_invalid_casing_type(self):
+        payload = {
+            "versionId": 1,
+            "original": True,
+            'language': 'fr',
+            "boxType": "Cartridge box",
+            "casingType": "CD-likesss",
+            'supportType': 'CD-ROM',
+            "onCompilation": True,
+            "reedition": True,
+            "hasManual": False,
+            "status": "In",
+            "comments": "Found it somewhere"
+        }
+
+        resp = self.api_call('post', 'copy', payload, True)
+        
+        self.assertEqual(400, resp.status_code)
+        self.assertEqual({'message': "The field 'casingType' does not support the value 'CD-likesss'. Supported values are: CD-like, Cardboard sleeve, DVD-like, None, Other, Paper Sleeve, Plastic Sleeve, Plastic tube.", 'code': 11}, resp.json())
+
+
     def test_get_copy(self):
         # Does not exist
         resp = self.api_call('get', 'copy/666', {}, True)
