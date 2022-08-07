@@ -95,21 +95,22 @@ The application relies on 6 resources (not including the users).
 
 | Field                    | Type  | Editable | Unique | Role                                                                        |         Notes                           |
 |--------------------------|-------|----------|--------|-----------------------------------------------------------------------------|-----------------------------------------|
-| id                       | int   | No       |  Yes   | The version unique id.                                                      |                                         |
-| versionId                | int   | Yes      |  No    | The id of the version the story relates to.                                 |                                         |
-| original                 | bool  | Yes      |  No    | Is the copy an original (not a copy from an original)?                      |                                         |
-| language                 | string  | Yes      |  No    | Any language value. We recommend to use ISO standards, or _multi_ if mutilanguage.                      |                                         |
-| boxType                  | string| Yes      |  No    | Type of the box (See allowed types below).                                  |                                         |
-| casingType               | string| Yes      |  No    | Casing type of the box (See allowed types below).                           |                                         |
-| supportType               | string| Yes      |  No    | The game support type (See allowed types below).                           |                                         |
-| onCompilation            | bool  | Yes      |  No    | Is the copy of the game on a compilation?                                   |                                         |
-| reedition                | bool  | Yes      |  No    | Is the copy of the game on a reedition, like a platinum, a classic one?     |                                         |
-| hasManual                | bool  | Yes      |  No    | Does the copy has a manual?                                                 |                                         |
-| status                   | string| Yes      |  No    | Do you currently have this copy (See allowed types below)?                  |                                         |
-| type                     | string| Yes      |  No    | Type of the copy (See allowed types below)?                                 |                                         |
-| comments                 | string| Yes      |  No    | Commments.                                                                  |                                         |
-| platformName             | string| No       |  No    | The name of the platform.                                                   |                                         |
-| gameTitle                | string| No       |  No    | The title of the game related to this copy.                                 |                                         |
+| id                       | int   | No       |  Yes   | The version unique id.                                                             |                                  |
+| versionId                | int   | Yes      |  No    | The id of the version the story relates to.                                        |                                  |
+| original                 | bool  | Yes      |  No    | Is the copy an original (not a copy from an original)?                             |                                  |
+| language                 | string| Yes      |  No    | Any language value. We recommend to use ISO standards, or _multi_ if mutilanguage. |                                  |
+| boxType                  | string| Yes      |  No    | Type of the box (See allowed types below).                                         |                                  |
+| casingType               | string| Yes      |  No    | Casing type of the box (See allowed types below).                                  |                                  |
+| supportType              | string| Yes      |  No    | The game support type (See allowed types below).                                   |                                  |
+| onCompilation            | bool  | Yes      |  No    | Is the copy of the game on a compilation?                                          |                                  |
+| reedition                | bool  | Yes      |  No    | Is the copy of the game on a reedition, like a platinum, a classic one?            |                                  |
+| hasManual                | bool  | Yes      |  No    | Does the copy has a manual?                                                        |                                  |
+| status                   | string| Yes      |  No    | Do you currently have this copy (See allowed types below)?                         |                                  |
+| type                     | string| Yes      |  No    | Type of the copy (See allowed types below)?                                        |                                  |
+| is_rom                   | bool  | Yes      |  No    | Is the copy a ROM?                                                                 |                                  |
+| comments                 | string| Yes      |  No    | Commments.                                                                         |                                  |
+| platformName             | string| No       |  No    | The name of the platform.                                                          |                                  |
+| gameTitle                | string| No       |  No    | The title of the game related to this copy.                                        |                                  |
 
 ### Allowed types for _boxType_
 

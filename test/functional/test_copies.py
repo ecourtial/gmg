@@ -61,6 +61,27 @@ class TestCopies(AbstractTests):
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, None, Other.", 'code': 11}, resp.json())
 
+    def test_create_invalid_casing_type(self):
+        payload = {
+            "versionId": 1,
+            "original": True,
+            'language': 'fr',
+            "boxType": "Cartridge box",
+            "casingType": "CD-likesss",
+            'supportType': 'CD-ROM',
+            "onCompilation": True,
+            "reedition": True,
+            "hasManual": False,
+            "status": "In",
+            "comments": "Found it somewhere"
+        }
+
+        resp = self.api_call('post', 'copy', payload, True)
+        
+        self.assertEqual(400, resp.status_code)
+        self.assertEqual({'message': "The field 'casingType' does not support the value 'CD-likesss'. Supported values are: CD-like, Cardboard sleeve, DVD-like, None, Other, Paper Sleeve, Plastic Sleeve, Plastic tube.", 'code': 11}, resp.json())
+
+
     def test_get_copy(self):
         # Does not exist
         resp = self.api_call('get', 'copy/666', {}, True)
@@ -85,6 +106,7 @@ class TestCopies(AbstractTests):
                 "status": "In",
                 'type': 'Physical',
                 "comments": "Bought it in 2004",
+                'isROM': False,
                 'gameTitle': 'Tonic Trouble',
                 'platformName': 'PC',
                 'transactionCount': 2,
@@ -118,6 +140,7 @@ class TestCopies(AbstractTests):
         self.assertEqual(200, resp.status_code)
         copy_id = str(resp.json()["id"])
         payload['id'] = int(copy_id)
+        payload['isROM'] = False
         self.assertEqual(payload, resp.json())
 
         resp = self.api_call('get', 'copy/' + str(copy_id), None, True)
@@ -136,6 +159,7 @@ class TestCopies(AbstractTests):
             "hasManual": False,
             "status": "In",
             "comments": "Found it somewhere",
+            "isROM": True,
             'platformName': 'PC',
             'gameTitle': 'Tonic Trouble',
             'transactionCount': 0,
@@ -144,6 +168,7 @@ class TestCopies(AbstractTests):
 
         resp = self.api_call('patch', 'copy/' + copy_id, payload, True)
         payload['id'] = int(copy_id)
+        payload['isROM'] = True
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual(payload, resp.json()) 

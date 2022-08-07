@@ -39,6 +39,7 @@ class Copy(AbstractEntity):
                 'Cardboard sleeve',
                 'Paper Sleeve',
                 'Plastic Sleeve',
+                'Plastic tube',
                 'Other',
                 'None'
             }
@@ -103,6 +104,12 @@ class Copy(AbstractEntity):
             'type': 'text',
             'default': ''
         },
+        'isROM': {
+            'field': 'is_rom',
+            'method': '_is_rom',
+            'required': False,
+            'type': 'int'
+        },
     }
 
     authorized_extra_fields_for_filtering = {
@@ -131,6 +138,7 @@ class Copy(AbstractEntity):
             status,
             type,
             comments,
+            is_rom = None,
             platform_name = None,
             game_title = None,
             transaction_count = None,
@@ -147,6 +155,7 @@ class Copy(AbstractEntity):
         self.has_manual = bool(has_manual)
         self.status = status
         self.type = type
+        self.is_rom = bool(is_rom)
         self.comments = comments
         self.platform_name = platform_name
         self.game_title = game_title
@@ -188,6 +197,9 @@ class Copy(AbstractEntity):
     def get_type(self):
         return self.type
 
+    def get_is_rom(self):
+        return self.is_rom
+
     def get_comments(self):
         return self.comments
 
@@ -223,6 +235,9 @@ class Copy(AbstractEntity):
 
     def set_type(self, type):
         self.type = type
+
+    def set_is_rom(self, is_rom):
+        self.is_rom = bool(is_rom)
 
     def set_comments(self, comments):
         self.comments = comments

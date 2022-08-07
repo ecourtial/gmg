@@ -14,7 +14,6 @@ services:
     build: docker/python
     container_name: python_gmg
     working_dir: /code
-    restart: always
     volumes:
       - .:/code
     depends_on:
@@ -34,8 +33,3 @@ services:
         - MYSQL_DATABASE=games
         - MYSQL_USER=game
         - MYSQL_PASSWORD=azerty
-
-networks:
-  default: 
-    external:
-      name: shared-gmg

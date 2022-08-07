@@ -53,6 +53,7 @@ jobs:
           command: |
             mysql -h mysql -u game -pazerty games < test/games_test.sql
             nohup gunicorn --workers=1 --bind=0.0.0.0:9000 app:app &
+            sleep 5
             make test_command_python
 
   linter:

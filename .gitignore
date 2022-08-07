@@ -2,3 +2,5 @@ __pycache__/
 docker/data/db
 test/**/*.pyc
 configuration.json
+.history/
+.vscode/
