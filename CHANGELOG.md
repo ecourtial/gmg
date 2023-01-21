@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.1.1
+* Security updates.
+
 ## 4.1.0
 
 ### New features
