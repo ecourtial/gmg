@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.2.0
+* Added new support types: Blu-ray, MINI-Blu-ray, External drive.
+
 ## 4.1.1
 * Security updates.
 

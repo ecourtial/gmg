@@ -50,9 +50,11 @@ class Copy(AbstractEntity):
             'required': True,
             'type': 'strict-text',
             'allowed_values': {
+                'Blu-ray',
                 'DVD-ROM',
                 'CD-ROM',
                 'GD-ROM',
+                'MINI-Blu-ray'
                 'MINI-DVD-ROM',
                 'MINI-CD-ROM',
                 'Cartridge',
@@ -60,6 +62,7 @@ class Copy(AbstractEntity):
                 '5.25-inch floppy',
                 'Other disc',
                 'Other floppy',
+                'External drive',
                 'None'
             }
         },

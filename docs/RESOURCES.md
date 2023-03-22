@@ -137,9 +137,11 @@ The application relies on 6 resources (not including the users).
 
 | Value                | Meaning                                        |
 |----------------------|------------------------------------------------|
+|Blu-ray               |                                                |
 |DVD-ROM               |                                                |
 |CD-ROM                |                                                |
 |GD-ROM                |                                                |
+|MINI-Blu-ray          |                                                |
 |MINI-DVD-ROM          |                                                |
 |MINI-CD-ROM           |                                                |
 |Cartridge             |                                                |
@@ -147,6 +149,7 @@ The application relies on 6 resources (not including the users).
 |5.25-inch floppy      |                                                |
 |Other disc            |                                                |
 |Other floppy          |                                                |
+|External drive        |                                                |
 |None                  |                                                |
 
 ### Allowed types for _status_
