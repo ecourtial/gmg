@@ -2,6 +2,7 @@
 
 ## 4.2.0
 * Added new support types: Blu-ray, MINI-Blu-ray, External drive.
+* Added region type for a copy: PAL, JAP... The migration is included, setting the default value to PAL.
 
 ## 4.1.1
 * Security updates.

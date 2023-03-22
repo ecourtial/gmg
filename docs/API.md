@@ -78,9 +78,31 @@ A numeric field can also be used for sorting. Let's look at the following exampl
 Here you want to get all the versions (with the defaut pagination: first page, max result limit set to 30) but only the ones who have copies (hence the > 0 operator).
 
 
-| API syntax | Signification |           Example              |
+| API syntax | Meaning       |           Example              |
 |------------|---------------|--------------------------------|
 |lt          |Lesser than    |```versions?copyCount[]=lt-2``` |
 |gt          |Greater than   |```versions?copyCount[]=gt-1``` |
 |eq          |Equal          |```versions?copyCount[]=eq-1``` |
 |neq         |Not equal      |```versions?copyCount[]=neq-1```|
+
+### 4- API error codes
+
+When something goes wrong, we try to handle it with a specific exception and a specific error code so you can act properly on your side. These exception are located in the _src/exception_ folder. Below are the error codes.
+
+| Code  | Title                              | Meaning                                                                                              |
+|-------|------------------------------------|------------------------------------------------------------------------------------------------------|
+|  1    | Resource not found                 |                                                                                                      |
+|  2    | Invalid credentials                |                                                                                                      |
+|  3    | Inactive user                      |                                                                                                      |
+|  4    | Inconsistant transaction operation | Raised when you try, for instance, to sold a copy you don't have                                     |
+|  5    | Invalid input                      | Raised when the expected value is not good, inconsistent...                                          |
+|  6    | Missing mandatory field value      |                                                                                                      |
+|  7    | Missing mandatory header           |                                                                                                      |
+|  8    | Resource already exists            |                                                                                                      |
+|  9    | Resource has children              | Raised when the resource has children, for instance a version of a game has stories                  |
+|  10   | Unsupported filter                 |                                                                                                      |
+|  11   | Unsupported value                  |                                                                                                      |
+|  12   | Missing authentication token       |                                                                                                      |
+|  13   | Authentication token is invalid    |                                                                                                      |
+|  14   | Inconsistant version and copy      | Raised when you try to create a transaction for which version_id and the copy version_id don't match |
+|  15   | Duplicate consecutive operation    | Raised when you try, for instance, to create two consecutive inbound transaction                     |

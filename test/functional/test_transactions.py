@@ -247,6 +247,7 @@ class TestTransactions(AbstractTests):
                 "hasManual": False,
                 "status": "In",
                 'type': 'Physical',
+                'region': 'PAL',
                 "comments": "Well well well..."
         }
 
@@ -338,8 +339,9 @@ class TestTransactions(AbstractTests):
                 "onCompilation": True,
                 "reedition": True,
                 "hasManual": False,
+                'status': 'Out',
                 'type': 'Physical',
-                "status": "Out",
+                'region': 'PAL',
                 "comments": "Well well well..."
         }
 
@@ -418,8 +420,9 @@ class TestTransactions(AbstractTests):
                 "onCompilation": True,
                 "reedition": True,
                 "hasManual": False,
-                'type': 'Physical',
                 "status": "In",
+                'type': 'Physical',
+                'region': 'PAL',
                 "comments": "Well well well..."
         }
 

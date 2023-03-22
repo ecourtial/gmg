@@ -35,6 +35,7 @@ CREATE TABLE `copies` (
   `has_manual` tinyint unsigned NOT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'In',
   `type` varchar(255) NOT NULL,
+  `region` varchar(255) NOT NULL,
   `comments` text,
   PRIMARY KEY (`copy_id`),
   KEY `version_id` (`version_id`),
