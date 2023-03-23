@@ -54,7 +54,7 @@ class Copy(AbstractEntity):
                 'DVD-ROM',
                 'CD-ROM',
                 'GD-ROM',
-                'MINI-Blu-ray'
+                'MINI-Blu-ray',
                 'MINI-DVD-ROM',
                 'MINI-CD-ROM',
                 'Cartridge',
