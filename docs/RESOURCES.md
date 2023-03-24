@@ -102,7 +102,8 @@ The application relies on 6 resources (not including the users).
 | boxType                  | string| Yes      |  No    | Type of the box (See allowed types below).                                         |                                  |
 | casingType               | string| Yes      |  No    | Casing type of the box (See allowed types below).                                  |                                  |
 | supportType              | string| Yes      |  No    | The game support type (See allowed types below).                                   |                                  |
-| onCompilation            | bool  | Yes      |  No    | Is the copy of the game on a compilation?                                          |                                  |
+| onCompilation            | bool  | Yes      |  No    | Is the copy of the game on a compilation?                                          |
+| region            | string  | Yes      |  No    | Region lock of the game? (See allowed types below).                                        |                                  |
 | reedition                | bool  | Yes      |  No    | Is the copy of the game on a reedition, like a platinum, a classic one?            |                                  |
 | hasManual                | bool  | Yes      |  No    | Does the copy has a manual?                                                        |                                  |
 | status                   | string| Yes      |  No    | Do you currently have this copy (See allowed types below)?                         |                                  |
@@ -137,9 +138,11 @@ The application relies on 6 resources (not including the users).
 
 | Value                | Meaning                                        |
 |----------------------|------------------------------------------------|
+|Blu-ray               |                                                |
 |DVD-ROM               |                                                |
 |CD-ROM                |                                                |
 |GD-ROM                |                                                |
+|MINI-Blu-ray          |                                                |
 |MINI-DVD-ROM          |                                                |
 |MINI-CD-ROM           |                                                |
 |Cartridge             |                                                |
@@ -147,6 +150,7 @@ The application relies on 6 resources (not including the users).
 |5.25-inch floppy      |                                                |
 |Other disc            |                                                |
 |Other floppy          |                                                |
+|External drive        |                                                |
 |None                  |                                                |
 
 ### Allowed types for _status_
@@ -162,6 +166,17 @@ The application relies on 6 resources (not including the users).
 |----------------------|------------------------------------------------|
 |Physical              | The copy is physical.                          |
 |Virtual               | The copy is virtual (ex: bought on _Steam_).   |
+
+
+### Allowed types for _region_
+
+| Value                | Meaning                                        |
+|----------------------|------------------------------------------------|
+|PAL                   | Europe, New Zealand, Australia, Middle East, India, South Africa                                          |
+|JAP                   | Japan and Asia (NTSC-J)                        |
+|NTSC                  | North America and South America (NTSC-U)       |
+|CHINA                 | China (NTSC-C)                                 |
+
 
 ## Transaction
 

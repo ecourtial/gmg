@@ -50,9 +50,11 @@ class Copy(AbstractEntity):
             'required': True,
             'type': 'strict-text',
             'allowed_values': {
+                'Blu-ray',
                 'DVD-ROM',
                 'CD-ROM',
                 'GD-ROM',
+                'MINI-Blu-ray',
                 'MINI-DVD-ROM',
                 'MINI-CD-ROM',
                 'Cartridge',
@@ -60,6 +62,7 @@ class Copy(AbstractEntity):
                 '5.25-inch floppy',
                 'Other disc',
                 'Other floppy',
+                'External drive',
                 'None'
             }
         },
@@ -95,6 +98,18 @@ class Copy(AbstractEntity):
             'allowed_values': {
                 'Physical',
                 'Virtual',
+            }
+        },
+        'region': {
+            'field': 'region',
+            'method': '_region',
+            'required': True,
+            'type': 'strict-text',
+            'allowed_values': {
+                'PAL',
+                'JAP',
+                'NTSC',
+                'CHINA'
             }
         },
         'comments': {
@@ -137,6 +152,7 @@ class Copy(AbstractEntity):
             has_manual,
             status,
             type,
+            region,
             comments,
             is_rom = None,
             platform_name = None,
@@ -155,6 +171,7 @@ class Copy(AbstractEntity):
         self.has_manual = bool(has_manual)
         self.status = status
         self.type = type
+        self.region = region
         self.is_rom = bool(is_rom)
         self.comments = comments
         self.platform_name = platform_name
@@ -200,6 +217,9 @@ class Copy(AbstractEntity):
     def get_is_rom(self):
         return self.is_rom
 
+    def get_region(self):
+        return self.region
+
     def get_comments(self):
         return self.comments
 
@@ -238,6 +258,9 @@ class Copy(AbstractEntity):
 
     def set_is_rom(self, is_rom):
         self.is_rom = bool(is_rom)
+
+    def set_region(self, region):
+        self.region = region
 
     def set_comments(self, comments):
         self.comments = comments

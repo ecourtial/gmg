@@ -2,7 +2,7 @@
 
 ## Locally (DEV)
 
-In the root folder, copy the file _configuration.json.dist_ to _configuration.json_ and fill it with your values (the Google Captcha values are mandatory). The MySQL credentials are visible in the _docker-compose.yml_ in the root folder.
+In the root folder, copy the file _configuration.json.dist_ to _configuration.json_ and fill it with your values. The MySQL credentials are visible in the _docker-compose.yml_ in the root folder.
 
 Next, just do a __make start__, and then run __make test__ to run the tests and import the local DB with test features. You're good to go!
 

@@ -34,6 +34,7 @@ class TestCopies(AbstractTests):
             "hasManual": False,
             "status": "In",
             'type': 'Physical',
+            'region': 'PAL',
             "comments": "Found it somewhere"
         }
         resp = self.api_call('post', 'copy', payload, True)
@@ -105,6 +106,7 @@ class TestCopies(AbstractTests):
                 "hasManual": True,
                 "status": "In",
                 'type': 'Physical',
+                'region': 'PAL',
                 "comments": "Bought it in 2004",
                 'isROM': False,
                 'gameTitle': 'Tonic Trouble',
@@ -129,6 +131,7 @@ class TestCopies(AbstractTests):
                 "hasManual": False,
                 "status": "In",
                 'type': 'Virtual',
+                'region': 'PAL',
                 "comments": "Found it somewhere",
                 'gameTitle': 'Tonic Trouble',
                 'platformName': 'PC',
@@ -164,6 +167,7 @@ class TestCopies(AbstractTests):
             'gameTitle': 'Tonic Trouble',
             'transactionCount': 0,
             'type': 'Physical',
+            'region': 'PAL',
         }
 
         resp = self.api_call('patch', 'copy/' + copy_id, payload, True)

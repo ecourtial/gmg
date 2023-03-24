@@ -35,6 +35,7 @@ CREATE TABLE `copies` (
   `has_manual` tinyint unsigned NOT NULL,
   `status` varchar(255) NOT NULL DEFAULT 'In',
   `type` varchar(255) NOT NULL,
+  `region` varchar(255) NOT NULL,
   `is_rom` tinyint unsigned NOT NULL DEFAULT '0',
   `comments` text,
   PRIMARY KEY (`copy_id`),
@@ -49,7 +50,7 @@ CREATE TABLE `copies` (
 
 LOCK TABLES `copies` WRITE;
 /*!40000 ALTER TABLE `copies` DISABLE KEYS */;
-INSERT INTO `copies` VALUES (1,348,1,'fr','Big box','CD-like','CD-ROM',0,0,1,'In','Physical',0,'Bought it in 2004'),(2,349,1,'fr','none','Cardboard sleeve','CD-ROM',1,1,0,'In','Physical',0,'Got it with my cereals'),(3,245,1,'fr','None','CD-like','CD-ROM',1,1,0,'In','Physical',0,'pues');
+INSERT INTO `copies` VALUES (1,348,1,'fr','Big box','CD-like','CD-ROM',0,0,1,'In','Physical','PAL',0,'Bought it in 2004'),(2,349,1,'fr','none','Cardboard sleeve','CD-ROM',1,1,0,'In','Physical','PAL',0,'Got it with my cereals'),(3,245,1,'fr','None','CD-like','CD-ROM',1,1,0,'In','Physical','PAL',0,'pues');
 /*!40000 ALTER TABLE `copies` ENABLE KEYS */;
 UNLOCK TABLES;
 
