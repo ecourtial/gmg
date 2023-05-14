@@ -120,6 +120,7 @@ isBoxRepro                 | bool   | Yes     |  No    | Is the box a reproducti
 |--------------|---------------------------------------------------------|
 |Big box       | The big cardboard boxes we had for PC games in the 90's.|
 |Medium box    | The medium cardboard boxes we find sometimes.           |
+|Special box   | The special cardboard boxes we find sometimes.          |
 |Cartridge box | Cardboard boxes for Nintendo 64 for instance.           |
 |Other         | Other cases with special boxes                          |
 |None          | No box at all.                                          |

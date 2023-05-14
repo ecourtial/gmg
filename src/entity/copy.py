@@ -26,7 +26,7 @@ class Copy(AbstractEntity):
             'method': '_box_type',
             'required': True,
             'type': 'strict-text',
-            'allowed_values': {'Big box', 'Medium box', 'Cartridge box', 'Other', 'None'}
+            'allowed_values': {'Big box', 'Medium box', 'Special box', 'Cartridge box', 'Other', 'None'}
         },
         'isBoxRepro': {
             'field': 'is_box_repro',

@@ -62,7 +62,7 @@ class TestCopies(AbstractTests):
         resp = self.api_call('post', 'copy', payload, True)
         
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, Medium box, None, Other.", 'code': 11}, resp.json())
+        self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, Medium box, None, Other, Special box.", 'code': 11}, resp.json())
 
     def test_create_invalid_casing_type(self):
         payload = {
@@ -215,7 +215,7 @@ class TestCopies(AbstractTests):
         resp = self.api_call('patch', 'copy/1', payload, True)
         
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, Medium box, None, Other.", 'code': 11}, resp.json())
+        self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, Medium box, None, Other, Special box.", 'code': 11}, resp.json())
 
     def test_delete_fails_because_not_found(self):
         resp = self.api_call('delete', 'copy/9999', None, True)

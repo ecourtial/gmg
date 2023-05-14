@@ -3,6 +3,7 @@
 ## 4.3.0
 * Added a new _isBoxRepro_ field to the copy entity.
 * Added a new box type: _Medium box_.
+* Added a new box type: _Special box_.
 
 ## 4.2.0
 * Added new support types: Blu-ray, MINI-Blu-ray, External drive.
