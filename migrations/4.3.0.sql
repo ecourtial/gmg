@@ -1,0 +1,1 @@
+ALTER TABLE copies ADD is_box_repro TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER box_type;
