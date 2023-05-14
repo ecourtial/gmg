@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.29, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.32, for Linux (x86_64)
 --
 -- Host: localhost    Database: games
 -- ------------------------------------------------------
--- Server version	8.0.29
+-- Server version	8.0.32
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -28,6 +28,7 @@ CREATE TABLE `copies` (
   `is_original` tinyint unsigned NOT NULL,
   `language` varchar(255) NOT NULL,
   `box_type` varchar(255) NOT NULL,
+  `is_box_repro` tinyint unsigned NOT NULL DEFAULT '0',
   `casing_type` varchar(255) NOT NULL,
   `support_type` varchar(255) NOT NULL,
   `on_compilation` tinyint unsigned NOT NULL,
@@ -50,7 +51,7 @@ CREATE TABLE `copies` (
 
 LOCK TABLES `copies` WRITE;
 /*!40000 ALTER TABLE `copies` DISABLE KEYS */;
-INSERT INTO `copies` VALUES (1,348,1,'fr','Big box','CD-like','CD-ROM',0,0,1,'In','Physical','PAL',0,'Bought it in 2004'),(2,349,1,'fr','none','Cardboard sleeve','CD-ROM',1,1,0,'In','Physical','PAL',0,'Got it with my cereals'),(3,245,1,'fr','None','CD-like','CD-ROM',1,1,0,'In','Physical','PAL',0,'pues');
+INSERT INTO `copies` VALUES (1,348,1,'fr','Big box',0,'CD-like','CD-ROM',0,0,1,'In','Physical','PAL',0,'Bought it in 2004'),(2,349,1,'fr','none',0,'Cardboard sleeve','CD-ROM',1,1,0,'In','Physical','PAL',0,'Got it with my cereals'),(3,245,1,'fr','None',0,'CD-like','CD-ROM',1,1,0,'In','Physical','PAL',0,'pues');
 /*!40000 ALTER TABLE `copies` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -294,4 +295,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-07-21  6:36:31
+-- Dump completed on 2023-05-11 21:28:59

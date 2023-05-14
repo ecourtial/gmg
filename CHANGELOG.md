@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.0
+* Added a new _isBoxRepro_ field to the copy entity.
+* Added a new box type: _Medium box_.
+
 ## 4.2.0
 * Added new support types: Blu-ray, MINI-Blu-ray, External drive.
 * Added region type for a copy: PAL, JAP... The migration is included, setting the default value to PAL.

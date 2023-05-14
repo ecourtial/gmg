@@ -26,7 +26,13 @@ class Copy(AbstractEntity):
             'method': '_box_type',
             'required': True,
             'type': 'strict-text',
-            'allowed_values': {'Big box', 'Cartridge box', 'Other', 'None'}
+            'allowed_values': {'Big box', 'Medium box', 'Cartridge box', 'Other', 'None'}
+        },
+        'isBoxRepro': {
+            'field': 'is_box_repro',
+            'method': '_is_box_repro',
+            'required': True,
+            'type': 'int'
         },
         'casingType': {
             'field': 'casing_type',
@@ -69,7 +75,8 @@ class Copy(AbstractEntity):
         'onCompilation': {
             'field': 'on_compilation',
             'method': '_on_compilation',
-            'required': True, 'type': 'int'
+            'required': True,
+            'type': 'int'
         },
         'reedition': {
             'field': 'is_reedition',
@@ -145,6 +152,7 @@ class Copy(AbstractEntity):
             is_original,
             language,
             box_type,
+            is_box_repro,
             casing_type,
             support_type,
             on_compilation,
@@ -164,6 +172,7 @@ class Copy(AbstractEntity):
         self.is_original = bool(is_original)
         self.language = language
         self.box_type = box_type
+        self.is_box_repro = bool(is_box_repro)
         self.casing_type = casing_type
         self.support_type = support_type
         self.on_compilation = bool(on_compilation)
@@ -192,6 +201,9 @@ class Copy(AbstractEntity):
 
     def get_box_type(self):
         return self.box_type
+
+    def get_is_box_repro(self):
+        return bool(self.is_box_repro)
 
     def get_casing_type(self):
         return self.casing_type
@@ -234,6 +246,9 @@ class Copy(AbstractEntity):
 
     def set_box_type(self, type):
         self.box_type = type
+
+    def set_is_box_repro(self, is_repro):
+        self.is_box_repro = bool(is_repro)
 
     def set_casing_type(self, type):
         self.casing_type = type

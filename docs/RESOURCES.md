@@ -100,6 +100,7 @@ The application relies on 6 resources (not including the users).
 | original                 | bool  | Yes      |  No    | Is the copy an original (not a copy from an original)?                             |                                  |
 | language                 | string| Yes      |  No    | Any language value. We recommend to use ISO standards, or _multi_ if mutilanguage. |                                  |
 | boxType                  | string| Yes      |  No    | Type of the box (See allowed types below).                                         |                                  |
+isBoxRepro                 | bool   | Yes     |  No    | Is the box a reproduction?|
 | casingType               | string| Yes      |  No    | Casing type of the box (See allowed types below).                                  |                                  |
 | supportType              | string| Yes      |  No    | The game support type (See allowed types below).                                   |                                  |
 | onCompilation            | bool  | Yes      |  No    | Is the copy of the game on a compilation?                                          |
@@ -118,6 +119,7 @@ The application relies on 6 resources (not including the users).
 | Value        | Meaning                                                 |
 |--------------|---------------------------------------------------------|
 |Big box       | The big cardboard boxes we had for PC games in the 90's.|
+|Medium box    | The medium cardboard boxes we find sometimes.           |
 |Cartridge box | Cardboard boxes for Nintendo 64 for instance.           |
 |Other         | Other cases with special boxes                          |
 |None          | No box at all.                                          |

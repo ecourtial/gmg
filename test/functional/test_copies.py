@@ -27,6 +27,7 @@ class TestCopies(AbstractTests):
             "original": True,
             'language': 'fr',
             "boxType": "Big box",
+            'isBoxRepro': False,
             "casingType": "CD-like",
             'supportType': 'CD-ROM',
             "onCompilation": True,
@@ -48,6 +49,7 @@ class TestCopies(AbstractTests):
             "original": True,
             'language': 'fr',
             "boxType": "Big boxe",
+            'isBoxRepro': False,
             "casingType": "CD-like",
             'supportType': 'CD-ROM',
             "onCompilation": True,
@@ -60,7 +62,7 @@ class TestCopies(AbstractTests):
         resp = self.api_call('post', 'copy', payload, True)
         
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, None, Other.", 'code': 11}, resp.json())
+        self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, Medium box, None, Other.", 'code': 11}, resp.json())
 
     def test_create_invalid_casing_type(self):
         payload = {
@@ -68,6 +70,7 @@ class TestCopies(AbstractTests):
             "original": True,
             'language': 'fr',
             "boxType": "Cartridge box",
+            'isBoxRepro': False,
             "casingType": "CD-likesss",
             'supportType': 'CD-ROM',
             "onCompilation": True,
@@ -99,6 +102,7 @@ class TestCopies(AbstractTests):
                 "original": True,
                 'language': 'fr',
                 "boxType": "Big box",
+                'isBoxRepro': False,
                 "casingType": "CD-like",
                 'supportType': 'CD-ROM',
                 "onCompilation": False,
@@ -124,6 +128,7 @@ class TestCopies(AbstractTests):
                 "original": True,
                 'language': 'fr',
                 "boxType": "Big box",
+                'isBoxRepro': True,
                 "casingType": "CD-like",
                 'supportType': 'CD-ROM',
                 "onCompilation": True,
@@ -144,6 +149,7 @@ class TestCopies(AbstractTests):
         copy_id = str(resp.json()["id"])
         payload['id'] = int(copy_id)
         payload['isROM'] = False
+        payload['isBoxRepro'] = True
         self.assertEqual(payload, resp.json())
 
         resp = self.api_call('get', 'copy/' + str(copy_id), None, True)
@@ -155,6 +161,7 @@ class TestCopies(AbstractTests):
             "original": False,
             'language': 'fr',
             "boxType": "Big box",
+            'isBoxRepro': False,
             "casingType": "CD-like",
             'supportType': 'CD-ROM',
             "onCompilation": True,
@@ -196,6 +203,7 @@ class TestCopies(AbstractTests):
             "versionId": 1,
             "original": True,
             "boxType": "Big boxe",
+            'isBoxRepro': False,
             "casingType": "CD-like",
             "onCompilation": True,
             "reedition": True,
@@ -207,7 +215,7 @@ class TestCopies(AbstractTests):
         resp = self.api_call('patch', 'copy/1', payload, True)
         
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, None, Other.", 'code': 11}, resp.json())
+        self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, Medium box, None, Other.", 'code': 11}, resp.json())
 
     def test_delete_fails_because_not_found(self):
         resp = self.api_call('delete', 'copy/9999', None, True)
