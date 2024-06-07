@@ -2,8 +2,8 @@ from test.abstract_tests import AbstractTests
 
 class TestCopies(AbstractTests):
     def test_commons(self):
-        super().check_all_routes_error_bad_user_token('story', 'stories')
-        super().check_all_routes_error_missing_user_token('story', 'stories')
+        super().check_all_routes_error_bad_user_token('story')
+        super().check_all_routes_error_missing_user_token('story')
 
     def test_create_incomplete_payload(self):
         payload = {
