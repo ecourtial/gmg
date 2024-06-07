@@ -2,7 +2,7 @@ version: '2.1'
 executors:
   python:
     docker:
-      - image: python:3.7
+      - image: python:3.10
         name: python
       - image: mysql:8.0
         name: mysql
