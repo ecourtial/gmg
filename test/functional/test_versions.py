@@ -2,8 +2,8 @@ from test.abstract_tests import AbstractTests
 
 class TestVersions(AbstractTests):
     def test_commons(self):
-        super().check_all_routes_error_bad_user_token('version', 'versions')
-        super().check_all_routes_error_missing_user_token('version', 'versions')
+        super().check_all_routes_error_bad_user_token('version')
+        super().check_all_routes_error_missing_user_token('version')
 
     def test_get_version(self):
         # Does not exist

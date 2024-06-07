@@ -1,5 +1,8 @@
 # Changelog
 
+## 4.4.0
+* Added a new feature: notes.
+
 ## 4.3.0
 * Added a new _isBoxRepro_ field to the copy entity.
 * Added a new box type: _Medium box_.

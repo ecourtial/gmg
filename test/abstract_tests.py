@@ -1,7 +1,7 @@
 from test.abstract_tests_tools import AbstractTestsTools
 
 class AbstractTests(AbstractTestsTools):
-    def check_all_routes_error_missing_user_token(self, singular_endpoint, plural_endpoint):
+    def check_all_routes_error_missing_user_token(self, singular_endpoint):
         # create
         resp = self.api_call('post', singular_endpoint)
         self.assertEqual(403, resp.status_code)
@@ -17,7 +17,7 @@ class AbstractTests(AbstractTestsTools):
         self.assertEqual(403, resp.status_code)
         self.assertEqual({'message': 'Missing token', 'code': 12}, resp.json())
 
-    def check_all_routes_error_bad_user_token(self, singular_endpoint, plural_endpoint):
+    def check_all_routes_error_bad_user_token(self, singular_endpoint):
         headers = {'Authorization': 'token foo'}
 
         # create

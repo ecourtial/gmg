@@ -9,6 +9,7 @@ from src.controller.version_controller import VersionController
 from src.controller.copy_controller import CopyController
 from src.controller.story_controller import StoryController
 from src.controller.transaction_controller import TransactionController
+from src.controller.note_controller import NoteController
 from src.repository.user_repository import UserRepository
 from src.connection.mysql_factory import MySQLFactory
 
@@ -339,4 +340,39 @@ def delete_transaction(entity_id):
 def get_transactions():
     """Get the transactions"""
     controller = TransactionController
+    return controller.get_list(MySQLFactory.get())
+
+# Notes
+
+@app.route('/api/v1/notes/<int:entity_id>', methods=['GET'])
+def get_note_by_id(entity_id):
+    """Returns the note according to its id"""
+    controller = NoteController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/notes', methods=['POST'])
+@token_required
+def create_note():
+    """Create a note"""
+    controller = NoteController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/notes/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_note(entity_id):
+    """Update the note according to its id"""
+    controller = NoteController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/notes/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_note(entity_id):
+    """Delete the note according to its id"""
+    controller = NoteController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/notes', methods=['GET'])
+def get_notes():
+    """Get the transactions"""
+    controller = NoteController
     return controller.get_list(MySQLFactory.get())

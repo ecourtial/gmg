@@ -2,8 +2,8 @@ from test.abstract_tests import AbstractTests
 
 class TestPlatforms(AbstractTests):
     def test_commons(self):
-        super().check_all_routes_error_bad_user_token('game', 'games')
-        super().check_all_routes_error_missing_user_token('game', 'games')
+        super().check_all_routes_error_bad_user_token('game')
+        super().check_all_routes_error_missing_user_token('game')
 
     def test_get_game(self):
         # Does not exist

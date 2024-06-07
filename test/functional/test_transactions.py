@@ -2,8 +2,8 @@ from test.abstract_tests import AbstractTests
 
 class TestTransactions(AbstractTests):
     def test_commons(self):
-        super().check_all_routes_error_bad_user_token('transaction', 'transactions')
-        super().check_all_routes_error_missing_user_token('transaction', 'transactions')
+        super().check_all_routes_error_bad_user_token('transaction')
+        super().check_all_routes_error_missing_user_token('transaction')
 
     def test_create_incomplete_payload(self):
         payload = {
