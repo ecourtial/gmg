@@ -344,27 +344,27 @@ def get_transactions():
 
 # Notes
 
-@app.route('/api/v1/notes/<int:entity_id>', methods=['GET'])
+@app.route('/api/v1/note/<int:entity_id>', methods=['GET'])
 def get_note_by_id(entity_id):
     """Returns the note according to its id"""
     controller = NoteController
     return controller.get_by_id(MySQLFactory.get(), entity_id)
 
-@app.route('/api/v1/notes', methods=['POST'])
+@app.route('/api/v1/note', methods=['POST'])
 @token_required
 def create_note():
     """Create a note"""
     controller = NoteController
     return controller.create(MySQLFactory.get())
 
-@app.route('/api/v1/notes/<int:entity_id>', methods=['PATCH'])
+@app.route('/api/v1/note/<int:entity_id>', methods=['PATCH'])
 @token_required
 def update_note(entity_id):
     """Update the note according to its id"""
     controller = NoteController
     return controller.update(MySQLFactory.get(), entity_id)
 
-@app.route('/api/v1/notes/<int:entity_id>', methods=['DELETE'])
+@app.route('/api/v1/note/<int:entity_id>', methods=['DELETE'])
 @token_required
 def delete_note(entity_id):
     """Delete the note according to its id"""
@@ -373,6 +373,6 @@ def delete_note(entity_id):
 
 @app.route('/api/v1/notes', methods=['GET'])
 def get_notes():
-    """Get the transactions"""
+    """Get the notes"""
     controller = NoteController
     return controller.get_list(MySQLFactory.get())
