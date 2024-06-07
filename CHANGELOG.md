@@ -2,6 +2,7 @@
 
 ## 4.4.0
 * Added a new feature: notes.
+* Bump to Python 3.10.
 
 ## 4.3.0
 * Added a new _isBoxRepro_ field to the copy entity.
