@@ -2,7 +2,7 @@ version: '2.1'
 executors:
   python:
     docker:
-      - image: python:3.7
+      - image: python:3.10
         name: python
       - image: mysql:8.0
         name: mysql
@@ -22,7 +22,7 @@ commands:
       - run:
           name: "Install requirements for checkout"
           command: |
-            apt update && apt install -y netcat default-mysql-client git openssh-client curl make nano libzip-dev
+            apt update && apt install -y netcat-traditional default-mysql-client git openssh-client curl make nano libzip-dev
       - run:
           name: "Install required Python packages"
           command: |
