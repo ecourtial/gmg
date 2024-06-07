@@ -34,7 +34,7 @@ A basic documentation is available:
 * Docker
 * Nginx
 * Gunicorn
-* Python 3.7
+* Python 3.10
 * Flask 2
 * Circle CI
 * unittest
