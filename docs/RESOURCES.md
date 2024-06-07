@@ -212,3 +212,11 @@ _NOTE_: when creating a transaction, the status of the copy will be altered acco
 On top of that, if the transaction is of type "Sold", the copy will be deleted.
 
 Finally, you cannot edit a transaction if the copy no longer exists. If you did something wrong, delete the transaction and start over.
+
+## Notes
+
+| Field        | Type    | Editable | Unique | Role                                           | Notes                                              |
+|--------------|---------|----------|--------|------------------------------------------------|----------------------------------------------------|
+| id           | int     | No       |  Yes   | The note unique id.                        |                                                    |
+| title         | string  | Yes      |  No   | The note title.                             |                                                    |
+| content | string     | Yes       |  No    | The text of the note.|  
