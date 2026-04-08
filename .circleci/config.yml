@@ -2,7 +2,7 @@ version: '2.1'
 executors:
   python:
     docker:
-      - image: python:3.10
+      - image: python:3.13
         name: python
       - image: mysql:8.0
         name: mysql
@@ -20,13 +20,13 @@ commands:
     steps:
       - checkout
       - run:
-          name: "Install requirements for checkout"
+          name: "Install system dependencies"
           command: |
             apt update && apt install -y netcat-traditional default-mysql-client git openssh-client curl make nano libzip-dev
       - run:
           name: "Install required Python packages"
           command: |
-            cd docker/python && pip3 install --no-cache-dir -r requirements.txt && pip3 install --force-reinstall pylint==2.13.9 && cd && cd repo
+            pip install poetry && poetry config virtualenvs.create false && poetry install --no-root
       - run:
           name: "Create application configuration"
           command: |
@@ -59,10 +59,10 @@ jobs:
   linter:
     executor: python
     steps:
-      - extra_checkout  
+      - extra_checkout
       - run:
           name: Run pylint
-          command: pylint --rcfile=standard.rc src/ ./app.py
+          command: pylint src/ ./app.py
 
 workflows:
   version: '2.1'

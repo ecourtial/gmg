@@ -92,11 +92,11 @@ class TransactionService(AbstractService):
 
         return None
 
-    def check_version_copy_consistency(self, version, copy): #pylint: disable=no-self-use
+    def check_version_copy_consistency(self, version, copy):
         if (copy is not None and version.get_id() != copy.get_version_id()):
             raise InconsistentVersionAndCopyIdException(version.get_id(), copy.get_version_id())
 
-    def update_copy_status(self, transaction, copy): #pylint: disable=no-self-use
+    def update_copy_status(self, transaction, copy):
         if copy is not None:
             # You cannot create an outbound transaction if you already don't have the copy anymore
             if transaction.get_type() in transaction.transaction_out and copy.get_status() == 'Out':
@@ -107,7 +107,7 @@ class TransactionService(AbstractService):
             else:
                 copy.set_status('Out')
 
-    def update_copy_in_db(self, transaction, copy): #pylint: disable=no-self-use
+    def update_copy_in_db(self, transaction, copy):
         if copy is not None:
             if self.is_sold_transaction(transaction):
                 self.repository.reset_copy_id_for_transactions(copy.get_id(), False)
@@ -115,7 +115,7 @@ class TransactionService(AbstractService):
             else:
                 self.copy_repository.update(copy)
 
-    def is_sold_transaction(self, transaction): #pylint: disable=no-self-use
+    def is_sold_transaction(self, transaction):
         if transaction.get_type() == 'Sold':
             return True
 

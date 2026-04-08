@@ -25,4 +25,3 @@ class StoryRepository(AbstractRepository):
         story.set_game_title(row['gameTitle'])
 
         return story
-    

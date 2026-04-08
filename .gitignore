@@ -4,3 +4,4 @@ test/**/*.pyc
 configuration.json
 .history/
 .vscode/
+.venv/

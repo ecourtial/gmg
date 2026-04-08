@@ -14,7 +14,7 @@ from src.repository.user_repository import UserRepository
 from src.connection.mysql_factory import MySQLFactory
 
 app = Flask(__name__)
-app.config['JSON_SORT_KEYS'] = False
+app.json.sort_keys = False
 
 ##############
 # Load config
