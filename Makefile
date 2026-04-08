@@ -4,7 +4,7 @@ test:
 	make import_db && docker compose exec python bash -c 'make test_command_python'
 
 linter:
-	docker compose exec python bash -c 'cd /code && poetry run pylint src/ ./app.py'
+	docker compose exec python bash -c 'cd /code && poetry run ruff check src && poetry run pylint src/ ./app.py'
 
 start:
 	docker compose up
