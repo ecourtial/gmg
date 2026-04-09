@@ -1,9 +1,12 @@
+from typing import Any
+
 from src.entity.abstract_entity import AbstractEntity
+
 
 class Version(AbstractEntity):
     """ This class represent a version of a game, e.g the PC version of Monkey Island IV """
     # If you change the order here, you need to also change it in the constructor!
-    expected_fields = {
+    expected_fields: dict[str, Any] = {
         'platformId':
             {'field': 'platform_id',
             'method': '_platform_id',
@@ -156,7 +159,7 @@ class Version(AbstractEntity):
         },
     }
 
-    authorized_extra_fields_for_filtering = {
+    authorized_extra_fields_for_filtering: dict[str, Any] = {
         'id': {'field': 'version_id', 'origin': 'native', 'type': 'int'},
         'storyCount': {'field': 'storyCount', 'origin': 'computed', 'type': 'int'},
         'copyCount': {'field': 'copyCount', 'origin': 'computed', 'type': 'int'},
@@ -168,38 +171,38 @@ class Version(AbstractEntity):
     primary_key = 'version_id'
 
     # If you change the order here, you need to also change it in the array above!
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
             self,
-            entity_id,
-            platform_id,
-            game_id,
-            release_year,
-            todo_solo_sometimes,
-            todo_multiplayer_sometimes,
-            singleplayer_recurring,
-            multiplayer_recurring,
-            to_do,
-            to_buy,
-            to_watch_background,
-            to_watch_serious,
-            to_rewatch,
-            top_game,
-            hall_of_fame,
-            hall_of_fame_year,
-            hall_of_fame_position,
-            played_it_often,
-            ongoing,
-            comments,
-            todo_with_help,
-            bgf,
-            to_watch_position,
-            to_do_position,
-            finished,
-            platform_name = None,
-            game_title = None,
-            story_count = None,
-            copy_count = None,
-    ):
+            entity_id: int | None,
+            platform_id: int,
+            game_id: int,
+            release_year: int,
+            todo_solo_sometimes: int,
+            todo_multiplayer_sometimes: int,
+            singleplayer_recurring: int,
+            multiplayer_recurring: int,
+            to_do: int,
+            to_buy: int,
+            to_watch_background: int,
+            to_watch_serious: int,
+            to_rewatch: int,
+            top_game: int,
+            hall_of_fame: int,
+            hall_of_fame_year: int,
+            hall_of_fame_position: int,
+            played_it_often: int,
+            ongoing: int,
+            comments: str,
+            todo_with_help: int,
+            bgf: int,
+            to_watch_position: int,
+            to_do_position: int,
+            finished: int,
+            platform_name: str | None = None,
+            game_title: str | None = None,
+            story_count: int | None = None,
+            copy_count: int | None = None,
+    ) -> None:
         self.entity_id = entity_id
         self.platform_id = int(platform_id)
         self.game_id = int(game_id)
@@ -230,183 +233,181 @@ class Version(AbstractEntity):
         self.story_count = story_count
         self.copy_count = copy_count
 
-    def get_id(self):
+    def get_id(self) -> int | None:
         return self.entity_id
 
-    def get_platform_id(self):
+    def get_platform_id(self) -> int:
         return self.platform_id
 
-    def set_platform_id(self, entity_id):
+    def set_platform_id(self, entity_id: int) -> None:
         self.platform_id = int(entity_id)
 
-    def get_game_id(self):
+    def get_game_id(self) -> int:
         return self.game_id
 
-    def set_game_id(self, entity_id):
+    def set_game_id(self, entity_id: int) -> None:
         self.game_id = int(entity_id)
 
-    def get_release_year(self):
+    def get_release_year(self) -> int:
         return self.release_year
 
-    def set_release_year(self, year):
+    def set_release_year(self, year: int) -> None:
         self.release_year = int(year)
 
-    def get_todo_solo_sometimes(self):
+    def get_todo_solo_sometimes(self) -> bool:
         return self.todo_solo_sometimes
 
-    def set_todo_solo_sometimes(self, status):
+    def set_todo_solo_sometimes(self, status: int) -> None:
         self.todo_solo_sometimes = bool(status)
 
-    def get_todo_multiplayer_sometimes(self):
+    def get_todo_multiplayer_sometimes(self) -> bool:
         return self.todo_multiplayer_sometimes
 
-    def set_todo_multiplayer_sometimes(self, status):
+    def set_todo_multiplayer_sometimes(self, status: int) -> None:
         self.todo_multiplayer_sometimes = bool(status)
 
-    def get_singleplayer_recurring(self):
+    def get_singleplayer_recurring(self) -> bool:
         return self.singleplayer_recurring
 
-    def set_singleplayer_recurring(self, status):
+    def set_singleplayer_recurring(self, status: int) -> None:
         self.singleplayer_recurring = bool(status)
 
-    def get_multiplayer_recurring(self):
+    def get_multiplayer_recurring(self) -> bool:
         return self.multiplayer_recurring
 
-    def set_multiplayer_recurring(self, status):
+    def set_multiplayer_recurring(self, status: int) -> None:
         self.multiplayer_recurring = bool(status)
 
-    def get_to_do(self):
+    def get_to_do(self) -> bool:
         return self.to_do
 
-    def set_to_do(self, status):
+    def set_to_do(self, status: int) -> None:
         self.to_do = bool(status)
 
-    def get_to_buy(self):
+    def get_to_buy(self) -> bool:
         return self.to_buy
 
-    def set_to_buy(self, status):
+    def set_to_buy(self, status: int) -> None:
         self.to_buy = bool(status)
 
-    def get_to_watch_background(self):
+    def get_to_watch_background(self) -> bool:
         return self.to_watch_background
 
-    def set_to_watch_background(self, status):
+    def set_to_watch_background(self, status: int) -> None:
         self.to_watch_background = bool(status)
 
-    def get_to_watch_serious(self):
+    def get_to_watch_serious(self) -> bool:
         return self.to_watch_serious
 
-    def set_to_watch_serious(self, status):
+    def set_to_watch_serious(self, status: int) -> None:
         self.to_watch_serious = bool(status)
 
-    def get_to_rewatch(self):
+    def get_to_rewatch(self) -> bool:
         return self.to_rewatch
 
-    def set_to_rewatch(self, status):
+    def set_to_rewatch(self, status: int) -> None:
         self.to_rewatch = bool(status)
 
-    def get_top_game(self):
+    def get_top_game(self) -> bool:
         return self.top_game
 
-    def set_top_game(self, status):
+    def set_top_game(self, status: int) -> None:
         self.top_game = bool(status)
 
-    def get_hall_of_fame(self):
+    def get_hall_of_fame(self) -> bool:
         return self.hall_of_fame
 
-    def set_hall_of_fame(self, status):
+    def set_hall_of_fame(self, status: int) -> None:
         self.hall_of_fame = bool(status)
 
-    def get_hall_of_fame_year(self):
+    def get_hall_of_fame_year(self) -> int:
         return self.hall_of_fame_year
 
-    def set_hall_of_fame_year(self, year):
+    def set_hall_of_fame_year(self, year: int) -> None:
         self.hall_of_fame_year = int(year)
 
-    def get_hall_of_fame_position(self):
+    def get_hall_of_fame_position(self) -> int:
         return self.hall_of_fame_position
 
-    def set_hall_of_fame_position(self, position):
+    def set_hall_of_fame_position(self, position: int) -> None:
         self.hall_of_fame_position = int(position)
 
-    def get_played_it_often(self):
+    def get_played_it_often(self) -> bool:
         return self.played_it_often
 
-    def set_played_it_often(self, status):
+    def set_played_it_often(self, status: int) -> None:
         self.played_it_often = bool(status)
 
-    def get_ongoing(self):
+    def get_ongoing(self) -> bool:
         return self.ongoing
 
-    def set_ongoing(self, status):
+    def set_ongoing(self, status: int) -> None:
         self.ongoing = bool(status)
 
-    def get_comments(self):
+    def get_comments(self) -> str:
         return self.comments
 
-    def set_comments(self, comments):
+    def set_comments(self, comments: str) -> None:
         self.comments = comments
 
-    def get_todo_with_help(self):
+    def get_todo_with_help(self) -> bool:
         return self.todo_with_help
 
-    def set_todo_with_help(self, status):
+    def set_todo_with_help(self, status: int) -> None:
         self.todo_with_help = bool(status)
 
-    def get_best_game_forever(self):
+    def get_best_game_forever(self) -> bool:
         return self.bgf
 
-    def set_best_game_forever(self, status):
+    def set_best_game_forever(self, status: int) -> None:
         self.bgf = bool(status)
 
-    def get_to_watch_position(self):
+    def get_to_watch_position(self) -> int:
         return self.to_watch_position
 
-    def set_to_watch_position(self, position):
+    def set_to_watch_position(self, position: int) -> None:
         self.to_watch_position = int(position)
 
-    def get_to_do_position(self):
+    def get_to_do_position(self) -> int:
         return self.to_do_position
 
-    def set_to_do_position(self, position):
+    def set_to_do_position(self, position: int) -> None:
         self.to_do_position = int(position)
 
-    def get_platform_name(self):
+    def get_platform_name(self) -> str | None:
         return self.platform_name
 
-    def set_platform_name(self, name):
+    def set_platform_name(self, name: str) -> None:
         self.platform_name = name
 
-    def get_game_title(self):
+    def get_game_title(self) -> str | None:
         return self.game_title
 
-    def set_game_title(self, title):
+    def set_game_title(self, title: str) -> None:
         self.game_title = title
 
-    def get_finished(self):
+    def get_finished(self) -> bool:
         return self.finished
 
-    def set_finished(self, finished):
+    def set_finished(self, finished: int) -> None:
         self.finished = bool(finished)
 
-    def get_story_count(self):
+    def get_story_count(self) -> int | None:
         return self.story_count
 
-    def set_story_count(self, story_count):
+    def set_story_count(self, story_count: int | None) -> None:
         self.story_count = int(story_count or 0)
 
-    def get_copy_count(self):
+    def get_copy_count(self) -> int | None:
         return self.copy_count
 
-    def set_copy_count(self, copy_count):
+    def set_copy_count(self, copy_count: int | None) -> None:
         self.copy_count = int(copy_count or 0)
 
-    def serialize(self):
+    def serialize(self) -> dict[str, Any]:
         values = super().serialize()
-
         values['platformName'] = self.get_platform_name()
         values['gameTitle'] = self.get_game_title()
         values['storyCount'] = self.get_story_count()
         values['copyCount'] = self.get_copy_count()
-
         return values

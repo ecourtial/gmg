@@ -35,3 +35,10 @@ max-line-length = 200
 
 [tool.pylint.basic]
 bad-names = ["foo", "bar", "baz", "toto", "tutu", "tata"]
+
+[tool.ruff]
+line-length = 200
+
+[tool.ruff.lint]
+select = ["E", "F", "ANN"]
+ignore = ["ANN401"]

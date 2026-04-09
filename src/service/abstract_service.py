@@ -1,10 +1,13 @@
+from typing import Any
+
 from src.exception.unknown_resource_exception import ResourceNotFoundException
 from src.exception.missing_field_exception import MissingFieldException
 from src.exception.unsupported_value_exception import UnsupportedValueException
 from src.helpers.json_helper import JsonHelper
 
-class AbstractService: # pylint: disable=no-member
-    def get_by_id(self, entity_id):
+
+class AbstractService:  # pylint: disable=no-member
+    def get_by_id(self, entity_id: int) -> Any:
         object = self.repository.get_by_id(entity_id)
 
         if object is None:
@@ -12,14 +15,14 @@ class AbstractService: # pylint: disable=no-member
 
         return object
 
-    def insert(self, object):
+    def insert(self, object: Any) -> Any:
         return self.repository.insert(object)
 
-    def update(self, object):
+    def update(self, object: Any) -> Any:
         return self.repository.update(object)
 
-    def validate_payload_for_creation_and_hydrate(self, object):
-        values = []
+    def validate_payload_for_creation_and_hydrate(self, object: type) -> Any:
+        values: list[Any] = []
         values.append(None)
 
         for api_field, data in object.expected_fields.items():
@@ -42,7 +45,7 @@ class AbstractService: # pylint: disable=no-member
 
         return object(*values)
 
-    def hydrate_for_update(self, object):
+    def hydrate_for_update(self, object: Any) -> None:
         for api_field, data in object.expected_fields.items():
             value = JsonHelper.get_value_from_request(api_field, None)
 
@@ -54,7 +57,7 @@ class AbstractService: # pylint: disable=no-member
                 value = self.cast_type(data, value)
                 method_to_call(value)
 
-    def cast_type(self, data, value):
+    def cast_type(self, data: dict[str, Any], value: Any) -> Any:
         if data['type'] == 'int':
             try:
                 value = int(value)

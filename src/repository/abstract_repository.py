@@ -1,29 +1,34 @@
 """An abstract repository"""
 import math
+from typing import Any
+
+from werkzeug.datastructures import ImmutableMultiDict
+
 from src.repository.abstract_core_repository import AbstractCoreRepository
 
+
 class AbstractRepository(AbstractCoreRepository):
-    def get_by_id(self, entity_id):
+    def get_by_id(self, entity_id: int) -> Any:
         """Get one support by its primary key."""
         request = self.get_select_request_start()
-        request += f" AND {self.entity.table_name}.{self.entity.primary_key} = %s LIMIT 1;" # pylint: disable=E1101
+        request += f" AND {self.entity.table_name}.{self.entity.primary_key} = %s LIMIT 1;"  # pylint: disable=E1101
 
         return self.fetch_one(request, (entity_id,))
 
-    def delete(self, entity_id, commit = True):
-        request = f"DELETE FROM {self.entity.table_name} WHERE {self.entity.primary_key} = %s" # pylint: disable=E1101
+    def delete(self, entity_id: int, commit: bool = True) -> None:
+        request = f"DELETE FROM {self.entity.table_name} WHERE {self.entity.primary_key} = %s"  # pylint: disable=E1101
         self.write(request, (entity_id,), commit)
 
-    def get_select_request_start(self):
-        return f"SELECT * FROM {self.entity.table_name} WHERE {self.entity.primary_key} IS NOT NULL " # pylint: disable=E1101
+    def get_select_request_start(self) -> str:
+        return f"SELECT * FROM {self.entity.table_name} WHERE {self.entity.primary_key} IS NOT NULL "  # pylint: disable=E1101
 
-    def get_list(self, filters, page, limit):
+    def get_list(self, filters: ImmutableMultiDict, page: int | str, limit: int | str) -> dict[str, Any]:
         filter_request = ''
-        values = []
+        values: list[Any] = []
 
         usable_fields = {
-            **self.entity.expected_fields, # pylint: disable=E1101
-            **self.entity.authorized_extra_fields_for_filtering # pylint: disable=E1101
+            **self.entity.expected_fields,  # pylint: disable=E1101
+            **self.entity.authorized_extra_fields_for_filtering  # pylint: disable=E1101
         }
 
         # Create the filter part of the SQL request
@@ -38,9 +43,9 @@ class AbstractRepository(AbstractCoreRepository):
 
         # Count the total of result without pagination
         count_request = "SELECT count(*) as count "
-        count_request += f"FROM ({self.get_select_request_start()}) AS e, {self.entity.table_name} " # pylint: disable=E1101
-        count_request += f"WHERE {self.entity.table_name}.{self.entity.primary_key} IS NOT NULL " # pylint: disable=E1101
-        count_request += f"AND {self.entity.table_name}.{self.entity.primary_key} = e.{self.entity.primary_key} " # pylint: disable=E1101
+        count_request += f"FROM ({self.get_select_request_start()}) AS e, {self.entity.table_name} "  # pylint: disable=E1101
+        count_request += f"WHERE {self.entity.table_name}.{self.entity.primary_key} IS NOT NULL "  # pylint: disable=E1101
+        count_request += f"AND {self.entity.table_name}.{self.entity.primary_key} = e.{self.entity.primary_key} "  # pylint: disable=E1101
         count_request += filter_request
         total_result_count = self.fetch_cursor(count_request, values)['count']
 
@@ -70,7 +75,7 @@ class AbstractRepository(AbstractCoreRepository):
             "result": [entry.serialize() for entry in result]
         }
 
-    def get_order_by_conditions(self, usable_fields, filters):
+    def get_order_by_conditions(self, usable_fields: dict[str, Any], filters: ImmutableMultiDict) -> str:
         filter_request = ''
         order_by_filters = filters.getlist('orderBy[]')
 
@@ -89,7 +94,7 @@ class AbstractRepository(AbstractCoreRepository):
                     filter_request += 'RAND(), '
 
         if filter_request == '':
-            filter_request = 'ORDER BY ' + self.entity.primary_key + ' ASC ' # pylint: disable=E1101
+            filter_request = 'ORDER BY ' + self.entity.primary_key + ' ASC '  # pylint: disable=E1101
         else:
             length = len(filter_request)
             filter_request = 'ORDER BY ' + filter_request[:length-2] + ' '
@@ -98,7 +103,7 @@ class AbstractRepository(AbstractCoreRepository):
 
     # This method handles the creation of the SQL conditions for each filter
     @classmethod
-    def create_get_list_filter_condition(cls, current_filter_values, filter_data, field, values):
+    def create_get_list_filter_condition(cls, current_filter_values: list[str], filter_data: dict[str, Any], field: str, values: list[Any]) -> str:
         comparison_operators = {
             'lt': '<',
             'gt': '>',
@@ -110,11 +115,11 @@ class AbstractRepository(AbstractCoreRepository):
         # Loop on all the values given for this filter
         for filter_value in current_filter_values:
             # Various possibility according to the field type
-            if filter_data['type'] == 'int' or filter_data['type']== 'strict-text':
+            if filter_data['type'] == 'int' or filter_data['type'] == 'strict-text':
                 comparison_operator = ' = '
 
                 if filter_data['type'] == 'int':
-                    for comp_url_key, comp_sql_key in comparison_operators.items():# pylint: disable=W0612
+                    for comp_url_key, comp_sql_key in comparison_operators.items():  # pylint: disable=W0612
                         if filter_value.startswith(comp_url_key + '-'):
                             array = filter_value.split('-')
                             comparison_operator = comparison_operators[array[0]]
@@ -122,7 +127,7 @@ class AbstractRepository(AbstractCoreRepository):
 
                 or_request += field + f" {comparison_operator} %s OR "
                 value_to_bind = filter_value
-            else: # text
+            else:  # text
                 or_request += field + " LIKE %s OR "
                 value_to_bind = f"%{filter_value}%"
 
@@ -134,18 +139,18 @@ class AbstractRepository(AbstractCoreRepository):
 
         return or_request
 
-    def insert(self, object, commit = True):
+    def insert(self, object: Any, commit: bool = True) -> Any:
         """Insert a new entry"""
         request = f"INSERT INTO {object.table_name} ("
 
-        for api_field, data in object.expected_fields.items(): # pylint: disable=W0612
+        for api_field, data in object.expected_fields.items():  # pylint: disable=W0612
             request += data['field'] + ', '
 
         length = len(request)
         request = request[:length-2]
         request += ') VALUES ('
 
-        for api_field, data in object.expected_fields.items(): # pylint: disable=W0612
+        for api_field, data in object.expected_fields.items():  # pylint: disable=W0612
             request += '%s, '
 
         length = len(request)
@@ -153,16 +158,16 @@ class AbstractRepository(AbstractCoreRepository):
         request += ')'
 
         values = []
-        for api_field, data in object.expected_fields.items(): # pylint: disable=W0612
+        for api_field, data in object.expected_fields.items():  # pylint: disable=W0612
             method_to_call = getattr(object, 'get' + data['method'])
             values.append(method_to_call())
 
         return self.get_by_id(self.write(request, values, commit))
 
-    def update(self, object, commit = True):
+    def update(self, object: Any, commit: bool = True) -> Any:
         request = f"UPDATE {object.table_name} SET "
 
-        for api_field, data in object.expected_fields.items(): # pylint: disable=W0612
+        for api_field, data in object.expected_fields.items():  # pylint: disable=W0612
             request += data['field'] + ' = %s, '
 
         length = len(request)

@@ -1,3 +1,5 @@
+from typing import Any
+
 from src.service.abstract_service import AbstractService
 from src.repository.platform_repository import PlatformRepository
 from src.entity.platform import Platform
@@ -6,13 +8,14 @@ from src.exception.unknown_resource_exception import ResourceNotFoundException
 from src.exception.resource_has_children_exception import RessourceHasChildrenException
 from src.helpers.json_helper import JsonHelper
 
+
 class PlatformService(AbstractService):
     resource_type = 'platform'
 
-    def __init__(self, mysql):
+    def __init__(self, mysql: Any) -> None:
         self.repository = PlatformRepository(mysql)
 
-    def get_for_create(self):
+    def get_for_create(self) -> Platform:
         platform = super().validate_payload_for_creation_and_hydrate(Platform)
 
         existing_version = self.repository.get_by_name(platform.get_name())
@@ -22,7 +25,7 @@ class PlatformService(AbstractService):
 
         return platform
 
-    def get_for_update(self, platform_id):
+    def get_for_update(self, platform_id: int) -> Platform:
         # Verification
         platform = self.repository.get_by_id(platform_id)
 
@@ -39,7 +42,7 @@ class PlatformService(AbstractService):
 
         return platform
 
-    def delete(self, platform_id):
+    def delete(self, platform_id: int) -> bool:
         platform = self.repository.get_by_id(platform_id)
 
         if platform is None:
