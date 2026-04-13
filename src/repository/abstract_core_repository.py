@@ -20,18 +20,12 @@ class AbstractCoreRepository:  # pylint: disable=no-member
 
     def fetch_multiple(self, request: str, data_tuple: tuple[Any, ...]) -> list[Any]:
         """Fetch mutliple items and return a list."""
-        items_list = []
-        cursor = self.mysql.cursor(dictionary=True, buffered=True)
+        cursor = self.mysql.cursor(dictionary=True)
         try:
             cursor.execute(request, data_tuple)
-            while True:
-                row = cursor.fetchone()
-                if row is None:
-                    break
-                items_list.append(self.hydrate(row))
+            return [self.hydrate(row) for row in cursor.fetchall()]
         finally:
             cursor.close()
-        return items_list
 
     def hydrate(self, row: dict[str, Any]) -> Any:
         """Hydrate an object from a row."""
