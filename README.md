@@ -1,11 +1,11 @@
 # GMG (Give Me a Game)
-[![CircleCI](https://circleci.com/gh/ecourtial/gmg/tree/master.svg?style=svg)](https://circleci.com/gh/ecourtial/gmg/tree/master) [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=gmg&metric=alert_status)](https://sonarcloud.io/dashboard?id=gmg) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/ecourtial/gmg/graphs/commit-activity) [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://GitHub.com/ecourtial/gmg) [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/ecourtial/gmg/blob/master/LICENSE)
+[![CI](https://github.com/ecourtial/gmg/actions/workflows/ci.yaml/badge.svg)](https://github.com/ecourtial/gmg/actions/workflows/ci.yaml) [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/ecourtial/gmg/graphs/commit-activity) [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://GitHub.com/ecourtial/gmg) [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) [![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/ecourtial/gmg/blob/master/LICENSE)
 
 ## Description :notebook:
 
 ### A back-end application for your video games inventory
 
-GMG is an educational test project. Being a PHP programmer, I developed this project using Python 3.x and Flask 2.
+GMG is an educational test project. Being a PHP programmer, I developed this project using Python 3.x and Flask 3.x.
 The goal of this application is to expose API endpoints to manage you video games collection, with various features.
 There is no graphical interfaces, only API endpoints. Data is stored in MySQL.
 
@@ -34,12 +34,14 @@ A basic documentation is available:
 * Docker
 * Nginx
 * Gunicorn
-* Python 3.10
-* Flask 2
+* Python 3
+* Flask 3
 * Circle CI
 * unittest
 * pylint
 * MySQL 8
+* Ruff
+* Poetry
 
 ## Changelog
 

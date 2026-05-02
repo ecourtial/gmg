@@ -11,6 +11,10 @@ from src.controller.copy_controller import CopyController
 from src.controller.story_controller import StoryController
 from src.controller.transaction_controller import TransactionController
 from src.controller.note_controller import NoteController
+from src.controller.magazine_controller import MagazineController
+from src.controller.magazine_issue_controller import MagazineIssueController
+from src.controller.magazine_issue_copy_controller import MagazineIssueCopyController
+from src.controller.game_version_magazine_mention_controller import GameVersionMagazineMentionController
 from src.repository.user_repository import UserRepository
 from src.connection.mysql_factory import MySQLFactory
 
@@ -376,4 +380,144 @@ def delete_note(entity_id: int) -> tuple[Response, int]:
 def get_notes() -> Response:
     """Get the notes"""
     controller = NoteController
+    return controller.get_list(MySQLFactory.get())
+
+# Magazines
+
+@app.route('/api/v1/magazine/<int:entity_id>', methods=['GET'])
+def get_magazine_by_id(entity_id: int) -> tuple[Response, int]:
+    """Returns the magazine according to its id"""
+    controller = MagazineController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/magazine', methods=['POST'])
+@token_required
+def create_magazine() -> tuple[Response, int]:
+    """Create a magazine"""
+    controller = MagazineController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/magazine/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_magazine(entity_id: int) -> tuple[Response, int]:
+    """Update the magazine according to its id"""
+    controller = MagazineController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/magazine/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_magazine(entity_id: int) -> tuple[Response, int]:
+    """Delete the magazine according to its id"""
+    controller = MagazineController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/magazines', methods=['GET'])
+def get_magazines() -> Response:
+    """Get the magazines"""
+    controller = MagazineController
+    return controller.get_list(MySQLFactory.get())
+
+# Magazine Issues
+
+@app.route('/api/v1/magazine-issue/<int:entity_id>', methods=['GET'])
+def get_magazine_issue_by_id(entity_id: int) -> tuple[Response, int]:
+    """Returns the magazine issue according to its id"""
+    controller = MagazineIssueController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/magazine-issue', methods=['POST'])
+@token_required
+def create_magazine_issue() -> tuple[Response, int]:
+    """Create a magazine issue"""
+    controller = MagazineIssueController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/magazine-issue/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_magazine_issue(entity_id: int) -> tuple[Response, int]:
+    """Update the magazine issue according to its id"""
+    controller = MagazineIssueController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/magazine-issue/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_magazine_issue(entity_id: int) -> tuple[Response, int]:
+    """Delete the magazine issue according to its id"""
+    controller = MagazineIssueController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/magazine-issues', methods=['GET'])
+def get_magazine_issues() -> Response:
+    """Get the magazine issues"""
+    controller = MagazineIssueController
+    return controller.get_list(MySQLFactory.get())
+
+# Magazine Issue Copies
+
+@app.route('/api/v1/magazine-issue-copy/<int:entity_id>', methods=['GET'])
+def get_magazine_issue_copy_by_id(entity_id: int) -> tuple[Response, int]:
+    """Returns the magazine issue copy according to its id"""
+    controller = MagazineIssueCopyController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/magazine-issue-copy', methods=['POST'])
+@token_required
+def create_magazine_issue_copy() -> tuple[Response, int]:
+    """Create a magazine issue copy"""
+    controller = MagazineIssueCopyController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/magazine-issue-copy/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_magazine_issue_copy(entity_id: int) -> tuple[Response, int]:
+    """Update the magazine issue copy according to its id"""
+    controller = MagazineIssueCopyController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/magazine-issue-copy/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_magazine_issue_copy(entity_id: int) -> tuple[Response, int]:
+    """Delete the magazine issue copy according to its id"""
+    controller = MagazineIssueCopyController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/magazine-issue-copies', methods=['GET'])
+def get_magazine_issue_copies() -> Response:
+    """Get the magazine issue copies"""
+    controller = MagazineIssueCopyController
+    return controller.get_list(MySQLFactory.get())
+
+# Game Version Magazine Mentions
+
+@app.route('/api/v1/game-version-magazine-mention/<int:entity_id>', methods=['GET'])
+def get_game_version_magazine_mention_by_id(entity_id: int) -> tuple[Response, int]:
+    """Returns the game version magazine mention according to its id"""
+    controller = GameVersionMagazineMentionController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/game-version-magazine-mention', methods=['POST'])
+@token_required
+def create_game_version_magazine_mention() -> tuple[Response, int]:
+    """Create a game version magazine mention"""
+    controller = GameVersionMagazineMentionController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/game-version-magazine-mention/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_game_version_magazine_mention(entity_id: int) -> tuple[Response, int]:
+    """Update the game version magazine mention according to its id"""
+    controller = GameVersionMagazineMentionController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/game-version-magazine-mention/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_game_version_magazine_mention(entity_id: int) -> tuple[Response, int]:
+    """Delete the game version magazine mention according to its id"""
+    controller = GameVersionMagazineMentionController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/game-version-magazine-mentions', methods=['GET'])
+def get_game_version_magazine_mentions() -> Response:
+    """Get the game version magazine mentions"""
+    controller = GameVersionMagazineMentionController
     return controller.get_list(MySQLFactory.get())

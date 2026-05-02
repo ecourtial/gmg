@@ -4,7 +4,7 @@ services:
     build: docker/nginx
     container_name: nginx_gmg
     ports:
-      - "80:80"
+      - "8000:80"
     volumes:
       - ./docker/data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
@@ -35,3 +35,20 @@ services:
         - MYSQL_DATABASE=games
         - MYSQL_USER=game
         - MYSQL_PASSWORD=azerty
+
+  ############################
+  ## Adminer
+  ############################
+  adminer:
+      image: adminer
+      container_name: adminer_gmg
+      ports:
+          - ${ADMINER_HTTP_PORT:-8080}:8080
+
+############################
+## Common settings
+############################
+volumes:
+    mysql_data:
+        driver: local
+      
