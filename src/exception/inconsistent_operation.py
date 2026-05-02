@@ -1,2 +1,2 @@
 class InconsistentOperation(Exception):
-    "Abstract"
+    """Abstract base for inconsistent operation exceptions"""

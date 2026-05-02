@@ -45,7 +45,7 @@ class TestNotes(AbstractTests):
 
         resp = self.api_call('delete', 'note/' + note_id, {}, True)
         self.assertEqual(404, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'note' with id #4 has not been found.", 'code': 1}, resp.json())
+        self.assertEqual({'message': "The resource of type 'note' with id #3 has not been found.", 'code': 1}, resp.json())
 
     def test_get_list_basic_filters(self):
         resp = self.api_call('get', 'notes?page=2&limit=1', {}, True)

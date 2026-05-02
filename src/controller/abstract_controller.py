@@ -1,4 +1,5 @@
-from flask import request, jsonify
+from typing import Any
+from flask import request, jsonify, Response
 from src.exception.inconsistent_operation import InconsistentOperation
 from src.exception.missing_field_exception import MissingFieldException
 from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
@@ -8,7 +9,7 @@ from src.exception.unsupported_value_exception import UnsupportedValueException
 
 class AbstractController:# pylint: disable=no-member
     @classmethod
-    def get_by_id(cls, mysql, entity_id):
+    def get_by_id(cls, mysql: Any, entity_id: int) -> tuple[Response, int]:
         service = cls.service(mysql)
 
         try:
@@ -19,7 +20,7 @@ class AbstractController:# pylint: disable=no-member
         return jsonify(copy.serialize()), 200
 
     @classmethod
-    def create(cls, mysql):
+    def create(cls, mysql: Any) -> tuple[Response, int]:
         service = cls.service(mysql)
 
         try:
@@ -39,7 +40,7 @@ class AbstractController:# pylint: disable=no-member
         return cls.get_by_id(mysql, object.get_id())
 
     @classmethod
-    def update(cls, mysql, entity_id):
+    def update(cls, mysql: Any, entity_id: int) -> tuple[Response, int]:
         service = cls.service(mysql)
 
         try:
@@ -57,7 +58,7 @@ class AbstractController:# pylint: disable=no-member
         return cls.get_by_id(mysql, object.get_id())
 
     @classmethod
-    def delete(cls, mysql, entity_id):
+    def delete(cls, mysql: Any, entity_id: int) -> tuple[Response, int]:
         service = cls.service(mysql)
 
         try:
@@ -70,7 +71,7 @@ class AbstractController:# pylint: disable=no-member
         return jsonify({'message': service.resource_type + ' successfully deleted.'}), 200
 
     @classmethod
-    def get_list(cls, mysql):
+    def get_list(cls, mysql: Any) -> Response:
         repo = cls.repository(mysql)
 
         page = request.args.get('page', 1)

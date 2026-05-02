@@ -4,7 +4,7 @@ test:
 	make import_db && docker compose exec python bash -c 'make test_command_python'
 
 linter:
-	docker compose exec python pylint --rcfile=standard.rc src/ ./app.py
+	docker compose exec python bash -c 'cd /code && poetry run ruff check src && poetry run pylint src/ ./app.py'
 
 start:
 	docker compose up
@@ -21,9 +21,9 @@ import_db:
 export_db:
 	docker compose exec mysql bash -c 'cd /code && mysqldump -u game -pazerty games > test/games_test.sql'
 
-# updates the requirements from PIPENV (need to rebuild the pyton container after that)
+# updates dependencies and regenerates the lock file (need to rebuild the python container after that)
 requirements:
-	docker compose exec python bash -c "cd docker/python && pipenv lock -r > ./requirements.txt"
+	docker compose exec python bash -c "cd /code && poetry update"
 
 ## Containers internal command
 import_db_command:

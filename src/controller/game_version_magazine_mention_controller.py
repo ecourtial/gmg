@@ -1,0 +1,7 @@
+from src.controller.abstract_controller import AbstractController
+from src.repository.game_version_magazine_mention_repository import GameVersionMagazineMentionRepository
+from src.service.game_version_magazine_mention_service import GameVersionMagazineMentionService
+
+class GameVersionMagazineMentionController(AbstractController):
+    repository = GameVersionMagazineMentionRepository
+    service = GameVersionMagazineMentionService
