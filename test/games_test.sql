@@ -435,8 +435,9 @@ CREATE TABLE `magazine_issues` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `magazine_issues` (`id`, `magazine_id`, `issue_number`, `year`, `month`, `notes`) VALUES
-(1,	1,	1,	1997,	8,	'Le premier !'),
-(2,	1,	2,	1997,	9,	'Le second.');
+(1,	1,	3,	1997,	10,	'Le troisième !'),
+(2,	1,	1,	1997,	8,	'Le premier !'),
+(3,	1,	2,	1997,	9,	'Le second.');
 
 DROP TABLE IF EXISTS `magazines`;
 CREATE TABLE `magazines` (
@@ -448,7 +449,7 @@ CREATE TABLE `magazines` (
 
 INSERT INTO `magazines` (`id`, `title`, `notes`) VALUES
 (1,	'Gen4',	'Découvert en 1997.'),
-(2,	'PC PLayer',	'Découvert début 1998.');
+(2,	'PC Player',	'Découvert début 1998.');
 
 DROP TABLE IF EXISTS `notes`;
 CREATE TABLE `notes` (

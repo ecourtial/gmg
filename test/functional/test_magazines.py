@@ -16,7 +16,7 @@ class TestMagazines(AbstractTests):
         resp = self.api_call('get', 'magazine/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'id': 1, 'title': 'Gen4', 'notes': 'Découvert en 1997.', 'issueCount': 2}, resp.json())
+        self.assertEqual({'id': 1, 'title': 'Gen4', 'notes': 'Découvert en 1997.', 'issueCount': 3}, resp.json())
 
     def test_create_incomplete_payload(self):
         resp = self.api_call('post', 'magazine', {}, True)
@@ -69,7 +69,7 @@ class TestMagazines(AbstractTests):
         resp = self.api_call('patch', 'magazine/2', {'title': 'Gen4'}, True)
 
         self.assertEqual(400, resp.status_code)
-        self.assertEqual({'message': "The resource of type 'magazine' with title 'PC PLayer' already exists.", 'code': 8}, resp.json())
+        self.assertEqual({'message': "The resource of type 'magazine' with title 'Gen4' already exists.", 'code': 8}, resp.json())
 
     def test_delete_fails_because_magazine_has_issues(self):
         resp = self.api_call('delete', 'magazine/1', {}, True)

@@ -16,7 +16,7 @@ class TestMagazineIssues(AbstractTests):
         resp = self.api_call('get', 'magazine-issue/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'id': 1, 'magazineId': 1, 'issueNumber': 1, 'year': 1997, 'month': 8, 'notes': 'Le premier !'}, resp.json())
+        self.assertEqual({'id': 1, 'magazineId': 1, 'issueNumber': 3, 'year': 1997, 'month': 10, 'notes': 'Le troisième !'}, resp.json())
 
     def test_create_incomplete_payload(self):
         resp = self.api_call('post', 'magazine-issue', {}, True)
@@ -38,15 +38,15 @@ class TestMagazineIssues(AbstractTests):
 
     def test_create_update_delete_success(self):
         # Create
-        payload = {'magazineId': 1, 'issueNumber': 3, 'year': 1997, 'month': 10, 'notes': 'Le troisième.'}
+        payload = {'magazineId': 1, 'issueNumber': 4, 'year': 1998, 'month': 1, 'notes': 'Le quatrième.'}
         resp = self.api_call('post', 'magazine-issue', payload, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual(3, resp.json()['issueNumber'])
+        self.assertEqual(4, resp.json()['issueNumber'])
         issue_id = str(resp.json()['id'])
 
         resp = self.api_call('get', 'magazine-issue/' + issue_id, None, True)
-        payload['id'] = 3
+        payload['id'] = 4
         self.assertEqual(payload, resp.json())
 
         # Patch
@@ -70,7 +70,7 @@ class TestMagazineIssues(AbstractTests):
         self.assertEqual({'message': "The resource of type 'magazine_issue' with id #666 has not been found.", 'code': 1}, resp.json())
 
     def test_update_duplicate_issue_number(self):
-        resp = self.api_call('patch', 'magazine-issue/2', {'issueNumber': 1}, True)
+        resp = self.api_call('patch', 'magazine-issue/3', {'issueNumber': 1}, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The resource of type 'magazine_issue' with issue_number '1' already exists.", 'code': 8}, resp.json())
@@ -97,8 +97,8 @@ class TestMagazineIssues(AbstractTests):
         resp = self.api_call('get', 'magazine-issues', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual(2, resp.json()['resultCount'])
-        self.assertEqual(2, resp.json()['totalResultCount'])
+        self.assertEqual(3, resp.json()['resultCount'])
+        self.assertEqual(3, resp.json()['totalResultCount'])
         self.assertEqual(1, resp.json()['page'])
         self.assertEqual(1, resp.json()['totalPageCount'])
 
@@ -106,7 +106,7 @@ class TestMagazineIssues(AbstractTests):
         resp = self.api_call('get', 'magazine-issues?magazineId[]=1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual(2, resp.json()['resultCount'])
+        self.assertEqual(3, resp.json()['resultCount'])
 
         resp = self.api_call('get', 'magazine-issues?magazineId[]=2', {}, True)
 

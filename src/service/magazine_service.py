@@ -35,7 +35,7 @@ class MagazineService(AbstractService):
         existing = self.repository.get_by_title(title)
 
         if existing is not None and existing.get_id() != magazine.get_id():
-            raise ResourceAlreadyExistsException('magazine', magazine.get_title(), 'title')
+            raise ResourceAlreadyExistsException('magazine', title, 'title')
 
         super().hydrate_for_update(magazine)
 
