@@ -41,7 +41,7 @@ CREATE TABLE `game_version_magazine_mentions` (
   `magazine_issue_id` int unsigned NOT NULL,
   `game_version_id` int unsigned NOT NULL,
   `type` varchar(255) NOT NULL,
-  `notes` text NOT NULL,
+  `notes` text NULL,
   PRIMARY KEY (`mention_id`),
   KEY `fk_mention_magazine_issue` (`magazine_issue_id`),
   KEY `fk_mention_game_version` (`game_version_id`),
@@ -50,8 +50,9 @@ CREATE TABLE `game_version_magazine_mentions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `game_version_magazine_mentions` (`mention_id`, `magazine_issue_id`, `game_version_id`, `type`, `notes`) VALUES
-(1,	1,	1,	'Test',	''),
-(2,	2,	1,	'Guide',	'');
+(1,	2,	1,	'Test',	''),
+(2,	1,	1,	'Guide',	''),
+(3,	1,	36,	'Test',	'Super !');
 
 DROP TABLE IF EXISTS `games`;
 CREATE TABLE `games` (
@@ -411,14 +412,14 @@ CREATE TABLE `magazine_issue_copies` (
   `issue_copy_id` int unsigned NOT NULL AUTO_INCREMENT,
   `magazine_issue_id` int unsigned NOT NULL,
   `type` varchar(255) NOT NULL,
-  `notes` text NOT NULL,
+  `notes` text,
   PRIMARY KEY (`issue_copy_id`),
   KEY `fk_magazine_issue_copy_issue` (`magazine_issue_id`),
   CONSTRAINT `fk_magazine_issue_copy_issue` FOREIGN KEY (`magazine_issue_id`) REFERENCES `magazine_issues` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `magazine_issue_copies` (`issue_copy_id`, `magazine_issue_id`, `type`, `notes`) VALUES
-(1,	1,	'Paper',	'Original'),
+(1,	1,	'Printed-Original',	'Original'),
 (2,	1,	'Digital',	'Copy.');
 
 DROP TABLE IF EXISTS `magazine_issues`;
@@ -428,7 +429,7 @@ CREATE TABLE `magazine_issues` (
   `issue_number` smallint unsigned NOT NULL,
   `year` smallint unsigned NOT NULL,
   `month` tinyint unsigned NOT NULL,
-  `notes` text NOT NULL,
+  `notes` text NULL,
   PRIMARY KEY (`id`),
   KEY `fk_magazine_issue_magazine` (`magazine_id`),
   CONSTRAINT `fk_magazine_issue_magazine` FOREIGN KEY (`magazine_id`) REFERENCES `magazines` (`id`)
@@ -443,7 +444,7 @@ DROP TABLE IF EXISTS `magazines`;
 CREATE TABLE `magazines` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
-  `notes` text NOT NULL,
+  `notes` text NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

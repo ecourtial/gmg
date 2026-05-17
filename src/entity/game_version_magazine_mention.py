@@ -23,7 +23,19 @@ class GameVersionMagazineMention(AbstractEntity):
             'method': '_type',
             'required': True,
             'type': 'strict-text',
-            'allowed_values': {'Preview', 'Test', 'Guide', 'Other', 'Playable-demo', 'Watchable-demo'}
+            'allowed_values': {
+                'Advertisement',
+                'Comparison',
+                'Guide',
+                'Mention',
+                'Playable-demo',
+                'Other',
+                'Preview',
+                'Short preview',
+                'Short test',
+                'Test',
+                'Watchable-demo',
+            }
         },
         'notes': {
             'field': 'notes',

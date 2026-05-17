@@ -16,7 +16,7 @@ class TestMagazineIssueCopies(AbstractTests):
         resp = self.api_call('get', 'magazine-issue-copy/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'id': 1, 'magazineIssueId': 1, 'type': 'Paper', 'notes': 'Original'}, resp.json())
+        self.assertEqual({'id': 1, 'magazineIssueId': 1, 'type': 'Printed-Original', 'notes': 'Original'}, resp.json())
 
     def test_create_incomplete_payload(self):
         resp = self.api_call('post', 'magazine-issue-copy', {}, True)
@@ -30,7 +30,7 @@ class TestMagazineIssueCopies(AbstractTests):
         self.assertEqual(400, resp.status_code)
 
     def test_create_magazine_issue_not_found(self):
-        resp = self.api_call('post', 'magazine-issue-copy', {'magazineIssueId': 666, 'type': 'Paper'}, True)
+        resp = self.api_call('post', 'magazine-issue-copy', {'magazineIssueId': 666, 'type': 'Printed-Original'}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'magazine_issue' with id #666 has not been found.", 'code': 1}, resp.json())

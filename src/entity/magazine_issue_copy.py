@@ -18,7 +18,7 @@ class MagazineIssueCopy(AbstractEntity):
             'method': '_type',
             'required': True,
             'type': 'strict-text',
-            'allowed_values': {'Digital', 'Paper'}
+            'allowed_values': {'Digital', 'Printed-Original', 'Printed-Copy'}
         },
         'notes': {
             'field': 'notes',
