@@ -4,3 +4,6 @@ test/**/*.pyc
 configuration.json
 .history/
 .vscode/
+.venv/
+.DS_Store
+

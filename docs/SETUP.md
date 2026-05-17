@@ -6,7 +6,7 @@ In the root folder, copy the file _configuration.json.dist_ to _configuration.js
 
 Next, just do a __make start__, and then run __make test__ to run the tests and import the local DB with test features. You're good to go!
 
-Ther test DB it just imported has a user. You can login with the following credentials : 
+The test DB which was just imported has already a given user. You can login with the following credentials : 
 * username: _mephistophelesz_
 * password: _barz_
 

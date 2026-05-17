@@ -1,3 +1,5 @@
+from typing import Any
+
 from src.repository.abstract_repository import AbstractRepository
 from src.entity.copy import Copy
 from src.entity.transaction import Transaction
@@ -5,10 +7,11 @@ from src.entity.version import Version
 from src.entity.game import Game
 from src.entity.platform import Platform
 
+
 class CopyRepository(AbstractRepository):
     entity = Copy
 
-    def get_select_request_start(self):
+    def get_select_request_start(self) -> str:
         request = f"SELECT {Copy.table_name}.*, v.transactionCount AS transactionCount, "
         request += f"{Game.table_name}.title AS gameTitle, {Platform.table_name}.name AS platformName "
         request += 'FROM '
@@ -25,7 +28,7 @@ class CopyRepository(AbstractRepository):
 
         return request
 
-    def hydrate(self, row):
+    def hydrate(self, row: dict[str, Any]) -> Copy:
         """Hydrate an object from a row."""
         copy = super().hydrate(row)
         copy.set_platform_name(row['platformName'])

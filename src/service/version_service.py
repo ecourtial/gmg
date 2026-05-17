@@ -1,3 +1,5 @@
+from typing import Any
+
 from src.service.abstract_service import AbstractService
 from src.repository.version_repository import VersionRepository
 from src.repository.platform_repository import PlatformRepository
@@ -9,16 +11,17 @@ from src.exception.unknown_resource_exception import ResourceNotFoundException
 from src.exception.resource_has_children_exception import RessourceHasChildrenException
 from src.helpers.json_helper import JsonHelper
 
+
 class VersionService(AbstractService):
     resource_type = 'version'
 
-    def __init__(self, mysql):
+    def __init__(self, mysql: Any) -> None:
         self.repository = VersionRepository(mysql)
         self.game_repository = GameRepository(mysql)
         self.platform_repository = PlatformRepository(mysql)
         self.transaction_repository = TransactionRepository(mysql)
 
-    def get_for_create(self):
+    def get_for_create(self) -> Version:
         version = super().validate_payload_for_creation_and_hydrate(Version)
 
         platform = self.platform_repository.get_by_id(version.get_platform_id())
@@ -43,7 +46,7 @@ class VersionService(AbstractService):
 
         return version
 
-    def get_for_update(self, version_id):
+    def get_for_update(self, version_id: int) -> Version:
         # Verification
         version = self.repository.get_by_id(version_id)
 
@@ -72,7 +75,7 @@ class VersionService(AbstractService):
 
         return version
 
-    def delete(self, version_id):
+    def delete(self, version_id: int) -> bool:
         """Delete a version"""
         version = self.repository.get_by_id(version_id)
 

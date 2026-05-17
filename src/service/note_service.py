@@ -1,21 +1,21 @@
+from typing import Any
+
 from src.service.abstract_service import AbstractService
 from src.repository.note_repository import NoteRepository
 from src.entity.note import Note
 from src.exception.unknown_resource_exception import ResourceNotFoundException
 
+
 class NoteService(AbstractService):
     resource_type = 'note'
 
-    def __init__(self, mysql):
+    def __init__(self, mysql: Any) -> None:
         self.repository = NoteRepository(mysql)
 
+    def get_for_create(self) -> Note:
+        return super().validate_payload_for_creation_and_hydrate(Note)
 
-    def get_for_create(self):
-        note = super().validate_payload_for_creation_and_hydrate(Note)
-
-        return note
-
-    def get_for_update(self, note_id):
+    def get_for_update(self, note_id: int) -> Note:
         # Verification
         note = self.repository.get_by_id(note_id)
 
@@ -26,7 +26,7 @@ class NoteService(AbstractService):
 
         return note
 
-    def delete(self, note_id):
+    def delete(self, note_id: int) -> bool:
         note = self.repository.get_by_id(note_id)
 
         if note is None:

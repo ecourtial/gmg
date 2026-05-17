@@ -1,4 +1,6 @@
 """ Repository to handle the versions """
+from typing import Any
+
 from src.repository.abstract_repository import AbstractRepository
 from src.entity.version import Version
 from src.entity.game import Game
@@ -6,10 +8,11 @@ from src.entity.platform import Platform
 from src.entity.copy import Copy
 from src.entity.story import Story
 
+
 class VersionRepository(AbstractRepository):
     entity = Version
 
-    def get_select_request_start(self):
+    def get_select_request_start(self) -> str:
         request = "SELECT versions.*, v.storyCount AS storyCount, c.copyCount AS copyCount, "
         request += f"{Game.table_name}.title AS gameTitle, {Platform.table_name}.name AS platformName "
         request += 'FROM '
@@ -33,7 +36,7 @@ class VersionRepository(AbstractRepository):
 
         return request
 
-    def get_by_unique_index(self, platform_id, game_id):
+    def get_by_unique_index(self, platform_id: int, game_id: int) -> Version | None:
         """Get one version by the unique combination of the platform and the game."""
         request = self.get_select_request_start()
         request += f"AND {Version.table_name}.platform_id = %s "
@@ -41,7 +44,7 @@ class VersionRepository(AbstractRepository):
 
         return self.fetch_one(request, (platform_id, game_id,))
 
-    def hydrate(self, row):
+    def hydrate(self, row: dict[str, Any]) -> Version:
         """Hydrate an object from a row."""
         version = super().hydrate(row)
         version.set_platform_name(row['platformName'])
