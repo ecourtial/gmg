@@ -16,7 +16,7 @@ class TestGameVersionMagazineMentions(AbstractTests):
         resp = self.api_call('get', 'game-version-magazine-mention/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'id': 1, 'magazineIssueId': 1, 'gameVersionId': 1, 'type': 'Test', 'notes': ''}, resp.json())
+        self.assertEqual({'id': 1, 'magazineIssueId': 2, 'gameVersionId': 1, 'type': 'Test', 'notes': ''}, resp.json())
 
     def test_create_incomplete_payload(self):
         resp = self.api_call('post', 'game-version-magazine-mention', {}, True)
@@ -51,7 +51,7 @@ class TestGameVersionMagazineMentions(AbstractTests):
         mention_id = str(resp.json()['id'])
 
         resp = self.api_call('get', 'game-version-magazine-mention/' + mention_id, None, True)
-        payload['id'] = 3
+        payload['id'] = 4
         self.assertEqual(payload, resp.json())
 
         # Patch
@@ -78,8 +78,8 @@ class TestGameVersionMagazineMentions(AbstractTests):
         resp = self.api_call('get', 'game-version-magazine-mentions', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual(2, resp.json()['resultCount'])
-        self.assertEqual(2, resp.json()['totalResultCount'])
+        self.assertEqual(3, resp.json()['resultCount'])
+        self.assertEqual(3, resp.json()['totalResultCount'])
         self.assertEqual(1, resp.json()['page'])
         self.assertEqual(1, resp.json()['totalPageCount'])
 
@@ -87,8 +87,8 @@ class TestGameVersionMagazineMentions(AbstractTests):
         resp = self.api_call('get', 'game-version-magazine-mentions?magazineIssueId[]=1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual(1, resp.json()['resultCount'])
-        self.assertEqual(1, resp.json()['result'][0]['id'])
+        self.assertEqual(2, resp.json()['resultCount'])
+        self.assertEqual(2, resp.json()['result'][0]['id'])
 
     def test_get_list_filter_by_game_version(self):
         resp = self.api_call('get', 'game-version-magazine-mentions?gameVersionId[]=1', {}, True)

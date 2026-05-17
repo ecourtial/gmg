@@ -50,8 +50,9 @@ CREATE TABLE `game_version_magazine_mentions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `game_version_magazine_mentions` (`mention_id`, `magazine_issue_id`, `game_version_id`, `type`, `notes`) VALUES
-(1,	1,	1,	'Test',	''),
-(2,	2,	1,	'Guide',	'');
+(1,	2,	1,	'Test',	''),
+(2,	1,	1,	'Guide',	''),
+(3,	1,	36,	'Test',	'Super !');
 
 DROP TABLE IF EXISTS `games`;
 CREATE TABLE `games` (
