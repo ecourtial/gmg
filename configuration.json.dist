@@ -3,5 +3,6 @@
     "db_user": "game",
     "db_password": "azerty",
     "database": "games",
-    "secret": "replaceThisSecret"
+    "secret": "replaceThisSecret",
+    "authorized_ips": []
 }

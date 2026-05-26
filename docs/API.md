@@ -106,3 +106,4 @@ When something goes wrong, we try to handle it with a specific exception and a s
 |  13   | Authentication token is invalid    |                                                                                                      |
 |  14   | Inconsistant version and copy      | Raised when you try to create a transaction for which version_id and the copy version_id don't match |
 |  15   | Duplicate consecutive operation    | Raised when you try, for instance, to create two consecutive inbound transaction                     |
+|  16   | Unauthorized client                | Returned when the client IP is not in the whitelist                                                  |

@@ -27,6 +27,7 @@ app.json.sort_keys = False
 
 with open('configuration.json', encoding='UTF-8') as json_file:
     configurationData = json.load(json_file)
+authorized_ips = configurationData.get('authorized_ips', [])
 
 ################
 # DB connection
@@ -70,6 +71,28 @@ def token_required(decorated_function: Callable[..., Any]) -> Callable[..., Any]
 
         return decorated_function(*args, **kwargs)
     return decorator
+
+########################################################################
+# Before request: security...
+########################################################################
+
+@app.before_request
+def restrict_ip_access() -> tuple[Response, int] | None:
+    """Restrict access to authorized IPs if a whitelist is configured."""
+
+    if not authorized_ips:
+        return None
+
+    client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    client_ip = client_ip.split(',')[0].strip()
+
+    if client_ip not in authorized_ips:
+        return jsonify({
+            'message': 'IP address is not authorized',
+            'code': 16
+        }), 403
+
+    return None
 
 ########################################################################
 # After request: cache management, close DB connection...

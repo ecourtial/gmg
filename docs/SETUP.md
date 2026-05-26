@@ -27,6 +27,8 @@ The usual process to setup a project is the following:
 * Start the application.
 * Change your default credentials.
 
+Note: in the configuration, you can define a list of authorized IP adresses. It is recommended for production environment, but not for the dev one as it will prevent tests to pass.
+
 ## 1- Importing the dabase
 
 Nothing much to say here, import the empty database in to your MySQL server.

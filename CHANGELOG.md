@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.0.0
+* Bump to Python 3.13.
+* Migration to Poetry.
+* Added strong typing.
+* Added a feature to manage magazines.
+* Added an optionnal whitelist of IP adresses.
+
 ## 4.4.0
 * Added a new feature: notes.
 * Bump to Python 3.10.
