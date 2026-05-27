@@ -416,7 +416,7 @@ CREATE TABLE `magazine_issue_copies` (
   PRIMARY KEY (`copy_id`),
   KEY `fk_magazine_issue_copy_issue` (`magazine_issue_id`),
   CONSTRAINT `fk_magazine_issue_copy_issue` FOREIGN KEY (`magazine_issue_id`) REFERENCES `magazine_issues` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `magazine_issue_copies` (`copy_id`, `magazine_issue_id`, `type`, `notes`) VALUES
 (1,	1,	'Printed-Original',	'Original'),
@@ -433,7 +433,7 @@ CREATE TABLE `magazine_issues` (
   PRIMARY KEY (`id`),
   KEY `fk_magazine_issue_magazine` (`magazine_id`),
   CONSTRAINT `fk_magazine_issue_magazine` FOREIGN KEY (`magazine_id`) REFERENCES `magazines` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `magazine_issues` (`id`, `magazine_id`, `issue_number`, `year`, `month`, `notes`) VALUES
 (1,	1,	3,	1997,	10,	'Le troisième !'),
@@ -446,7 +446,7 @@ CREATE TABLE `magazines` (
   `title` text NOT NULL,
   `notes` text NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `magazines` (`id`, `title`, `notes`) VALUES
 (1,	'Gen4',	'Découvert en 1997.'),
@@ -458,7 +458,7 @@ CREATE TABLE `notes` (
   `title` varchar(255) NOT NULL,
   `content` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `notes` (`id`, `title`, `content`) VALUES
 (1,	'Note 1',	'Some comment 1.'),

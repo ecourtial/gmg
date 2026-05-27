@@ -75,7 +75,7 @@ CREATE TABLE `magazine_issue_copies` (
   PRIMARY KEY (`copy_id`),
   KEY `fk_magazine_issue_copy_issue` (`magazine_issue_id`),
   CONSTRAINT `fk_magazine_issue_copy_issue` FOREIGN KEY (`magazine_issue_id`) REFERENCES `magazine_issues` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 CREATE TABLE `game_version_magazine_mentions` (
