@@ -409,16 +409,16 @@ INSERT INTO `games` (`id`, `title`, `notes`) VALUES
 
 DROP TABLE IF EXISTS `magazine_issue_copies`;
 CREATE TABLE `magazine_issue_copies` (
-  `issue_copy_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `copy_id` int unsigned NOT NULL AUTO_INCREMENT,
   `magazine_issue_id` int unsigned NOT NULL,
   `type` varchar(255) NOT NULL,
   `notes` text,
-  PRIMARY KEY (`issue_copy_id`),
+  PRIMARY KEY (`copy_id`),
   KEY `fk_magazine_issue_copy_issue` (`magazine_issue_id`),
   CONSTRAINT `fk_magazine_issue_copy_issue` FOREIGN KEY (`magazine_issue_id`) REFERENCES `magazine_issues` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `magazine_issue_copies` (`issue_copy_id`, `magazine_issue_id`, `type`, `notes`) VALUES
+INSERT INTO `magazine_issue_copies` (`copy_id`, `magazine_issue_id`, `type`, `notes`) VALUES
 (1,	1,	'Printed-Original',	'Original'),
 (2,	1,	'Digital',	'Copy.');
 
@@ -579,24 +579,6 @@ INSERT INTO `stories` (`id`, `version_id`, `year`, `position`, `watched`, `playe
 (88,	338,	2022,	12,	1,	0),
 (89,	80,	2022,	13,	0,	1),
 (90,	224,	2022,	14,	0,	1);
-
-DROP TABLE IF EXISTS `trades`;
-CREATE TABLE `trades` (
-  `trade_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `copy_id` int unsigned NOT NULL,
-  `year` smallint unsigned NOT NULL,
-  `month` smallint unsigned NOT NULL,
-  `day` smallint unsigned NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `notes` text,
-  PRIMARY KEY (`trade_id`),
-  KEY `copy_id` (`copy_id`),
-  CONSTRAINT `trades_ibfk_1` FOREIGN KEY (`copy_id`) REFERENCES `copies` (`copy_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-INSERT INTO `trades` (`trade_id`, `copy_id`, `year`, `month`, `day`, `type`, `notes`) VALUES
-(90,	1,	2022,	2,	4,	'Loan-out',	''),
-(91,	1,	2022,	4,	8,	'Loan-out-return',	'');
 
 DROP TABLE IF EXISTS `transactions`;
 CREATE TABLE `transactions` (

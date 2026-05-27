@@ -29,13 +29,13 @@ class MagazineIssueCopy(AbstractEntity):
     }
 
     authorized_extra_fields_for_filtering: dict[str, Any] = {
-        'id': {'field': 'issue_copy_id', 'origin': 'native', 'type': 'int'},
+        'id': {'field': 'copy_id', 'origin': 'native', 'type': 'int'},
         'magazineIssueId': {'field': 'magazine_issue_id', 'origin': 'native', 'type': 'int'},
         'type': {'field': 'type', 'origin': 'native', 'type': 'string'},
     }
 
     table_name = 'magazine_issue_copies'
-    primary_key = 'issue_copy_id'
+    primary_key = 'copy_id'
 
     # If you change the order here, you need to also change it in the array above!
     def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
