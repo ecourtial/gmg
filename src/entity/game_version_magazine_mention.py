@@ -27,14 +27,14 @@ class GameVersionMagazineMention(AbstractEntity):
                 'Advertisement',
                 'Cheat',
                 'Comparison',
-                'Full-game-included'
+                'Full-game-included',
                 'Guide',
                 'Mention',
                 'Playable-demo',
                 'Other',
                 'Preview',
-                'Short preview',
-                'Short test',
+                'Short-preview',
+                'Short-test',
                 'Test',
                 'Watchable-demo',
             }
