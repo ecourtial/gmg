@@ -39,6 +39,12 @@ class GameVersionMagazineMention(AbstractEntity):
                 'Watchable-demo',
             }
         },
+        'pageNumber': {
+            'field': 'page_number',
+            'method': '_page_number',
+            'required': True,
+            'type': 'int'
+        },
         'notes': {
             'field': 'notes',
             'method': '_notes',
@@ -64,12 +70,14 @@ class GameVersionMagazineMention(AbstractEntity):
             magazine_issue_id: int,
             game_version_id: int,
             type: str,
+            page_number: int,
             notes: str
     ) -> None:
         self.entity_id = entity_id
         self.magazine_issue_id = int(magazine_issue_id)
         self.game_version_id = int(game_version_id)
         self.type = type
+        self.page_number = page_number
         self.notes = notes
 
     def get_id(self) -> int | None:
@@ -92,6 +100,12 @@ class GameVersionMagazineMention(AbstractEntity):
 
     def set_type(self, type: str) -> None:
         self.type = type
+
+    def get_page_number(self) -> int:
+        return self.page_number
+
+    def set_page_numner(self, page_number: int) -> None:
+        self.page_number = page_number
 
     def get_notes(self) -> str:
         return self.notes

@@ -41,6 +41,7 @@ CREATE TABLE `game_version_magazine_mentions` (
   `magazine_issue_id` int unsigned NOT NULL,
   `game_version_id` int unsigned NOT NULL,
   `type` varchar(255) NOT NULL,
+  `page_number` int unsigned NOT NULL,
   `notes` text NULL,
   PRIMARY KEY (`mention_id`),
   KEY `fk_mention_magazine_issue` (`magazine_issue_id`),
@@ -49,10 +50,10 @@ CREATE TABLE `game_version_magazine_mentions` (
   CONSTRAINT `fk_mention_magazine_issue` FOREIGN KEY (`magazine_issue_id`) REFERENCES `magazine_issues` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `game_version_magazine_mentions` (`mention_id`, `magazine_issue_id`, `game_version_id`, `type`, `notes`) VALUES
-(1,	2,	1,	'Test',	''),
-(2,	1,	1,	'Guide',	''),
-(3,	1,	36,	'Test',	'Super !');
+INSERT INTO `game_version_magazine_mentions` (`mention_id`, `magazine_issue_id`, `game_version_id`, `type`, `page_number`, `notes`) VALUES
+(1,	2,	1,'Test', 12,	''),
+(2,	1,	1, 'Guide', 36,	''),
+(3,	1,	36, 'Test',	43, 'Super !');
 
 DROP TABLE IF EXISTS `games`;
 CREATE TABLE `games` (

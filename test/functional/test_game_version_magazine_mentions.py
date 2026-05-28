@@ -16,7 +16,7 @@ class TestGameVersionMagazineMentions(AbstractTests):
         resp = self.api_call('get', 'game-version-magazine-mention/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'id': 1, 'magazineIssueId': 2, 'gameVersionId': 1, 'type': 'Test', 'notes': ''}, resp.json())
+        self.assertEqual({'id': 1, 'magazineIssueId': 2, 'gameVersionId': 1, 'type': 'Test', 'pageNumber': 12, 'notes': ''}, resp.json())
 
     def test_create_incomplete_payload(self):
         resp = self.api_call('post', 'game-version-magazine-mention', {}, True)
@@ -30,20 +30,20 @@ class TestGameVersionMagazineMentions(AbstractTests):
         self.assertEqual(400, resp.status_code)
 
     def test_create_magazine_issue_not_found(self):
-        resp = self.api_call('post', 'game-version-magazine-mention', {'magazineIssueId': 666, 'gameVersionId': 1, 'type': 'Test'}, True)
+        resp = self.api_call('post', 'game-version-magazine-mention', {'magazineIssueId': 666, 'gameVersionId': 1, 'type': 'Test', 'pageNumber': 49}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'magazine_issue' with id #666 has not been found.", 'code': 1}, resp.json())
 
     def test_create_game_version_not_found(self):
-        resp = self.api_call('post', 'game-version-magazine-mention', {'magazineIssueId': 1, 'gameVersionId': 666, 'type': 'Test'}, True)
+        resp = self.api_call('post', 'game-version-magazine-mention', {'magazineIssueId': 1, 'gameVersionId': 666, 'type': 'Test', 'pageNumber': 49}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'version' with id #666 has not been found.", 'code': 1}, resp.json())
 
     def test_create_update_delete_success(self):
         # Create
-        payload = {'magazineIssueId': 1, 'gameVersionId': 1, 'type': 'Preview', 'notes': 'A preview mention.'}
+        payload = {'magazineIssueId': 1, 'gameVersionId': 1, 'type': 'Preview', 'pageNumber': 49, 'notes': 'A preview mention.'}
         resp = self.api_call('post', 'game-version-magazine-mention', payload, True)
 
         self.assertEqual(200, resp.status_code)

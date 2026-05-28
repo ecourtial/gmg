@@ -77,12 +77,12 @@ CREATE TABLE `magazine_issue_copies` (
   CONSTRAINT `fk_magazine_issue_copy_issue` FOREIGN KEY (`magazine_issue_id`) REFERENCES `magazine_issues` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
 CREATE TABLE `game_version_magazine_mentions` (
   `mention_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `magazine_issue_id` INT UNSIGNED NOT NULL,
   `game_version_id` INT UNSIGNED NOT NULL,
   `type` VARCHAR(255) NOT NULL,
+  `page_number` int unsigned NOT NULL,
   `notes` TEXT NOT NULL,
   PRIMARY KEY (`mention_id`),
   CONSTRAINT `fk_mention_magazine_issue` FOREIGN KEY (`magazine_issue_id`) REFERENCES `magazine_issues` (`id`),
