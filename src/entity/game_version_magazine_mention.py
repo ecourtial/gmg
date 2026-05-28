@@ -25,7 +25,9 @@ class GameVersionMagazineMention(AbstractEntity):
             'type': 'strict-text',
             'allowed_values': {
                 'Advertisement',
+                'Cheat',
                 'Comparison',
+                'Full-game-included'
                 'Guide',
                 'Mention',
                 'Playable-demo',
