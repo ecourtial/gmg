@@ -57,6 +57,7 @@ class GameVersionMagazineMention(AbstractEntity):
         'id': {'field': 'mention_id', 'origin': 'native', 'type': 'int'},
         'magazineIssueId': {'field': 'magazine_issue_id', 'origin': 'native', 'type': 'int'},
         'gameVersionId': {'field': 'game_version_id', 'origin': 'native', 'type': 'int'},
+        'pageNumber': {'field': 'game_version_id', 'origin': 'native', 'type': 'int'},
         'type': {'field': 'type', 'origin': 'native', 'type': 'string'},
     }
 
