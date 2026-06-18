@@ -88,3 +88,6 @@ CREATE TABLE `game_version_magazine_mentions` (
   CONSTRAINT `fk_mention_magazine_issue` FOREIGN KEY (`magazine_issue_id`) REFERENCES `magazine_issues` (`id`),
   CONSTRAINT `fk_mention_game_version` FOREIGN KEY (`game_version_id`) REFERENCES `versions` (`version_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE notes ADD game_version_id INT UNSIGNED NULL;
+ALTER TABLE `notes` ADD FOREIGN KEY (`game_version_id`) REFERENCES `versions` (`version_id`);

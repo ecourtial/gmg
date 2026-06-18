@@ -16,7 +16,7 @@ class TestNotes(AbstractTests):
         resp = self.api_call('get', 'note/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
-        self.assertEqual({'id': 1, 'title': 'Note 1', 'content': 'Some comment 1.'}, resp.json())
+        self.assertEqual({'id': 1, 'title': 'Note 1', 'content': 'Some comment 1.', 'gameVersionId': None}, resp.json())
 
     def test_create_incomplete_payload(self):
         resp = self.api_call('post', 'note', {}, True)

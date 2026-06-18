@@ -13,11 +13,11 @@ class AbstractController:# pylint: disable=no-member
         service = cls.service(mysql)
 
         try:
-            copy = service.get_by_id(entity_id)
+            object = service.get_by_id(entity_id)
         except ResourceNotFoundException as error:
             return jsonify({'message': str(error), 'code':  error.get_code()}), 404
 
-        return jsonify(copy.serialize()), 200
+        return jsonify(object.serialize()), 200
 
     @classmethod
     def create(cls, mysql: Any) -> tuple[Response, int]:

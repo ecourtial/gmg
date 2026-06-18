@@ -21,15 +21,22 @@ class Note(AbstractEntity):
             'type': 'text',
             'default': ''
         },
+        'gameVersionId': {
+            'field': 'game_version_id',
+            'method': '_game_version_id',
+            'required': False,
+            'type': 'int'
+        },
     }
 
     table_name = 'notes'
     primary_key = 'id'
 
-    def __init__(self, entity_id: int | None, title: str, content: str) -> None:
+    def __init__(self, entity_id: int | None, title: str, content: str, game_version_id: int) -> None:
         self.entity_id = entity_id
         self.title = title
         self.content = content
+        self.game_version_id = game_version_id
 
     def get_id(self) -> int | None:
         return self.entity_id
@@ -40,8 +47,14 @@ class Note(AbstractEntity):
     def get_content(self) -> str:
         return self.content
 
+    def get_game_version_id(self) -> int|None:
+        return self.game_version_id
+
     def set_title(self, title: str) -> None:
         self.title = title
 
     def set_content(self, content: str) -> None:
         self.content = content
+
+    def set_game_version_id(self, game_version_id: int)-> None:
+        self.game_version_id = game_version_id

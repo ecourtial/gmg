@@ -458,12 +458,15 @@ CREATE TABLE `notes` (
   `id` smallint unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `content` text,
+  `game_version_id` INT UNSIGNED NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+ALTER TABLE `notes` ADD FOREIGN KEY (`game_version_id`) REFERENCES `versions` (`version_id`);
+
 INSERT INTO `notes` (`id`, `title`, `content`) VALUES
 (1,	'Note 1',	'Some comment 1.'),
-(2,	'Note 2',	'Some comment 2');
+(2,	'Note 2',	'Some comment 2.');
 
 DROP TABLE IF EXISTS `platforms`;
 CREATE TABLE `platforms` (

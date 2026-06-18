@@ -6,6 +6,8 @@
 * Added strong typing.
 * Added a feature to manage magazines.
 * Added an optionnal whitelist of IP adresses.
+* We can link a note to a game version.
+* API filters: for filter of type int, we can check against NULL by sending "Null" as the parameter.
 
 ## 4.4.0
 * Added a new feature: notes.

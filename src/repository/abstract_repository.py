@@ -116,10 +116,18 @@ class AbstractRepository(AbstractCoreRepository):
         for filter_value in current_filter_values:
             # Various possibility according to the field type
             if filter_data['type'] == 'int' or filter_data['type'] == 'strict-text':
-                comparison_operator = ' = '
+                comparison_operator = '='
 
                 if filter_data['type'] == 'int':
                     for comp_url_key, comp_sql_key in comparison_operators.items():  # pylint: disable=W0612
+                        # Special case for Null
+                        if filter_value == 'Null' and comparison_operator == '=':
+                            or_request += field + " IS NULL OR "
+                            continue
+                        if filter_value == 'Null':
+                            or_request += field + " IS NOT NULL OR "
+                            continue
+
                         if filter_value.startswith(comp_url_key + '-'):
                             array = filter_value.split('-')
                             comparison_operator = comparison_operators[array[0]]
