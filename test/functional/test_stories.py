@@ -2,8 +2,8 @@ from test.abstract_tests import AbstractTests
 
 class TestCopies(AbstractTests):
     def test_commons(self):
-        super().check_all_routes_error_bad_user_token('story')
-        super().check_all_routes_error_missing_user_token('story')
+        super().check_all_routes_error_bad_user_token('stories')
+        super().check_all_routes_error_missing_user_token('stories')
 
     def test_create_incomplete_payload(self):
         payload = {
@@ -12,7 +12,7 @@ class TestCopies(AbstractTests):
             "watched": True,
             "played": False
         }
-        resp = self.api_call('post', 'story', payload, True)
+        resp = self.api_call('post', 'stories', payload, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': 'The following field is missing: versionId.', 'code': 6}, resp.json())
@@ -25,20 +25,20 @@ class TestCopies(AbstractTests):
             "watched": True,
             "played": False
         }
-        resp = self.api_call('post', 'story', payload, True)
+        resp = self.api_call('post', 'stories', payload, True)
         
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'version' with id #9999 has not been found.", 'code': 1}, resp.json())
 
     def test_get_story(self):
         # Does not exist
-        resp = self.api_call('get', 'story/666', {}, True)
+        resp = self.api_call('get', 'stories/666', {}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'story' with id #666 has not been found.", 'code': 1}, resp.json())
 
         # Exist
-        resp = self.api_call('get', 'story/2', {}, True)
+        resp = self.api_call('get', 'stories/2', {}, True)
 
         expectedPayload = {
             "id": 2,
@@ -64,7 +64,7 @@ class TestCopies(AbstractTests):
             "played": False
         }
 
-        resp = self.api_call('post', 'story', payload, True)
+        resp = self.api_call('post', 'stories', payload, True)
 
         self.assertEqual(200, resp.status_code)
         story_id = str(resp.json()["id"])
@@ -73,7 +73,7 @@ class TestCopies(AbstractTests):
         payload['gameTitle'] = resp.json()["gameTitle"]
         self.assertEqual(payload, resp.json())
 
-        resp = self.api_call('get', 'story/' + str(story_id), None, True)
+        resp = self.api_call('get', 'stories/' + str(story_id), None, True)
         self.assertEqual(payload, resp.json())
 
         # Patch
@@ -85,7 +85,7 @@ class TestCopies(AbstractTests):
             "played": False
         }
 
-        resp = self.api_call('patch', 'story/' + story_id, payload, True)
+        resp = self.api_call('patch', 'stories/' + story_id, payload, True)
         payload['id'] = int(story_id)
         payload['platformName'] = resp.json()["platformName"]
         payload['gameTitle'] = resp.json()["gameTitle"]
@@ -94,21 +94,21 @@ class TestCopies(AbstractTests):
         self.assertEqual(payload, resp.json()) 
 
         # Delete
-        resp = self.api_call('delete', 'story/' + story_id, {}, True)
+        resp = self.api_call('delete', 'stories/' + story_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
-        resp = self.api_call('delete', 'story/' + story_id, {}, True)
+        resp = self.api_call('delete', 'stories/' + story_id, {}, True)
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': f"The resource of type 'story' with id #{story_id} has not been found.", 'code': 1}, resp.json())
 
     def test_update_fails_because_resource_not_found(self):
-        resp = self.api_call('patch', 'story/9999', None, True)
+        resp = self.api_call('patch', 'stories/9999', None, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'story' with id #9999 has not been found.", 'code': 1}, resp.json())
 
     def test_delete_fails_because_not_found(self):
-        resp = self.api_call('delete', 'story/9999', None, True)
+        resp = self.api_call('delete', 'stories/9999', None, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'story' with id #9999 has not been found.", 'code': 1}, resp.json())

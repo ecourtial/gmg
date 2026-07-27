@@ -2,37 +2,37 @@ from test.abstract_tests import AbstractTests
 
 class TestPlatforms(AbstractTests):
     def test_commons(self):
-        super().check_all_routes_error_bad_user_token('platform')
-        super().check_all_routes_error_missing_user_token('platform')
+        super().check_all_routes_error_bad_user_token('platforms')
+        super().check_all_routes_error_missing_user_token('platforms')
 
     def test_get_platform(self):
         # Does not exist
-        resp = self.api_call('get', 'platform/666', {}, True)
+        resp = self.api_call('get', 'platforms/666', {}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'platform' with id #666 has not been found.", 'code': 1}, resp.json())
 
         # Exist
-        resp = self.api_call('get', 'platform/1', {}, True)
+        resp = self.api_call('get', 'platforms/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual({'id': 1, 'name': 'PC', 'versionCount': 232}, resp.json())
 
     def test_create_incomplete_payload(self):
-        resp = self.api_call('post', 'platform', {}, True)
+        resp = self.api_call('post', 'platforms', {}, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': 'The following field is missing: name.', 'code': 6}, resp.json())    
 
     def test_create_duplicate_name(self):
-        resp = self.api_call('post', 'platform', {'name': 'PC'}, True)
+        resp = self.api_call('post', 'platforms', {'name': 'PC'}, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The resource of type 'platform' with name 'PC' already exists.", 'code': 8}, resp.json())  
 
     def test_create_update_delete_success(self):
         # Create
-        resp = self.api_call('post', 'platform', {'name': 'Genesis'}, True)
+        resp = self.api_call('post', 'platforms', {'name': 'Genesis'}, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual('Genesis', resp.json()["name"])
@@ -40,32 +40,32 @@ class TestPlatforms(AbstractTests):
         platform_id = str(resp.json()["id"])
 
         # Patch
-        resp = self.api_call('patch', 'platform/' + platform_id, {'name': 'Playstation III'}, True)
+        resp = self.api_call('patch', 'platforms/' + platform_id, {'name': 'Playstation III'}, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual('Playstation III', resp.json()["name"]) 
 
         # Delete
-        resp = self.api_call('delete', 'platform/' + platform_id, {}, True)
+        resp = self.api_call('delete', 'platforms/' + platform_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
-        resp = self.api_call('delete', 'platform/' + platform_id, {}, True)
+        resp = self.api_call('delete', 'platforms/' + platform_id, {}, True)
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'platform' with id #12 has not been found.", 'code': 1}, resp.json())
 
     def test_update_duplicate_name(self):
-        resp = self.api_call('patch', 'platform/4', {'name': 'PC'}, True)
+        resp = self.api_call('patch', 'platforms/4', {'name': 'PC'}, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The resource of type 'platform' with name 'Nintendo 64' already exists.", 'code': 8}, resp.json())  
 
     def test_delete_fails_because_platform_has_versions(self):
-        resp = self.api_call('delete', 'platform/1', {}, True)
+        resp = self.api_call('delete', 'platforms/1', {}, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message':  "The following resource type 'platform' has children of type 'version', so it cannot be deleted.", 'code': 9}, resp.json())  
 
-        resp = self.api_call('get', 'platform/1', {}, True)
+        resp = self.api_call('get', 'platforms/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual({'id': 1, 'name': 'PC', 'versionCount': 232}, resp.json())
