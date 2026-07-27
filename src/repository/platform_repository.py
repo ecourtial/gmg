@@ -1,12 +1,15 @@
 """ Repository to handle the platforms """
+from typing import Any
+
 from src.repository.abstract_repository import AbstractRepository
 from src.entity.platform import Platform
 from src.entity.version import Version
 
+
 class PlatformRepository(AbstractRepository):
     entity = Platform
 
-    def get_select_request_start(self):
+    def get_select_request_start(self) -> str:
         request = f"SELECT {Platform.table_name}.*, v.versionCount AS versionCount "
         request += 'FROM '
         request += f"     (SELECT COUNT(*) AS versionCount, {Platform.table_name}.id AS platform_id "
@@ -18,13 +21,13 @@ class PlatformRepository(AbstractRepository):
 
         return request
 
-    def get_by_name(self, name):
+    def get_by_name(self, name: str) -> Platform | None:
         """Get one support by its name."""
         request = self.get_select_request_start() + f"AND {Platform.table_name}.name = %s LIMIT 1;"
 
         return self.fetch_one(request, (name,))
 
-    def hydrate(self, row):
+    def hydrate(self, row: dict[str, Any]) -> Platform:
         """Hydrate an object from a row."""
         version = super().hydrate(row)
         version.set_version_count(row['versionCount'])

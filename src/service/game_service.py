@@ -1,3 +1,5 @@
+from typing import Any
+
 from src.service.abstract_service import AbstractService
 from src.repository.game_repository import GameRepository
 from src.entity.game import Game
@@ -6,13 +8,14 @@ from src.exception.unknown_resource_exception import ResourceNotFoundException
 from src.exception.resource_has_children_exception import RessourceHasChildrenException
 from src.helpers.json_helper import JsonHelper
 
+
 class GameService(AbstractService):
     resource_type = 'game'
 
-    def __init__(self, mysql):
+    def __init__(self, mysql: Any) -> None:
         self.repository = GameRepository(mysql)
 
-    def get_for_create(self):
+    def get_for_create(self) -> Game:
         game = super().validate_payload_for_creation_and_hydrate(Game)
 
         existing_version = self.repository.get_by_title(game.get_title())
@@ -22,7 +25,7 @@ class GameService(AbstractService):
 
         return game
 
-    def get_for_update(self, game_id):
+    def get_for_update(self, game_id: int) -> Game:
         # Verification
         game = self.repository.get_by_id(game_id)
 
@@ -39,7 +42,7 @@ class GameService(AbstractService):
 
         return game
 
-    def delete(self, game_id):
+    def delete(self, game_id: int) -> bool:
         """Delete a game"""
         game = self.repository.get_by_id(game_id)
 

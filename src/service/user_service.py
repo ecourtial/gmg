@@ -3,7 +3,10 @@ import hashlib
 import random
 import string
 import base64
+from typing import Any
+
 from flask import request
+
 from src.exception.inactive_user_exception import InactiveUserException
 from src.exception.missing_field_exception import MissingFieldException
 from src.exception.missing_header_exception import MissingHeaderException
@@ -16,19 +19,20 @@ from src.repository.user_repository import UserRepository
 from src.helpers.json_helper import JsonHelper
 from src.entity.user import User
 
+
 class UserService:
     """Useless comment"""
-    def __init__(self, mysql):
+    def __init__(self, mysql: Any) -> None:
         self.user_repository = UserRepository(mysql)
 
-    def authenticate(self):
+    def authenticate(self) -> User:
         if 'Authorization' in request.headers:
             header_value = request.headers['Authorization']
             if header_value.find(' ') != -1:
                 array = header_value.split(' ')
                 if array[0] == 'Basic':
                     try:
-                        decoded_value  = base64.b64decode(array[1])
+                        decoded_value = base64.b64decode(array[1])
                         decoded_value = decoded_value.decode('utf-8')
                     except UnicodeDecodeError:
                         raise InvalidInput(
@@ -42,7 +46,7 @@ class UserService:
 
         raise MissingHeaderException('Authorization')
 
-    def get_by_filter(self, filter, filter_value):
+    def get_by_filter(self, filter: str, filter_value: int | str) -> User:
         if filter == 'id':
             user = self.user_repository.get_by_id(filter_value)
         elif filter == 'email':
@@ -57,8 +61,8 @@ class UserService:
 
         return user
 
-    def validate_payload_for_creation_and_hydrate(self):
-        values = []
+    def validate_payload_for_creation_and_hydrate(self) -> User:
+        values: list[Any] = []
         values.append(None)
 
         for api_field, data in User.expected_fields.items():
@@ -74,7 +78,7 @@ class UserService:
         values.append(None)
         values.append(None)
 
-        user = User(*values) # pylint: disable=E1120
+        user = User(*values)  # pylint: disable=E1120
 
         check_user = self.user_repository.get_by_email(user.get_email())
         if check_user is not None:
@@ -86,7 +90,7 @@ class UserService:
 
         return user
 
-    def create(self, user):
+    def create(self, user: User) -> User | None:
         salt = self.get_new_salt()
         user.set_salt(salt)
         user.set_password(self.get_hashed_password(user.get_password(), salt))
@@ -94,7 +98,7 @@ class UserService:
 
         return self.user_repository.insert(user)
 
-    def update(self, user_id):
+    def update(self, user_id: int) -> User:
         # Verification
         user = self.user_repository.get_by_id(user_id)
 
@@ -123,29 +127,29 @@ class UserService:
 
         return user
 
-    def get_new_salt(self):
+    def get_new_salt(self) -> str:
         return self.get_random_salt(8)
 
-    def get_new_token(self):
+    def get_new_token(self) -> str:
         return self.get_random_salt(32)
 
-    def renew_token(self, current_user):
+    def renew_token(self, current_user: User) -> None:
         current_user.set_token(self.get_new_token())
         self.user_repository.update(current_user)
 
     @classmethod
-    def get_hashed_password(cls, password, salt):
+    def get_hashed_password(cls, password: str, salt: str) -> str:
         """Generates a hash from a given password and salt"""
-        password = hashlib.pbkdf2_hmac('sha256', bytes(password, 'utf-8'), bytes(salt, 'utf-8'), 4)
-        return password.hex()
+        hashed = hashlib.pbkdf2_hmac('sha256', bytes(password, 'utf-8'), bytes(salt, 'utf-8'), 4)
+        return hashed.hex()
 
     @classmethod
-    def get_random_salt(cls, string_length):
+    def get_random_salt(cls, string_length: int) -> str:
         """Genereates a salt"""
         letters = string.ascii_letters + string.digits
         return ''.join(random.choice(letters) for i in range(string_length))
 
-    def get_authenticated_user(self, username, raw_password):
+    def get_authenticated_user(self, username: str, raw_password: str) -> User:
         """Load a user and check if the credentials are correct"""
         user = self.user_repository.get_by_user_name(username)
         if user is None:

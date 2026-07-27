@@ -6,7 +6,7 @@ In the root folder, copy the file _configuration.json.dist_ to _configuration.js
 
 Next, just do a __make start__, and then run __make test__ to run the tests and import the local DB with test features. You're good to go!
 
-Ther test DB it just imported has a user. You can login with the following credentials : 
+The test DB which was just imported has already a given user but you still need to run the test suite at least once. After that, you can login with the following credentials : 
 * username: _mephistophelesz_
 * password: _barz_
 
@@ -26,6 +26,8 @@ The usual process to setup a project is the following:
 * Configure the application.
 * Start the application.
 * Change your default credentials.
+
+Note: in the configuration, you can define a list of authorized IP adresses. It is recommended for production environment, but not for the dev one as it will prevent tests to pass.
 
 ## 1- Importing the dabase
 

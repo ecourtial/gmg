@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "gmg-back"
+version = "1.0.0"
+description = "Give Me a Game - Video game collection management API"
+authors = ["Eric COURTIAL"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.13"
+flask = "^3.1"
+gunicorn = "^23.0"
+mysql-connector-python = "^9.0"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^3.3"
+ruff = "^0.9"
+requests = "^2.32"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.main]
+fail-under = 10
+
+[tool.pylint."messages control"]
+enable = ["c-extension-no-member"]
+disable = ["C0114", "C0115", "C0116", "R0801", "W0622", "R0914", "R0902", "R0904", "R0913", "W0707", "R0917"]
+
+[tool.pylint.reports]
+evaluation = "10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)"
+
+[tool.pylint.format]
+max-line-length = 200
+
+[tool.pylint.basic]
+bad-names = ["foo", "bar", "baz", "toto", "tutu", "tata"]
+
+[tool.ruff]
+line-length = 200
+
+[tool.ruff.lint]
+select = ["E", "F", "ANN"]
+ignore = ["ANN401"]
