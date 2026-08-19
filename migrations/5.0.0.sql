@@ -91,3 +91,21 @@ CREATE TABLE `game_version_magazine_mentions` (
 
 ALTER TABLE notes ADD game_version_id INT UNSIGNED NULL;
 ALTER TABLE `notes` ADD FOREIGN KEY (`game_version_id`) REFERENCES `versions` (`version_id`);
+
+CREATE TABLE `game_version_categories` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `game_version_category_association` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `category_id` int NOT NULL,
+  `version_id` int unsigned NOT NULL,
+  FOREIGN KEY (`category_id`) REFERENCES `game_version_categories` (`id`) ON DELETE RESTRICT,
+  FOREIGN KEY (`version_id`) REFERENCES `versions` (`version_id`) ON DELETE RESTRICT
+) ENGINE='InnoDB';
+
+ALTER TABLE game_version_category_association
+ADD CONSTRAINT uniq_category_version
+UNIQUE (category_id, version_id);

@@ -7,8 +7,8 @@ class Version(AbstractEntity):
     """ This class represent a version of a game, e.g the PC version of Monkey Island IV """
     # If you change the order here, you need to also change it in the constructor!
     expected_fields: dict[str, Any] = {
-        'platformId':
-            {'field': 'platform_id',
+        'platformId': {
+            'field': 'platform_id',
             'method': '_platform_id',
             'required': True,
             'type': 'int'
