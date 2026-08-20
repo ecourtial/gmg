@@ -109,3 +109,6 @@ CREATE TABLE `game_version_category_association` (
 ALTER TABLE game_version_category_association
 ADD CONSTRAINT uniq_category_version
 UNIQUE (category_id, version_id);
+
+ALTER TABLE `game_version_category_association`
+ADD `notes` text NULL;

@@ -29,7 +29,7 @@ class GameVersionCategoryService(AbstractService):
         # Verification
         category = self.repository.get_by_id(category_id)
 
-        if category_id is None:
+        if category is None:
             raise ResourceNotFoundException(self.resource_type, category_id)
 
         name = JsonHelper.get_value_from_request('name', category.get_name())

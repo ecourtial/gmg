@@ -46,6 +46,7 @@ CREATE TABLE `game_version_category_association` (
   `id` int NOT NULL AUTO_INCREMENT,
   `category_id` int NOT NULL,
   `version_id` int unsigned NOT NULL,
+  `notes` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_category_version` (`category_id`,`version_id`),
   KEY `version_id` (`version_id`),
@@ -236,4 +237,4 @@ CREATE TABLE `versions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
--- 2026-08-19 16:09:50 UTC
+-- 2026-08-20 13:42:38 UTC

@@ -1,0 +1,7 @@
+from src.controller.abstract_controller import AbstractController
+from src.repository.game_version_category_association_repository import GameVersionCategoryAssociationRepository
+from src.service.game_version_category_association_service import GameVersionCategoryAssociationService
+
+class GameVersionCategoryAssociationController(AbstractController):
+    repository = GameVersionCategoryAssociationRepository
+    service = GameVersionCategoryAssociationService

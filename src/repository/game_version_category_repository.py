@@ -2,8 +2,7 @@ from typing import Any
 
 from src.repository.abstract_repository import AbstractRepository
 from src.entity.game_version_category import GameVersionCategory
-from src.entity.version import Version
-
+from src.entity.game_version_category_association import GameVersionCategoryAssociation
 
 class GameVersionCategoryRepository(AbstractRepository):
     entity = GameVersionCategory
@@ -11,12 +10,12 @@ class GameVersionCategoryRepository(AbstractRepository):
     def get_select_request_start(self) -> str:
         request = f"SELECT {GameVersionCategory.table_name}.*, v.versionCount AS versionCount "
         request += 'FROM '
-        request += f"     (SELECT COUNT(*) AS versionCount, {GameVersionCategory.table_name}.id AS game_id "
-        request += f"      FROM {Version.table_name}, {GameVersionCategory.table_name}  "
-        request += f"      WHERE {Version.table_name}.game_id = {GameVersionCategory.table_name}.{GameVersionCategory.primary_key} "
+        request += f"     (SELECT COUNT(*) AS versionCount, {GameVersionCategory.table_name}.{GameVersionCategory.primary_key} AS category_id "
+        request += f"      FROM {GameVersionCategoryAssociation.table_name}, {GameVersionCategory.table_name}  "
+        request += f"      WHERE {GameVersionCategoryAssociation.table_name}.category_id = {GameVersionCategory.table_name}.{GameVersionCategory.primary_key} "
         request += f"      GROUP BY {GameVersionCategory.table_name}.{GameVersionCategory.primary_key}) AS v "
         request += f"RIGHT JOIN {GameVersionCategory.table_name} ON "
-        request += f"{GameVersionCategory.table_name}.{GameVersionCategory.primary_key} = v.game_id WHERE TRUE "
+        request += f"{GameVersionCategory.table_name}.{GameVersionCategory.primary_key} = v.category_id WHERE TRUE "
 
         return request
 
@@ -27,7 +26,7 @@ class GameVersionCategoryRepository(AbstractRepository):
 
     def hydrate(self, row: dict[str, Any]) -> GameVersionCategory:
         """Hydrate an object from a row."""
-        version = super().hydrate(row)
-        version.set_version_count(row['versionCount'])
+        category = super().hydrate(row)
+        category.set_version_count(int(row['versionCount']))
 
-        return version
+        return category

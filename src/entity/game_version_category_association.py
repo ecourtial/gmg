@@ -18,6 +18,13 @@ class GameVersionCategoryAssociation(AbstractEntity):
             'required': True,
             'type': 'int'
         },
+        'notes': {
+            'field': 'notes',
+            'method': '_notes',
+            'required': False,
+            'type': 'text',
+            'default': ''
+        },
     }
 
     authorized_extra_fields_for_filtering: dict[str, Any] = {
@@ -32,6 +39,7 @@ class GameVersionCategoryAssociation(AbstractEntity):
         entity_id: int | None,
         category_id: int,
         version_id: int,
+        notes: str | None,
         category_name: str | None = None,
         version_platform_name: str | None = None,
         game_title: str | None = None,
@@ -39,6 +47,7 @@ class GameVersionCategoryAssociation(AbstractEntity):
         self.entity_id = entity_id
         self.category_id = category_id
         self.version_id = version_id
+        self.notes = notes
         self.category_name = category_name
         self.version_platform_name = version_platform_name
         self.game_title = game_title
@@ -57,6 +66,12 @@ class GameVersionCategoryAssociation(AbstractEntity):
 
     def set_version_id(self, version_id: int) -> None:
         self.version_id = version_id
+
+    def get_notes(self) -> str:
+        return self.notes
+
+    def set_notes(self, notes: str) -> None:
+        self.notes = notes
 
     def get_category_name(self) -> str | None:
         return self.category_name
@@ -78,7 +93,7 @@ class GameVersionCategoryAssociation(AbstractEntity):
 
     def serialize(self) -> dict[str, Any]:
         values = super().serialize()
-        values['categoryName'] = self.category_name()
-        values['versionPlatformName'] = self.version_platform_name()
+        values['categoryName'] = self.get_category_name()
+        values['versionPlatformName'] = self.get_version_platform_name()
         values['gameTitle'] = self.get_game_title()
         return values
