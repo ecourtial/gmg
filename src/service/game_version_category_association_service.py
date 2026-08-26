@@ -44,7 +44,7 @@ class GameVersionCategoryAssociationService(AbstractService):
         if self.game_version_category_repository.get_by_id(category_id) is None:
             raise ResourceNotFoundException('category', category_id)
 
-        existing_association = self.repository.get_by_association(version_id, category_id)
+        existing_association = self.repository.get_by_unique_index(version_id, category_id)
 
         if existing_association is not None and existing_association.get_id() != association.get_id():
             raise ResourceAlreadyExistsException(self.resource_type, association.get_id(), 'version and category id')

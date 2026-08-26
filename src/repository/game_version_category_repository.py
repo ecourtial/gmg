@@ -27,6 +27,9 @@ class GameVersionCategoryRepository(AbstractRepository):
     def hydrate(self, row: dict[str, Any]) -> GameVersionCategory:
         """Hydrate an object from a row."""
         category = super().hydrate(row)
+
+        if row['versionCount'] is None:
+            row['versionCount'] = 0
         category.set_version_count(int(row['versionCount']))
 
         return category

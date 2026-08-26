@@ -21,6 +21,14 @@ class GameVersionCategoryAssociationRepository(AbstractRepository):
 
         return request
 
+    def get_by_unique_index(self, version_id: int, category_id: int) -> Version | None:
+        """Get one association by the unique combination of the version and the category."""
+        request = self.get_select_request_start()
+        request += f"AND {GameVersionCategoryAssociation.table_name}.category_id = %s "
+        request += f"AND {GameVersionCategoryAssociation.table_name}.version_id = %s LIMIT 1;"
+
+        return self.fetch_one(request, (category_id, version_id,))
+
     def hydrate(self, row: dict[str, Any]) -> GameVersionCategoryAssociation:
         """Hydrate an object from a row."""
         association = super().hydrate(row)

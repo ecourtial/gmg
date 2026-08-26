@@ -36,7 +36,7 @@ class GameVersionCategoryService(AbstractService):
         existing_version = self.repository.get_by_name(name)
 
         if existing_version is not None and existing_version.get_id() != category.get_id():
-            raise ResourceAlreadyExistsException(self.resource_type, category.get_name(), 'name')
+            raise ResourceAlreadyExistsException(self.resource_type, name, 'name')
 
         super().hydrate_for_update(category)
 
