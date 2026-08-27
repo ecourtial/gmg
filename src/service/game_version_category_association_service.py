@@ -63,7 +63,7 @@ class GameVersionCategoryAssociationService(AbstractService):
         association = self.repository.get_by_id(association_id)
 
         if association is None:
-            raise ResourceNotFoundException('category', association_id)
+            raise ResourceNotFoundException(self.resource_type, association_id)
 
         self.repository.delete(association_id)
 

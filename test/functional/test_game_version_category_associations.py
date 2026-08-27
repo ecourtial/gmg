@@ -46,34 +46,32 @@ class TestGameVersionCategoryAssociations(AbstractTests):
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The resource of type 'game_version_category_association' with category id '1' already exists.", 'code': 8}, resp.json())  
 
-    # def test_create_update_delete_category_success(self):
-    #     # Create
-    #     payload = {'name': 'Something', 'description': 'For those played at it in 1997.'}
-    #     resp = self.api_call('post', 'game-version-categories', payload, True)
+    def test_create_update_delete_association_success(self):
+        # Create
+        payload = {'categoryId': 1, 'versionId': 5, 'notes': 'Pues!'}
+        resp = self.api_call('post', 'game-version-category-associations', payload, True)
 
-    #     self.assertEqual(200, resp.status_code)
-    #     self.assertEqual('Something', resp.json()["name"])
-    #     category_id = str(resp.json()["id"])
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual('Pues!', resp.json()["notes"])
+        association_id = str(resp.json()["id"])
 
-    #     resp = self.api_call('get', 'game-version-categories/' + category_id, None, True)
-    #     payload['id'] = 3
-    #     payload['versionCount'] = 0
-    #     self.assertEqual(payload, resp.json())
+        resp = self.api_call('get', 'game-version-category-associations/' + association_id, None, True)
+        self.assertEqual(200, resp.status_code)
 
-    #     # Patch
-    #     new_name = 'Something II - ' + category_id
-    #     resp = self.api_call('patch', 'game-version-categories/' + category_id, {'name': new_name}, True)
+        # Patch
+        new_name = 'Something II - ' + association_id
+        resp = self.api_call('patch', 'game-version-category-associations/' + association_id, {'notes': new_name}, True)
 
-    #     self.assertEqual(200, resp.status_code)
-    #     self.assertEqual(new_name, resp.json()["name"]) 
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(new_name, resp.json()["notes"]) 
 
-    # #     # Delete
-    #     resp = self.api_call('delete', 'game-version-categories/' + category_id, {}, True)
-    #     self.assertEqual(200, resp.status_code)
+    #     # Delete
+        resp = self.api_call('delete', 'game-version-category-associations/' + association_id, {}, True)
+        self.assertEqual(200, resp.status_code)
 
-    #     resp = self.api_call('delete', 'game-version-categories/' + category_id, {}, True)
-    #     self.assertEqual(404, resp.status_code)
-    #     self.assertEqual({'message': f"The resource of type 'game_version_category' with id #{category_id} has not been found.", 'code': 1}, resp.json()) 
+        resp = self.api_call('delete', 'game-version-category-associations/' + association_id, {}, True)
+        self.assertEqual(404, resp.status_code)
+        self.assertEqual({'message': f"The resource of type 'game_version_category_association' with id #{association_id} has not been found.", 'code': 1}, resp.json()) 
 
     def test_update_association_duplicate_name(self):
         resp = self.api_call('patch', 'game-version-category-associations/1', {'categoryId': 2, 'versionId': 3}, True)
