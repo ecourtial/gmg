@@ -35,7 +35,7 @@ class GameVersionCategoryAssociation(AbstractEntity):
     primary_key = 'id'
 
     def __init__(
-        self, 
+        self,
         entity_id: int | None,
         category_id: int,
         version_id: int,

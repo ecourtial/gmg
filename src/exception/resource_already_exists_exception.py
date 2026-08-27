@@ -1,6 +1,8 @@
 class ResourceAlreadyExistsException(Exception):
     """Raised when the expected resource already exists"""
-    def __init__(self, type: str, id: str, key: str = 'id') -> None:
+    def __init__(self, type: str, id: str|int, key: str = 'id') -> None:
+        id = str(id)
+
         if key == 'id':
             id = '#' + id
         else:
