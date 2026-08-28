@@ -8,6 +8,7 @@
 * Added an optionnal whitelist of IP adresses.
 * We can link a note to a game version.
 * API filters: for filter of type int, we can check against NULL by sending "Null" as the parameter.
+* Added a feature to manage categories to associate games versions.
 
 BC Break: the URI for resources are now plural.
 
