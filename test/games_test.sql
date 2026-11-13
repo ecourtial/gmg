@@ -35,6 +35,37 @@ INSERT INTO `copies` (`copy_id`, `version_id`, `is_original`, `language`, `box_t
 (2,	349,	1,	'fr',	'none',	0,	'Cardboard sleeve',	'CD-ROM',	1,	1,	0,	'In',	'Physical',	'PAL',	0,	'Got it with my cereals'),
 (3,	245,	1,	'fr',	'None',	0,	'CD-like',	'CD-ROM',	1,	1,	0,	'In',	'Physical',	'PAL',	0,	'pues');
 
+DROP TABLE IF EXISTS `game_version_categories`;
+CREATE TABLE `game_version_categories` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `game_version_categories` (`id`, `name`, `description`) VALUES
+(1,	'Category #1',	'Awesome games'),
+(2,	'Category #2',	'Good games');
+
+DROP TABLE IF EXISTS `game_version_category_association`;
+CREATE TABLE `game_version_category_association` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `category_id` int NOT NULL,
+  `version_id` int unsigned NOT NULL,
+  `notes` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_category_version` (`category_id`,`version_id`),
+  KEY `version_id` (`version_id`),
+  CONSTRAINT `game_version_category_association_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `game_version_categories` (`id`) ON DELETE RESTRICT,
+  CONSTRAINT `game_version_category_association_ibfk_2` FOREIGN KEY (`version_id`) REFERENCES `versions` (`version_id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `game_version_category_association` (`id`, `category_id`, `version_id`, `notes`) VALUES
+(1,	1,	2,	'Cool!'),
+(2,	2,	3,	'OK'),
+(3,	1,	4,	NULL);
+
 DROP TABLE IF EXISTS `game_version_magazine_mentions`;
 CREATE TABLE `game_version_magazine_mentions` (
   `mention_id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -42,7 +73,7 @@ CREATE TABLE `game_version_magazine_mentions` (
   `game_version_id` int unsigned NOT NULL,
   `type` varchar(255) NOT NULL,
   `page_number` int unsigned NOT NULL,
-  `notes` text NULL,
+  `notes` text,
   PRIMARY KEY (`mention_id`),
   KEY `fk_mention_magazine_issue` (`magazine_issue_id`),
   KEY `fk_mention_game_version` (`game_version_id`),
@@ -51,9 +82,9 @@ CREATE TABLE `game_version_magazine_mentions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `game_version_magazine_mentions` (`mention_id`, `magazine_issue_id`, `game_version_id`, `type`, `page_number`, `notes`) VALUES
-(1,	2,	1,'Test', 12,	''),
-(2,	1,	1, 'Guide', 36,	''),
-(3,	1,	36, 'Test',	43, 'Super !');
+(1,	2,	1,	'Test',	12,	''),
+(2,	1,	1,	'Guide',	36,	''),
+(3,	1,	36,	'Test',	43,	'Super !');
 
 DROP TABLE IF EXISTS `games`;
 CREATE TABLE `games` (
@@ -417,7 +448,7 @@ CREATE TABLE `magazine_issue_copies` (
   PRIMARY KEY (`copy_id`),
   KEY `fk_magazine_issue_copy_issue` (`magazine_issue_id`),
   CONSTRAINT `fk_magazine_issue_copy_issue` FOREIGN KEY (`magazine_issue_id`) REFERENCES `magazine_issues` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `magazine_issue_copies` (`copy_id`, `magazine_issue_id`, `type`, `notes`) VALUES
 (1,	1,	'Printed-Original',	'Original'),
@@ -430,11 +461,11 @@ CREATE TABLE `magazine_issues` (
   `issue_number` smallint unsigned NOT NULL,
   `year` smallint unsigned NOT NULL,
   `month` tinyint unsigned NOT NULL,
-  `notes` text NULL,
+  `notes` text,
   PRIMARY KEY (`id`),
   KEY `fk_magazine_issue_magazine` (`magazine_id`),
   CONSTRAINT `fk_magazine_issue_magazine` FOREIGN KEY (`magazine_id`) REFERENCES `magazines` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `magazine_issues` (`id`, `magazine_id`, `issue_number`, `year`, `month`, `notes`) VALUES
 (1,	1,	3,	1997,	10,	'Le troisième !'),
@@ -445,9 +476,9 @@ DROP TABLE IF EXISTS `magazines`;
 CREATE TABLE `magazines` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
-  `notes` text NULL,
+  `notes` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `magazines` (`id`, `title`, `notes`) VALUES
 (1,	'Gen4',	'Découvert en 1997.'),
@@ -458,15 +489,15 @@ CREATE TABLE `notes` (
   `id` smallint unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `content` text,
-  `game_version_id` INT UNSIGNED NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `game_version_id` int unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `game_version_id` (`game_version_id`),
+  CONSTRAINT `notes_ibfk_1` FOREIGN KEY (`game_version_id`) REFERENCES `versions` (`version_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-ALTER TABLE `notes` ADD FOREIGN KEY (`game_version_id`) REFERENCES `versions` (`version_id`);
-
-INSERT INTO `notes` (`id`, `title`, `content`) VALUES
-(1,	'Note 1',	'Some comment 1.'),
-(2,	'Note 2',	'Some comment 2.');
+INSERT INTO `notes` (`id`, `title`, `content`, `game_version_id`) VALUES
+(1,	'Note 1',	'Some comment 1.',	NULL),
+(2,	'Note 2',	'Some comment 2.',	NULL);
 
 DROP TABLE IF EXISTS `platforms`;
 CREATE TABLE `platforms` (
@@ -583,6 +614,24 @@ INSERT INTO `stories` (`id`, `version_id`, `year`, `position`, `watched`, `playe
 (88,	338,	2022,	12,	1,	0),
 (89,	80,	2022,	13,	0,	1),
 (90,	224,	2022,	14,	0,	1);
+
+DROP TABLE IF EXISTS `trades`;
+CREATE TABLE `trades` (
+  `trade_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `copy_id` int unsigned NOT NULL,
+  `year` smallint unsigned NOT NULL,
+  `month` smallint unsigned NOT NULL,
+  `day` smallint unsigned NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `notes` text,
+  PRIMARY KEY (`trade_id`),
+  KEY `copy_id` (`copy_id`),
+  CONSTRAINT `trades_ibfk_1` FOREIGN KEY (`copy_id`) REFERENCES `copies` (`copy_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `trades` (`trade_id`, `copy_id`, `year`, `month`, `day`, `type`, `notes`) VALUES
+(90,	1,	2022,	2,	4,	'Loan-out',	''),
+(91,	1,	2022,	4,	8,	'Loan-out-return',	'');
 
 DROP TABLE IF EXISTS `transactions`;
 CREATE TABLE `transactions` (
@@ -1011,4 +1060,4 @@ INSERT INTO `versions` (`version_id`, `platform_id`, `game_id`, `release_year`, 
 (348,	1,	379,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	NULL,	0,	0,	0,	0,	0),
 (349,	1,	380,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	NULL,	0,	0,	0,	0,	0);
 
--- 2026-04-22 12:16:44 UTC
+-- 2026-08-20 18:42:12 UTC

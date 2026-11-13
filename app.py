@@ -15,6 +15,8 @@ from src.controller.magazine_controller import MagazineController
 from src.controller.magazine_issue_controller import MagazineIssueController
 from src.controller.magazine_issue_copy_controller import MagazineIssueCopyController
 from src.controller.game_version_magazine_mention_controller import GameVersionMagazineMentionController
+from src.controller.game_version_category_controller import GameVersionCategoryController
+from src.controller.game_version_category_association_controller import GameVersionCategoryAssociationController
 from src.repository.user_repository import UserRepository
 from src.connection.mysql_factory import MySQLFactory
 
@@ -543,4 +545,74 @@ def delete_game_version_magazine_mention(entity_id: int) -> tuple[Response, int]
 def get_game_version_magazine_mentions() -> Response:
     """Get the game version magazine mentions"""
     controller = GameVersionMagazineMentionController
+    return controller.get_list(MySQLFactory.get())
+
+# Category for game versions
+
+@app.route('/api/v1/game-version-categories/<int:entity_id>', methods=['GET'])
+def get_game_version_category_by_id(entity_id: int) -> tuple[Response, int]:
+    """Returns the game version category according to its id"""
+    controller = GameVersionCategoryController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/game-version-categories', methods=['POST'])
+@token_required
+def create_game_version_category_by_id() -> tuple[Response, int]:
+    """Create a game version category"""
+    controller = GameVersionCategoryController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/game-version-categories/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_game_version_category_by_id(entity_id: int) -> tuple[Response, int]:
+    """Update the game version category according to its id"""
+    controller = GameVersionCategoryController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/game-version-categories/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_game_version_category_by_id(entity_id: int) -> tuple[Response, int]:
+    """Delete the game version category according to its id"""
+    controller = GameVersionCategoryController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/game-version-categories', methods=['GET'])
+def get_game_version_categories() -> Response:
+    """Get the game version categories"""
+    controller = GameVersionCategoryController
+    return controller.get_list(MySQLFactory.get())
+
+# Association for category and game versions
+
+@app.route('/api/v1/game-version-category-associations/<int:entity_id>', methods=['GET'])
+def get_game_version_category_association_by_id(entity_id: int) -> tuple[Response, int]:
+    """Returns the game version category association according to its id"""
+    controller = GameVersionCategoryAssociationController
+    return controller.get_by_id(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/game-version-category-associations', methods=['POST'])
+@token_required
+def create_game_version_category_association_by_id() -> tuple[Response, int]:
+    """Create a game version category association"""
+    controller = GameVersionCategoryAssociationController
+    return controller.create(MySQLFactory.get())
+
+@app.route('/api/v1/game-version-category-associations/<int:entity_id>', methods=['PATCH'])
+@token_required
+def update_game_version_category_association_by_id(entity_id: int) -> tuple[Response, int]:
+    """Update the game version category association according to its id"""
+    controller = GameVersionCategoryAssociationController
+    return controller.update(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/game-version-category-associations/<int:entity_id>', methods=['DELETE'])
+@token_required
+def delete_game_version_category_association_by_id(entity_id: int) -> tuple[Response, int]:
+    """Delete the game version category association according to its id"""
+    controller = GameVersionCategoryAssociationController
+    return controller.delete(MySQLFactory.get(), entity_id)
+
+@app.route('/api/v1/game-version-category-associations', methods=['GET'])
+def get_game_version_category_associations() -> Response:
+    """Get the game version category associations"""
+    controller = GameVersionCategoryAssociationController
     return controller.get_list(MySQLFactory.get())
