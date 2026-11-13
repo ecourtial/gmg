@@ -12,7 +12,7 @@ gunicorn = "^23.0"
 mysql-connector-python = "^9.0"
 
 [tool.poetry.group.dev.dependencies]
-pylint = "^3.3"
+pylint = ">=3.3,<5.0"
 ruff = "^0.9"
 requests = "^2.32"
 
