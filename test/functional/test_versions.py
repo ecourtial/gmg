@@ -2,18 +2,18 @@ from test.abstract_tests import AbstractTests
 
 class TestVersions(AbstractTests):
     def test_commons(self):
-        super().check_all_routes_error_bad_user_token('version')
-        super().check_all_routes_error_missing_user_token('version')
+        super().check_all_routes_error_bad_user_token('versions')
+        super().check_all_routes_error_missing_user_token('versions')
 
     def test_get_version(self):
         # Does not exist
-        resp = self.api_call('get', 'version/666', {}, True)
+        resp = self.api_call('get', 'versions/666', {}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'version' with id #666 has not been found.", 'code': 1}, resp.json())
 
         # Exist
-        resp = self.api_call('get', 'version/1', {}, True)
+        resp = self.api_call('get', 'versions/1', {}, True)
 
         self.assertEqual(200, resp.status_code)
         expected_result = {
@@ -76,7 +76,7 @@ class TestVersions(AbstractTests):
             "todoWithHelp": False,
             "topGame": False
         }
-        resp = self.api_call('post', 'version', payload, True)
+        resp = self.api_call('post', 'versions', payload, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': 'The following field is missing: platformId.', 'code': 6}, resp.json())
@@ -107,7 +107,7 @@ class TestVersions(AbstractTests):
             "todoWithHelp": False,
             "topGame": False
         }
-        resp = self.api_call('post', 'version', payload, True)
+        resp = self.api_call('post', 'versions', payload, True)
         
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'platform' with id #700 has not been found.", 'code': 1}, resp.json())
@@ -138,7 +138,7 @@ class TestVersions(AbstractTests):
             "todoWithHelp": False,
             "topGame": False
         }
-        resp = self.api_call('post', 'version', payload, True)
+        resp = self.api_call('post', 'versions', payload, True)
         
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'game' with id #1000 has not been found.", 'code': 1}, resp.json())
@@ -169,14 +169,14 @@ class TestVersions(AbstractTests):
             "todoWithHelp": False,
             "topGame": False
         }
-        resp = self.api_call('post', 'version', payload, True)
+        resp = self.api_call('post', 'versions', payload, True)
         
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The resource of type 'platform-game couple' with id #7:1 already exists.", 'code': 8}, resp.json())
 
     def test_create_update_delete_success(self):
         # Create the game
-        resp = self.api_call('post', 'game', {'finished': True, 'title': 'Something'}, True)
+        resp = self.api_call('post', 'games', {'finished': True, 'title': 'Something'}, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual('Something', resp.json()["title"])
@@ -213,7 +213,7 @@ class TestVersions(AbstractTests):
         }
 
         # Create
-        resp = self.api_call('post', 'version', payload, True)
+        resp = self.api_call('post', 'versions', payload, True)
         
         self.assertEqual(200, resp.status_code)
 
@@ -231,7 +231,7 @@ class TestVersions(AbstractTests):
         str_id = str(resp.json()["id"])
         str_game_id = str(resp.json()["gameId"])
 
-        resp = self.api_call('patch', 'version/' + str_id, {'topGame': True}, True)
+        resp = self.api_call('patch', 'versions/' + str_id, {'topGame': True}, True)
 
         self.assertEqual(200, resp.status_code)
         self.assertEqual(True, resp.json()["topGame"])
@@ -239,61 +239,61 @@ class TestVersions(AbstractTests):
         self.assertEqual(0, resp.json()["toWatchPosition"])
 
         # Delete
-        resp = self.api_call('delete', 'version/' + str_id, {}, True)
+        resp = self.api_call('delete', 'versions/' + str_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
-        resp = self.api_call('delete', 'version/' + str_id, {}, True)
+        resp = self.api_call('delete', 'versions/' + str_id, {}, True)
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'version' with id #350 has not been found.", 'code': 1}, resp.json())
 
         # Remove the game too (otherwise it will pollute the DB)
-        resp = self.api_call('delete', 'game/' + str_game_id, {}, True)
+        resp = self.api_call('delete', 'games/' + str_game_id, {}, True)
         self.assertEqual(200, resp.status_code)
         
     def test_update_fails_because_resource_not_found(self):
-        resp = self.api_call('patch', 'version/9999', {'topGame': True}, True)
+        resp = self.api_call('patch', 'versions/9999', {'topGame': True}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'version' with id #9999 has not been found.", 'code': 1}, resp.json())
 
     def test_update_fails_because_platform_not_found(self):
-        resp = self.api_call('patch', 'version/1', {'platformId': 9999}, True)
+        resp = self.api_call('patch', 'versions/1', {'platformId': 9999}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'platform' with id #9999 has not been found.", 'code': 1}, resp.json())
 
     def test_update_fails_because_game_not_found(self):
-        resp = self.api_call('patch', 'version/1', {'gameId': 9999}, True)
+        resp = self.api_call('patch', 'versions/1', {'gameId': 9999}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'game' with id #9999 has not been found.", 'code': 1}, resp.json())
 
     def test_update_fails_because_platform_game_couple_already_exist(self):
-        resp = self.api_call('patch', 'version/347', {'platformId': 8, 'gameId': 377}, True)
+        resp = self.api_call('patch', 'versions/347', {'platformId': 8, 'gameId': 377}, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The resource of type 'platform-game couple' with id #377-8 already exists.", 'code': 8}, resp.json())
 
     def test_delete_fails_because_not_found(self):
-        resp = self.api_call('delete', 'version/9999', None, True)
+        resp = self.api_call('delete', 'versions/9999', None, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'version' with id #9999 has not been found.", 'code': 1}, resp.json())
 
     def test_delete_fails_because_has_copies(self):
-        resp = self.api_call('delete', 'version/349', None, True)
+        resp = self.api_call('delete', 'versions/349', None, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The following resource type 'version' has children of type 'copy', so it cannot be deleted.", 'code': 9}, resp.json())
 
     def test_delete_fails_because_has_stories(self):
-        resp = self.api_call('delete', 'version/231', None, True)
+        resp = self.api_call('delete', 'versions/231', None, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The following resource type 'version' has children of type 'story', so it cannot be deleted.", 'code': 9}, resp.json())
 
     def test_delete_fails_because_has_transactions(self):
-        resp = self.api_call('delete', 'version/340', None, True)
+        resp = self.api_call('delete', 'versions/340', None, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The following resource type 'version' has children of type 'transaction', so it cannot be deleted.", 'code': 9}, resp.json())

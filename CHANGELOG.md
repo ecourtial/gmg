@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.0.0
+* Bump to Python 3.13.
+* Migration to Poetry.
+* Added strong typing.
+* Added a feature to manage magazines.
+* Added an optionnal whitelist of IP adresses.
+* We can link a note to a game version.
+* API filters: for filter of type int, we can check against NULL by sending "Null" as the parameter.
+* Added a feature to manage categories to associate games versions.
+
+BC Break: the URI for resources are now plural.
+
 ## 4.4.0
 * Added a new feature: notes.
 * Bump to Python 3.10.

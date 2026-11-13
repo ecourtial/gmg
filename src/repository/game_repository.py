@@ -1,12 +1,15 @@
 """ Repository to handle the games """
+from typing import Any
+
 from src.repository.abstract_repository import AbstractRepository
 from src.entity.game import Game
 from src.entity.version import Version
 
+
 class GameRepository(AbstractRepository):
     entity = Game
 
-    def get_select_request_start(self):
+    def get_select_request_start(self) -> str:
         request = f"SELECT {Game.table_name}.*, v.versionCount AS versionCount "
         request += 'FROM '
         request += f"     (SELECT COUNT(*) AS versionCount, {Game.table_name}.id AS game_id "
@@ -18,13 +21,13 @@ class GameRepository(AbstractRepository):
 
         return request
 
-    def get_by_title(self, title):
+    def get_by_title(self, title: str) -> Game | None:
         """Get one support by its title."""
         request = self.get_select_request_start() + f"AND {Game.table_name}.title = %s LIMIT 1;"
 
         return self.fetch_one(request, (title,))
 
-    def hydrate(self, row):
+    def hydrate(self, row: dict[str, Any]) -> Game:
         """Hydrate an object from a row."""
         version = super().hydrate(row)
         version.set_version_count(row['versionCount'])

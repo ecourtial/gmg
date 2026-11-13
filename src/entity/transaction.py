@@ -1,7 +1,12 @@
+from typing import Any
+
 from src.entity.abstract_entity import AbstractEntity
 
+
 class Transaction(AbstractEntity):
-    expected_fields = {
+    """ This class represent a transaction entry, for instance I sell or bought a game """
+
+    expected_fields: dict[str, Any] = {
         'versionId': {'field': 'version_id', 'method': '_version_id', 'required': True, 'type': 'int'},
         'copyId': {'field': 'copy_id', 'method': '_copy_id', 'required': False, 'type': 'int'},
         'year': {'field': 'year', 'method': '_year', 'required': True, 'type': 'int'},
@@ -30,7 +35,7 @@ class Transaction(AbstractEntity):
         },
     }
 
-    authorized_extra_fields_for_filtering = {
+    authorized_extra_fields_for_filtering: dict[str, Any] = {
         'id': {'field': 'transaction_id', 'origin': 'native', 'type': 'int'},
         'platformName': {'field': 'platformName', 'origin': 'computed', 'type': 'string'},
         'gameTitle': {'field': 'gameTitle', 'origin': 'computed', 'type': 'string'},
@@ -39,23 +44,22 @@ class Transaction(AbstractEntity):
     table_name = 'transactions'
     primary_key = 'transaction_id'
 
-    transaction_in = {'Bought', 'Loan-out-return', 'Loan-in',}
-    transaction_out = {'Sold', 'Loan-out', 'Loan-in-return'}
+    transaction_in: set[str] = {'Bought', 'Loan-out-return', 'Loan-in'}
+    transaction_out: set[str] = {'Sold', 'Loan-out', 'Loan-in-return'}
 
-    """ This class represent a transaction entry, for instance I sell or bought a game """
     def __init__(
             self,
-            entity_id,
-            version_id,
-            copy_id,
-            year,
-            month,
-            day,
-            type,
-            notes,
-            platform_name = None,
-            game_title = None,
-    ):
+            entity_id: int | None,
+            version_id: int,
+            copy_id: int | None,
+            year: int,
+            month: int,
+            day: int,
+            type: str,
+            notes: str,
+            platform_name: str | None = None,
+            game_title: str | None = None,
+    ) -> None:
         self.entity_id = entity_id
         self.version_id = version_id
         self.copy_id = copy_id
@@ -67,67 +71,65 @@ class Transaction(AbstractEntity):
         self.platform_name = platform_name
         self.game_title = game_title
 
-    def get_id(self):
+    def get_id(self) -> int | None:
         return self.entity_id
 
-    def get_version_id(self):
+    def get_version_id(self) -> int:
         return self.version_id
 
-    def get_copy_id(self):
+    def get_copy_id(self) -> int | None:
         return self.copy_id
 
-    def get_year(self):
+    def get_year(self) -> int:
         return self.year
 
-    def get_month(self):
+    def get_month(self) -> int:
         return self.month
 
-    def get_day(self):
+    def get_day(self) -> int:
         return self.day
 
-    def get_type(self):
+    def get_type(self) -> str:
         return self.type
 
-    def get_notes(self):
+    def get_notes(self) -> str:
         return self.notes
 
-    def set_version_id(self, version_id):
+    def set_version_id(self, version_id: int) -> None:
         self.version_id = version_id
 
-    def set_copy_id(self, entity_id):
+    def set_copy_id(self, entity_id: int | None) -> None:
         self.copy_id = entity_id
 
-    def set_year(self, year):
+    def set_year(self, year: int) -> None:
         self.year = year
 
-    def set_month(self, month):
+    def set_month(self, month: int) -> None:
         self.month = month
 
-    def set_day(self, day):
+    def set_day(self, day: int) -> None:
         self.day = day
 
-    def set_type(self, type):
+    def set_type(self, type: str) -> None:
         self.type = type
 
-    def set_notes(self, notes):
+    def set_notes(self, notes: str) -> None:
         self.notes = notes
 
-    def get_game_title(self):
+    def get_game_title(self) -> str | None:
         return self.game_title
 
-    def set_game_title(self, title):
+    def set_game_title(self, title: str) -> None:
         self.game_title = title
 
-    def get_platform_name(self):
+    def get_platform_name(self) -> str | None:
         return self.platform_name
 
-    def set_platform_name(self, platform_name):
+    def set_platform_name(self, platform_name: str) -> None:
         self.platform_name = platform_name
 
-    def serialize(self):
+    def serialize(self) -> dict[str, Any]:
         values = super().serialize()
-
         values['platformName'] = self.get_platform_name()
         values['gameTitle'] = self.get_game_title()
-
         return values

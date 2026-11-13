@@ -1,5 +1,6 @@
 """Controller to handle user operations"""
-from flask import jsonify
+from typing import Any
+from flask import jsonify, Response
 from src.exception.inactive_user_exception import InactiveUserException
 from src.exception.invalid_credentials_exception import InvalidCredentialsException
 from src.exception.invalid_input import InvalidInput
@@ -8,12 +9,13 @@ from src.exception.missing_header_exception import MissingHeaderException
 from src.exception.resource_already_exists_exception import ResourceAlreadyExistsException
 from src.exception.unknown_resource_exception import ResourceNotFoundException
 from src.exception.unsupported_filter_exception import UnsupportedFilterException
+from src.entity.user import User
 from src.repository.user_repository import UserRepository
 from src.service.user_service import UserService
 
 class UserController:# pylint: disable=R0911
     @classmethod
-    def authenticate(cls, mysql):
+    def authenticate(cls, mysql: Any) -> tuple[Response, int]:
         user_service = UserService(mysql)
 
         try:
@@ -42,7 +44,7 @@ class UserController:# pylint: disable=R0911
         ), 200
 
     @classmethod
-    def get_by_filter(cls, mysql, filter, filter_value):
+    def get_by_filter(cls, mysql: Any, filter: str, filter_value: int | str) -> tuple[Response, int]:
         user_service = UserService(mysql)
 
         try:
@@ -62,7 +64,7 @@ class UserController:# pylint: disable=R0911
         ), 200
 
     @classmethod
-    def create(cls, mysql):
+    def create(cls, mysql: Any) -> tuple[Response, int]:
         service = UserService(mysql)
 
         try:
@@ -77,7 +79,7 @@ class UserController:# pylint: disable=R0911
         return cls.get_by_filter(mysql, 'id', user.get_id())
 
     @classmethod
-    def update(cls, mysql, user_id):
+    def update(cls, mysql: Any, user_id: int) -> tuple[Response, int]:
         service = UserService(mysql)
 
         try:
@@ -95,7 +97,7 @@ class UserController:# pylint: disable=R0911
         return cls.get_by_filter(mysql, 'id', user.get_id())
 
     @classmethod
-    def renew_token(cls, mysql, current_user):
+    def renew_token(cls, mysql: Any, current_user: User) -> tuple[Response, int]:
         user_service = UserService(mysql)
         user_service.renew_token(current_user)
 

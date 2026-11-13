@@ -2,8 +2,8 @@ from test.abstract_tests import AbstractTests
 
 class TestTransactions(AbstractTests):
     def test_commons(self):
-        super().check_all_routes_error_bad_user_token('transaction')
-        super().check_all_routes_error_missing_user_token('transaction')
+        super().check_all_routes_error_bad_user_token('transactions')
+        super().check_all_routes_error_missing_user_token('transactions')
 
     def test_create_incomplete_payload(self):
         payload = {
@@ -13,7 +13,7 @@ class TestTransactions(AbstractTests):
             "type": "Loan-out",
             "notes": ""
         }
-        resp = self.api_call('post', 'transaction', payload, True)
+        resp = self.api_call('post', 'transactions', payload, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': 'The following field is missing: versionId.', 'code': 6}, resp.json())
@@ -28,7 +28,7 @@ class TestTransactions(AbstractTests):
             "type": "Loan-out",
             "notes": ""
         }
-        resp = self.api_call('post', 'transaction', payload, True)
+        resp = self.api_call('post', 'transactions', payload, True)
         
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'version' with id #99998 has not been found.", 'code': 1}, resp.json())
@@ -44,7 +44,7 @@ class TestTransactions(AbstractTests):
             "type": "Loan-out",
             "notes": ""
         }
-        resp = self.api_call('post', 'transaction', payload, True)
+        resp = self.api_call('post', 'transactions', payload, True)
         
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'copy' with id #99999 has not been found.", 'code': 1}, resp.json())
@@ -60,20 +60,20 @@ class TestTransactions(AbstractTests):
             "notes": ""
         }
 
-        resp = self.api_call('post', 'transaction', payload, True)
+        resp = self.api_call('post', 'transactions', payload, True)
         
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The field 'type' does not support the value 'Loan-oute'. Supported values are: Bought, Loan-in, Loan-in-return, Loan-out, Loan-out-return, Sold.", 'code': 11}, resp.json())
 
     def test_get_transaction(self):
         # Does not exist
-        resp = self.api_call('get', 'transaction/666', {}, True)
+        resp = self.api_call('get', 'transactions/666', {}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'transaction' with id #666 has not been found.", 'code': 1}, resp.json())
 
         # Exist
-        resp = self.api_call('get', 'transaction/90', {}, True)
+        resp = self.api_call('get', 'transactions/90', {}, True)
 
         expectedPayload = {
             "id": 90,
@@ -103,7 +103,7 @@ class TestTransactions(AbstractTests):
             "notes": ""
         }
 
-        resp = self.api_call('post', 'transaction', payload, True)
+        resp = self.api_call('post', 'transactions', payload, True)
 
         self.assertEqual(200, resp.status_code)
         transaction_id = str(resp.json()["id"])
@@ -112,7 +112,7 @@ class TestTransactions(AbstractTests):
         payload['gameTitle'] = resp.json()["gameTitle"]
         self.assertEqual(payload, resp.json())
 
-        resp = self.api_call('get', 'transaction/' + str(transaction_id), None, True)
+        resp = self.api_call('get', 'transactions/' + str(transaction_id), None, True)
         self.assertEqual(payload, resp.json())
 
         # Patch
@@ -125,7 +125,7 @@ class TestTransactions(AbstractTests):
             "notes": ""
         }
 
-        resp = self.api_call('patch', 'transaction/' + transaction_id, payload, True)
+        resp = self.api_call('patch', 'transactions/' + transaction_id, payload, True)
         payload['id'] = int(transaction_id)
         payload['platformName'] = resp.json()["platformName"]
         payload['gameTitle'] = resp.json()["gameTitle"]
@@ -135,15 +135,15 @@ class TestTransactions(AbstractTests):
         self.assertEqual(payload, resp.json()) 
 
         # Delete
-        resp = self.api_call('delete', 'transaction/' + transaction_id, {}, True)
+        resp = self.api_call('delete', 'transactions/' + transaction_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
-        resp = self.api_call('delete', 'transaction/' + transaction_id, {}, True)
+        resp = self.api_call('delete', 'transactions/' + transaction_id, {}, True)
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': f"The resource of type 'transaction' with id #{transaction_id} has not been found.", 'code': 1}, resp.json())
 
     def test_update_fails_because_transaction_not_found(self):
-        resp = self.api_call('patch', 'transaction/9999', None, True)
+        resp = self.api_call('patch', 'transactions/9999', None, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'transaction' with id #9999 has not been found.", 'code': 1}, resp.json())
@@ -158,7 +158,7 @@ class TestTransactions(AbstractTests):
             "type": "Loan-out",
             "notes": ""
         }
-        resp = self.api_call('post', 'transaction', payload, True)
+        resp = self.api_call('post', 'transactions', payload, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "Inconsistent transaction. You tried to create a transaction with versionId = '349' while the copy versionId is '348'.", 'code': 14}, resp.json())
@@ -173,7 +173,7 @@ class TestTransactions(AbstractTests):
             "type": "Loan-out",
             "notes": ""
         }
-        resp = self.api_call('patch', 'transaction/90', payload, True)
+        resp = self.api_call('patch', 'transactions/90', payload, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "Inconsistent transaction. You tried to create a transaction with versionId = '349' while the copy versionId is '348'.", 'code': 14}, resp.json())
@@ -189,13 +189,13 @@ class TestTransactions(AbstractTests):
             "notes": ""
         }
 
-        resp = self.api_call('patch', 'transaction/90', payload, True)
+        resp = self.api_call('patch', 'transactions/90', payload, True)
         
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The field 'type' does not support the value 'Loan-ine'. Supported values are: Bought, Loan-in, Loan-in-return, Loan-out, Loan-out-return, Sold.", 'code': 11}, resp.json())
 
     def test_delete_fails_because_not_found(self):
-        resp = self.api_call('delete', 'transaction/9999', None, True)
+        resp = self.api_call('delete', 'transactions/9999', None, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'transaction' with id #9999 has not been found.", 'code': 1}, resp.json())
@@ -252,7 +252,7 @@ class TestTransactions(AbstractTests):
                 "comments": "Well well well..."
         }
 
-        resp = self.api_call('post', 'copy', payload, True)
+        resp = self.api_call('post', 'copies', payload, True)
 
         copy_id = str(resp.json()["id"])
         payload['id'] = int(copy_id)
@@ -271,7 +271,7 @@ class TestTransactions(AbstractTests):
             'platformName': 'PC',
         }
 
-        resp = self.api_call('post', 'transaction', tr_payload, True)
+        resp = self.api_call('post', 'transactions', tr_payload, True)
 
         self.assertEqual(200, resp.status_code)
         tr_id = str(resp.json()["id"])
@@ -279,15 +279,15 @@ class TestTransactions(AbstractTests):
         self.assertEqual(tr_payload, resp.json())
 
         # Now, the current copy status should be "Out"
-        resp = self.api_call('get', 'copy/' + copy_id, {}, True)
+        resp = self.api_call('get', 'copies/' + copy_id, {}, True)
         self.assertEqual('Out', resp.json()['status'])
 
         # If we DELETE the transaction (let's say it was a mistake to create it...)
         # The status of the copy must remain at "Out"
-        resp = self.api_call('delete', 'transaction/' + tr_id, {}, True)
+        resp = self.api_call('delete', 'transactions/' + tr_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
-        resp = self.api_call('get', 'copy/' + copy_id, {}, True)
+        resp = self.api_call('get', 'copies/' + copy_id, {}, True)
         self.assertEqual('Out', resp.json()['status'])
 
         # Now let's create an inbound transaction
@@ -301,13 +301,13 @@ class TestTransactions(AbstractTests):
             "notes": ""
         }
 
-        resp = self.api_call('post', 'transaction', tr_payload, True)
+        resp = self.api_call('post', 'transactions', tr_payload, True)
 
         self.assertEqual(200, resp.status_code)
         tr_id = str(resp.json()["id"])
         
         # Now, the current copy status should be "In"
-        resp = self.api_call('get', 'copy/' + copy_id, {}, True)
+        resp = self.api_call('get', 'copies/' + copy_id, {}, True)
         self.assertEqual('In', resp.json()['status'])
 
         # Now let's change the transaction type to 'Sold'
@@ -317,15 +317,15 @@ class TestTransactions(AbstractTests):
             "type": "Sold",
         }
 
-        resp = self.api_call('patch', 'transaction/' + tr_id, tr_payload, True)
+        resp = self.api_call('patch', 'transactions/' + tr_id, tr_payload, True)
         self.assertEqual(200, resp.status_code)
         self.assertEqual(None, resp.json()["copyId"])
 
-        resp = self.api_call('get', 'copy/' + copy_id, {}, True)
+        resp = self.api_call('get', 'copies/' + copy_id, {}, True)
         self.assertEqual(404, resp.status_code)
 
         # Delete for cleanup
-        resp = self.api_call('delete', 'transaction/' + tr_id, {}, True)
+        resp = self.api_call('delete', 'transactions/' + tr_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
     def test_inconsistent_status_operation(self):
@@ -347,7 +347,7 @@ class TestTransactions(AbstractTests):
                 "comments": "Well well well..."
         }
 
-        resp = self.api_call('post', 'copy', payload, True)
+        resp = self.api_call('post', 'copies', payload, True)
 
         copy_id = str(resp.json()["id"])
         payload['id'] = int(copy_id)
@@ -364,17 +364,17 @@ class TestTransactions(AbstractTests):
             "notes": ""
         }
 
-        resp = self.api_call('post', 'transaction', tr_payload, True)
+        resp = self.api_call('post', 'transactions', tr_payload, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'code': 4, 'message': "Inconsistent transaction. You tried to create a transaction of type 'Loan-out' while the copy status is 'Out'."}, resp.json())
 
         # The current copy status should still be "Out"
-        resp = self.api_call('get', 'copy/' + copy_id, {}, True)
+        resp = self.api_call('get', 'copies/' + copy_id, {}, True)
         self.assertEqual('Out', resp.json()['status'])
 
         # Delete for cleanup
-        resp = self.api_call('delete', 'copy/' + copy_id, {}, True)
+        resp = self.api_call('delete', 'copies/' + copy_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
     def test_can_create_with_no_copy_id(self):
@@ -390,7 +390,7 @@ class TestTransactions(AbstractTests):
             'platformName': 'PC',
         }
 
-        resp = self.api_call('post', 'transaction', tr_payload, True)
+        resp = self.api_call('post', 'transactions', tr_payload, True)
 
         self.assertEqual(200, resp.status_code)
         tr_id = str(resp.json()["id"])
@@ -398,7 +398,7 @@ class TestTransactions(AbstractTests):
         self.assertEqual(tr_payload, resp.json())
 
         # Delete for cleanup
-        resp = self.api_call('delete', 'transaction/' + tr_id, {}, True)
+        resp = self.api_call('delete', 'transactions/' + tr_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
 
@@ -429,7 +429,7 @@ class TestTransactions(AbstractTests):
                 "comments": "Well well well..."
         }
 
-        resp = self.api_call('post', 'copy', payload, True)
+        resp = self.api_call('post', 'copies', payload, True)
         copy_id = str(resp.json()["id"])
         
         # Now let's create the first inbound transaction
@@ -445,7 +445,7 @@ class TestTransactions(AbstractTests):
             'platformName': 'PC',
         }
 
-        resp = self.api_call('post', 'transaction', tr_payload, True)
+        resp = self.api_call('post', 'transactions', tr_payload, True)
 
         self.assertEqual(200, resp.status_code)
         tr_id = str(resp.json()["id"])
@@ -453,13 +453,13 @@ class TestTransactions(AbstractTests):
         self.assertEqual(tr_payload, resp.json())
 
         # Now, let's try the same operation: it should fail
-        resp = self.api_call('post', 'transaction', tr_payload, True)
+        resp = self.api_call('post', 'transactions', tr_payload, True)
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'code': 15, 'message': "Inconsistent transaction. You tried to create a transaction an inbound transaction while the last registered transaction for this copy has of the same kind!"}, resp.json())
 
         # Delete for cleanup
-        resp = self.api_call('delete', 'transaction/' + tr_id, {}, True)
+        resp = self.api_call('delete', 'transactions/' + tr_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
-        resp = self.api_call('delete', 'copy/' + copy_id, {}, True)
+        resp = self.api_call('delete', 'copies/' + copy_id, {}, True)
         self.assertEqual(200, resp.status_code)

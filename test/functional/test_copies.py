@@ -2,8 +2,8 @@ from test.abstract_tests import AbstractTests
 
 class TestCopies(AbstractTests):
     def test_commons(self):
-        super().check_all_routes_error_bad_user_token('copy')
-        super().check_all_routes_error_missing_user_token('copy')
+        super().check_all_routes_error_bad_user_token('copies')
+        super().check_all_routes_error_missing_user_token('copies')
 
     def test_create_incomplete_payload(self):
         payload = {
@@ -16,7 +16,7 @@ class TestCopies(AbstractTests):
             "status": "In",
             "comments": "Found it somewhere"
         }
-        resp = self.api_call('post', 'copy', payload, True)
+        resp = self.api_call('post', 'copies', payload, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': 'The following field is missing: versionId.', 'code': 6}, resp.json())
@@ -38,7 +38,7 @@ class TestCopies(AbstractTests):
             'region': 'PAL',
             "comments": "Found it somewhere"
         }
-        resp = self.api_call('post', 'copy', payload, True)
+        resp = self.api_call('post', 'copies', payload, True)
         
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'version' with id #9999 has not been found.", 'code': 1}, resp.json())
@@ -59,7 +59,7 @@ class TestCopies(AbstractTests):
             "comments": "Found it somewhere"
         }
 
-        resp = self.api_call('post', 'copy', payload, True)
+        resp = self.api_call('post', 'copies', payload, True)
         
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, Medium box, None, Other, Special box.", 'code': 11}, resp.json())
@@ -80,7 +80,7 @@ class TestCopies(AbstractTests):
             "comments": "Found it somewhere"
         }
 
-        resp = self.api_call('post', 'copy', payload, True)
+        resp = self.api_call('post', 'copies', payload, True)
         
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The field 'casingType' does not support the value 'CD-likesss'. Supported values are: CD-like, Cardboard sleeve, DVD-like, None, Other, Paper Sleeve, Plastic Sleeve, Plastic tube.", 'code': 11}, resp.json())
@@ -88,13 +88,13 @@ class TestCopies(AbstractTests):
 
     def test_get_copy(self):
         # Does not exist
-        resp = self.api_call('get', 'copy/666', {}, True)
+        resp = self.api_call('get', 'copies/666', {}, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'copy' with id #666 has not been found.", 'code': 1}, resp.json())
 
         # Exist
-        resp = self.api_call('get', 'copy/1', {}, True)
+        resp = self.api_call('get', 'copies/1', {}, True)
 
         expectedPayload = {
                 "id": 1,
@@ -143,7 +143,7 @@ class TestCopies(AbstractTests):
                 'transactionCount': 0
         }
 
-        resp = self.api_call('post', 'copy', payload, True)
+        resp = self.api_call('post', 'copies', payload, True)
 
         self.assertEqual(200, resp.status_code)
         copy_id = str(resp.json()["id"])
@@ -152,7 +152,7 @@ class TestCopies(AbstractTests):
         payload['isBoxRepro'] = True
         self.assertEqual(payload, resp.json())
 
-        resp = self.api_call('get', 'copy/' + str(copy_id), None, True)
+        resp = self.api_call('get', 'copies/' + str(copy_id), None, True)
         self.assertEqual(payload, resp.json())
 
         # Patch
@@ -177,7 +177,7 @@ class TestCopies(AbstractTests):
             'region': 'PAL',
         }
 
-        resp = self.api_call('patch', 'copy/' + copy_id, payload, True)
+        resp = self.api_call('patch', 'copies/' + copy_id, payload, True)
         payload['id'] = int(copy_id)
         payload['isROM'] = True
 
@@ -185,15 +185,15 @@ class TestCopies(AbstractTests):
         self.assertEqual(payload, resp.json()) 
 
         # Delete
-        resp = self.api_call('delete', 'copy/' + copy_id, {}, True)
+        resp = self.api_call('delete', 'copies/' + copy_id, {}, True)
         self.assertEqual(200, resp.status_code)
 
-        resp = self.api_call('delete', 'copy/' + copy_id, {}, True)
+        resp = self.api_call('delete', 'copies/' + copy_id, {}, True)
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': f"The resource of type 'copy' with id #{copy_id} has not been found.", 'code': 1}, resp.json())
 
     def test_update_fails_because_resource_not_found(self):
-        resp = self.api_call('patch', 'copy/9999', None, True)
+        resp = self.api_call('patch', 'copies/9999', None, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'copy' with id #9999 has not been found.", 'code': 1}, resp.json())
@@ -212,19 +212,19 @@ class TestCopies(AbstractTests):
             "comments": "Found it somewhere"
         }
 
-        resp = self.api_call('patch', 'copy/1', payload, True)
+        resp = self.api_call('patch', 'copies/1', payload, True)
         
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The field 'boxType' does not support the value 'Big boxe'. Supported values are: Big box, Cartridge box, Medium box, None, Other, Special box.", 'code': 11}, resp.json())
 
     def test_delete_fails_because_not_found(self):
-        resp = self.api_call('delete', 'copy/9999', None, True)
+        resp = self.api_call('delete', 'copies/9999', None, True)
 
         self.assertEqual(404, resp.status_code)
         self.assertEqual({'message': "The resource of type 'copy' with id #9999 has not been found.", 'code': 1}, resp.json())
 
     def test_delete_fails_because_has_transactions(self):
-        resp = self.api_call('delete', 'copy/1', None, True)
+        resp = self.api_call('delete', 'copies/1', None, True)
 
         self.assertEqual(400, resp.status_code)
         self.assertEqual({'message': "The following resource type 'copy' has children of type 'transaction', so it cannot be deleted.", 'code': 9}, resp.json())

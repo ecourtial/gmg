@@ -1,13 +1,16 @@
+from typing import Any
+
 from src.repository.abstract_repository import AbstractRepository
 from src.entity.story import Story
 from src.entity.version import Version
 from src.entity.game import Game
 from src.entity.platform import Platform
 
+
 class StoryRepository(AbstractRepository):
     entity = Story
 
-    def get_select_request_start(self):
+    def get_select_request_start(self) -> str:
         request = f"SELECT {Story.table_name}.*, "
         request += f"{Game.table_name}.title AS gameTitle, "
         request += f"{Platform.table_name}.name AS platformName "
@@ -18,11 +21,10 @@ class StoryRepository(AbstractRepository):
 
         return request
 
-    def hydrate(self, row):
+    def hydrate(self, row: dict[str, Any]) -> Story:
         """Hydrate an object from a row."""
         story = super().hydrate(row)
         story.set_platform_name(row['platformName'])
         story.set_game_title(row['gameTitle'])
 
         return story
-    
